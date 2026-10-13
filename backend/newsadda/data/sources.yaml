@@ -74,6 +74,7 @@ sources:
     name_hi: अमर उजाला
     aliases: [amarujala.com]
     kind: rss
+    min_interval: 100   # fastest tier: every collection run
     live_wire: true
     urls: [https://www.amarujala.com/rss/uttar-pradesh.xml]
     listing_pages: [https://www.amarujala.com/rss]
@@ -82,6 +83,7 @@ sources:
     name: Amar Ujala Lucknow
     name_hi: अमर उजाला लखनऊ
     kind: rss
+    min_interval: 100   # fastest tier: every collection run
     up_section: local
     urls: [https://www.amarujala.com/rss/lucknow.xml]
 
@@ -90,6 +92,7 @@ sources:
     name_hi: न्यूज़18 हिंदी
     aliases: [News18, hindi.news18.com]
     kind: rss
+    min_interval: 100   # fastest tier: every collection run
     live_wire: true
     urls:
       - https://hindi.news18.com/rss/khabar/uttar-pradesh/uttar-pradesh.xml
@@ -100,6 +103,7 @@ sources:
     name_hi: टीवी9 भारतवर्ष
     aliases: [TV9 Hindi, tv9hindi.com, TV9 भारतवर्ष]
     kind: rss
+    min_interval: 100   # fastest tier: every collection run
     live_wire: true
     urls: [https://www.tv9hindi.com/state/uttar-pradesh/feed]
 
@@ -109,7 +113,7 @@ sources:
     aliases: [ABP Live, abplive.com, ABP Ganga]
     kind: rss
     live_wire: true
-    min_interval: 180   # only 10 items per feed, so poll a little more often
+    min_interval: 100   # fastest tier: every collection run
     urls:
       - https://www.abplive.com/news/states/up-uk/feed
       - https://www.abplive.com/states/up-uk/feed
@@ -172,6 +176,7 @@ sources:
     name_hi: लाइव हिन्दुस्तान
     aliases: [Hindustan, हिन्दुस्तान, हिंदुस्तान, livehindustan.com]
     kind: rss
+    min_interval: 100   # fastest tier: every collection run
     urls:
       - https://api.livehindustan.com/feeds/rss/uttar-pradesh/lucknow/rssfeed.xml
       - https://api.livehindustan.com/feeds/rss/uttar-pradesh/rssfeed.xml
@@ -190,7 +195,7 @@ sources:
      urls: [https://api.livehindustan.com/feeds/rss/uttar-pradesh/basti/rssfeed.xml]}
 
   # News18 city feeds (verified live).
-  - {id: news18_lucknow, name: News18 Lucknow, name_hi: न्यूज़18 लखनऊ, kind: rss, up_section: local, min_interval: 300,
+  - {id: news18_lucknow, name: News18 Lucknow, name_hi: न्यूज़18 लखनऊ, kind: rss, up_section: local, min_interval: 100,
      urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/lucknow.xml]}
   - {id: news18_varanasi, name: News18 Varanasi, name_hi: न्यूज़18 वाराणसी, kind: rss, up_section: local, min_interval: 600,
      urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/varanasi.xml]}
@@ -206,13 +211,13 @@ sources:
   # More national Hindi outlets with direct feeds. National feeds (up_section: false)
   # keep only stories that pass the strict UP test.
   - {id: indiatv_up, name: India TV, name_hi: इंडिया टीवी, aliases: [India TV Hindi, indiatv.in], kind: rss, live_wire: true,
-     min_interval: 240, urls: [https://www.indiatv.in/rssnews/topstory-uttar-pradesh.xml]}
+     min_interval: 100, urls: [https://www.indiatv.in/rssnews/topstory-uttar-pradesh.xml]}
   - {id: aajtak_national, name: Aaj Tak National, name_hi: आज तक, kind: rss, up_section: false, min_interval: 240,
      site: aajtak.in, urls: ["https://www.aajtak.in/rssfeeds/?id=home"]}
   - {id: ndtv_india, name: NDTV India, name_hi: एनडीटीवी इंडिया, aliases: [NDTV, ndtv.in], kind: rss, up_section: false,
      min_interval: 300, site: ndtv.in, urls: [https://feeds.feedburner.com/ndtvkhabar-latest]}
   - {id: bharatsamachar, name: Bharat Samachar, name_hi: भारत समाचार, aliases: [bharatsamachartv.in], kind: rss,
-     up_section: false, min_interval: 300, urls: [https://www.bharatsamachartv.in/feed/]}
+     up_section: false, min_interval: 100, urls: [https://www.bharatsamachartv.in/feed/]}
 
   # ---------------- Publishers without a reachable public feed ----------------
   # Kept with listing pages so the daily check notices if a feed appears.
@@ -259,11 +264,11 @@ sources:
 
   # Topic searches across all publishers: the early-detection net.
   - {id: gn_up_politics, site: news.google.com, name: Google News — UP politics, name_hi: गूगल न्यूज़ — यूपी राजनीति, kind: google_news,
-     query: "(यूपी OR \"उत्तर प्रदेश\") (भाजपा OR सपा OR बसपा OR कांग्रेस OR विधायक OR सांसद) when:1d", min_interval: 280,
+     query: "(यूपी OR \"उत्तर प्रदेश\") (भाजपा OR सपा OR बसपा OR कांग्रेस OR विधायक OR सांसद) when:1d", min_interval: 220,
      live_wire: true, up_section: false}
   - {id: gn_up_leaders, site: news.google.com, name: Google News — UP leaders, name_hi: गूगल न्यूज़ — यूपी नेता, kind: google_news,
      query: "\"योगी आदित्यनाथ\" OR \"अखिलेश यादव\" OR मायावती OR \"केशव प्रसाद मौर्य\" OR \"ब्रजेश पाठक\" OR राजभर when:1d",
-     min_interval: 280, live_wire: true, up_section: politics}
+     min_interval: 220, live_wire: true, up_section: politics}
   - {id: gn_up_leaders_2, site: news.google.com, name: "Google News — UP leaders (allies, opposition)", name_hi: "गूगल न्यूज़ — यूपी नेता (सहयोगी, विपक्ष)",
      kind: google_news, min_interval: 900,
      query: "\"डिंपल यादव\" OR शिवपाल OR \"जयंत चौधरी\" OR \"संजय निषाद\" OR \"अनुप्रिया पटेल\" OR \"चंद्रशेखर आजाद\" when:1d", up_section: politics}
@@ -275,7 +280,7 @@ sources:
 
   # Targeted political searches (verified live). The fastest tier runs every collection.
   - {id: gn_q_controversy, site: news.google.com, name: Google News — UP political rows, name_hi: गूगल न्यूज़ — यूपी सियासी वार-पलटवार,
-     kind: google_news, min_interval: 280, live_wire: true,
+     kind: google_news, min_interval: 220, live_wire: true,
      query: "(सपा OR भाजपा OR बसपा OR कांग्रेस) (पलटवार OR निशाना OR आरोप OR तंज) (यूपी OR \"उत्तर प्रदेश\" OR लखनऊ) when:1d", up_section: false}
   - {id: gn_q_yogi, site: news.google.com, name: Google News — Yogi Adityanath, name_hi: गूगल न्यूज़ — योगी आदित्यनाथ,
      kind: google_news, min_interval: 280, query: "\"योगी आदित्यनाथ\" OR \"सीएम योगी\" when:1d", up_section: politics}

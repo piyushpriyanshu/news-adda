@@ -88,7 +88,7 @@ Text is never rewritten or invented. `robots.txt` is honoured, the step is limit
 
 ## Source status (live check, 13 Oct 2026, from GitHub Actions)
 
-95 live feeds, polled every 4–15 minutes by importance (the GitHub run itself is every 5 minutes).
+95 live feeds. The fastest UP desks (Amar Ujala UP/Lucknow, News18 UP/Lucknow, TV9, ABP, India TV, Live Hindustan, Bharat Samachar) are read on **every** collection run; the main Google News political searches every ~4 minutes; district editions and other searches every 10–15 minutes.
 
 | Publisher | How it is collected | Status |
 |---|---|---|
@@ -114,7 +114,7 @@ GitHub's built-in schedule is best-effort: runs can be late, and on this reposit
 1. On GitHub: Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate. Repository access: only `news-adda`. Permissions: **Actions: Read and write**. Copy the token.
 2. On [cron-job.org](https://cron-job.org) (free), create a job:
    - URL: `https://api.github.com/repos/piyushpriyanshu/news-adda/actions/workflows/collect.yml/dispatches`
-   - Schedule: every 5 minutes. Request method: **POST**.
+   - Schedule: every 5 minutes — or **every 2 minutes** for the fastest breaking news (the fastest feeds are then read every 2 minutes; public repositories have unlimited free Actions minutes). Request method: **POST**.
    - Headers: `Authorization: Bearer <your token>`, `Accept: application/vnd.github+json`, `Content-Type: application/json`
    - Body: `{"ref":"main"}`
 3. The Actions tab will show a "Collect news" run every 5 minutes.
