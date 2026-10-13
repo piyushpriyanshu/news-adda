@@ -1,0 +1,13 @@
+build/
+.gradle/
+*.iml
+.idea/
+local.properties
+__pycache__/
+*.pyc
+.venv/
+*.db
+*.db-journal
+.env
+.pytest_cache/
+/out/
