@@ -120,3 +120,14 @@ def test_gist_retries_next_run_when_google_refuses(settings, router, tmp_path):
     assert p.gist_stats["google_blocked"] is True
     row = next(it for it in p.store.recent_items(datetime.now(timezone.utc) - timedelta(hours=6)) if "अखिलेश" in it["title"])
     assert not row["data"].get("gist_tried")  # left for the next run, not given up on
+
+
+def test_english_page_descriptions_are_not_used_as_gists():
+    page = ('<html><head><meta property="og:description" content="BJP leaders attack Akhilesh Yadav over controversial '
+            'politics in Lucknow. Follow Dainik Bhaskar for more."><meta name="description" content="लखनऊ में भाजपा नेताओं '
+            'ने सपा प्रमुख अखिलेश यादव पर पलटवार किया और कहा कि सपा की राजनीति परिवार तक सीमित है। Follow Dainik Bhaskar">'
+            '</head></html>')
+    gist, _ = description_from_page(page, "अखिलेश पर भाजपा का हमला")
+    assert gist.startswith("लखनऊ में भाजपा नेताओं") and "Follow" not in gist
+    only_en = '<html><head><meta property="og:description" content="BJP leaders attack Akhilesh Yadav over politics in Lucknow today."></head></html>'
+    assert description_from_page(only_en, "अखिलेश पर भाजपा का हमला")[0] is None

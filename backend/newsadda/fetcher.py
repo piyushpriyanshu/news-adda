@@ -155,7 +155,15 @@ class Fetcher:
                     res.error = "response too large"
                     last = res
                     continue
-                res.items = parse_feed(resp.content, google_news=src.kind == "google_news")
+                try:
+                    res.items = parse_feed(resp.content, google_news=src.kind == "google_news")
+                except FeedError:
+                    # Some feed APIs (e.g. Live Hindustan) answer an RSS Accept header
+                    # with something else; ask again the way a browser would.
+                    resp = await client.get(url, headers={"Accept": "*/*"})
+                    if resp.status_code >= 400:
+                        raise
+                    res.items = parse_feed(resp.content, google_news=src.kind == "google_news")
                 res.ok = True
                 res.extra_state = {
                     "active_url": url,

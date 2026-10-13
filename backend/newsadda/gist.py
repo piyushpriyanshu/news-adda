@@ -27,7 +27,7 @@ from urllib.robotparser import RobotFileParser
 
 import httpx
 
-from .textutil import content_terms, jaccard, normalize, strip_html
+from .textutil import content_terms, devanagari_share, jaccard, normalize, strip_html
 
 log = logging.getLogger("newsadda.gist")
 
@@ -57,12 +57,15 @@ def description_from_page(page: str, title: str) -> tuple[str | None, str | None
     canonical = tags.get("og:url")
     for key in ("og:description", "description", "twitter:description"):
         text = strip_html(tags.get(key))
-        if not text or len(text) < 40:
-            continue
+        if not text or len(text) < 40 or devanagari_share(text) < 0.5:
+            continue  # too short, or not Hindi (some sites write English SEO descriptions)
         nt, nd = normalize(title).strip(), normalize(text).strip()
         if nd == nt or nd.startswith(nt) and len(nd) - len(nt) < 25:
             continue
         if jaccard(content_terms(title), content_terms(text)) > 0.8:
+            continue
+        text = re.sub(r"\s*(Follow\b.*|और पढ़ें.*|पूरी खबर.*|Read more.*)$", "", text, flags=re.I).strip()
+        if len(text) < 40:
             continue
         if len(text) > GIST_LIMIT:
             cut = text[:GIST_LIMIT]

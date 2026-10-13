@@ -204,7 +204,7 @@ sources:
   - {id: aajtak_national, name: Aaj Tak National, name_hi: आज तक, kind: rss, up_section: false, min_interval: 240,
      site: aajtak.in, urls: ["https://www.aajtak.in/rssfeeds/?id=home"]}
   - {id: ndtv_india, name: NDTV India, name_hi: एनडीटीवी इंडिया, aliases: [NDTV, ndtv.in], kind: rss, up_section: false,
-     min_interval: 300, urls: [https://feeds.feedburner.com/ndtvkhabar-latest]}
+     min_interval: 300, site: ndtv.in, urls: [https://feeds.feedburner.com/ndtvkhabar-latest]}
   - {id: bharatsamachar, name: Bharat Samachar, name_hi: भारत समाचार, aliases: [bharatsamachartv.in], kind: rss,
      up_section: false, min_interval: 300, urls: [https://www.bharatsamachartv.in/feed/]}
 
@@ -231,30 +231,30 @@ sources:
   # Links open via news.google.com, which forwards to the publisher. The app
   # shows the original publisher's name and marks these "via Google News".
   - {id: gn_bhaskar, site: bhaskar.com, name: Dainik Bhaskar (via Google News), name_hi: दैनिक भास्कर (गूगल न्यूज़ से), kind: google_news,
-     query: "site:bhaskar.com उत्तर प्रदेश when:1d", min_interval: 280}
+     query: "site:bhaskar.com उत्तर प्रदेश when:1d", min_interval: 280, up_section: false}
   - {id: gn_uptak, site: uptak.in, name: UP Tak (via Google News), name_hi: यूपी तक (गूगल न्यूज़ से), kind: google_news,
      query: "site:uptak.in when:1d", min_interval: 280}
   - {id: gn_jagran, site: jagran.com, name: Dainik Jagran (via Google News), name_hi: दैनिक जागरण (गूगल न्यूज़ से), kind: google_news,
-     query: "site:jagran.com उत्तर प्रदेश when:1d", min_interval: 280}
+     query: "site:jagran.com उत्तर प्रदेश when:1d", min_interval: 280, up_section: false}
   - {id: gn_nbt, site: navbharattimes.indiatimes.com, name: Navbharat Times (via Google News), name_hi: नवभारत टाइम्स (गूगल न्यूज़ से), kind: google_news,
-     query: "site:navbharattimes.indiatimes.com उत्तर प्रदेश when:1d", min_interval: 900}
+     query: "site:navbharattimes.indiatimes.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_aajtak, site: aajtak.in, name: Aaj Tak (via Google News), name_hi: आज तक (गूगल न्यूज़ से), kind: google_news,
-     query: "site:aajtak.in उत्तर प्रदेश when:1d", min_interval: 280}
+     query: "site:aajtak.in उत्तर प्रदेश when:1d", min_interval: 280, up_section: false}
   - {id: gn_zee, site: zeenews.india.com, name: Zee News (via Google News), name_hi: ज़ी न्यूज़ (गूगल न्यूज़ से), kind: google_news,
-     query: "site:zeenews.india.com उत्तर प्रदेश when:1d", min_interval: 900}
+     query: "site:zeenews.india.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_hindustan, site: livehindustan.com, name: Live Hindustan (via Google News), name_hi: लाइव हिन्दुस्तान (गूगल न्यूज़ से), kind: google_news,
-     query: "site:livehindustan.com उत्तर प्रदेश when:1d", min_interval: 900}
+     query: "site:livehindustan.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_jansatta, site: jansatta.com, name: Jansatta (via Google News), name_hi: जनसत्ता (गूगल न्यूज़ से), kind: google_news,
-     query: "site:jansatta.com उत्तर प्रदेश when:2d", min_interval: 1200}
+     query: "site:jansatta.com उत्तर प्रदेश when:2d", min_interval: 1200, up_section: false}
   - {id: gn_lallantop, site: thelallantop.com, name: The Lallantop (via Google News), name_hi: द लल्लनटॉप (गूगल न्यूज़ से), kind: google_news,
      query: "site:thelallantop.com उत्तर प्रदेश OR यूपी when:2d", up_section: false, min_interval: 1200}
   - {id: gn_regional, site: patrika.com, name: Patrika / ETV Bharat (via Google News), name_hi: पत्रिका / ईटीवी भारत (गूगल न्यूज़ से),
-     kind: google_news, query: "(site:patrika.com OR site:etvbharat.com) उत्तर प्रदेश when:1d", min_interval: 1200}
+     kind: google_news, query: "(site:patrika.com OR site:etvbharat.com) उत्तर प्रदेश when:1d", min_interval: 1200, up_section: false}
 
   # Topic searches across all publishers: the early-detection net.
   - {id: gn_up_politics, site: news.google.com, name: Google News — UP politics, name_hi: गूगल न्यूज़ — यूपी राजनीति, kind: google_news,
      query: "(यूपी OR \"उत्तर प्रदेश\") (भाजपा OR सपा OR बसपा OR कांग्रेस OR विधायक OR सांसद) when:1d", min_interval: 280,
-     live_wire: true}
+     live_wire: true, up_section: false}
   - {id: gn_up_leaders, site: news.google.com, name: Google News — UP leaders, name_hi: गूगल न्यूज़ — यूपी नेता, kind: google_news,
      query: "\"योगी आदित्यनाथ\" OR \"अखिलेश यादव\" OR मायावती OR \"केशव प्रसाद मौर्य\" OR \"ब्रजेश पाठक\" OR राजभर when:1d",
      min_interval: 280, live_wire: true}
@@ -265,12 +265,12 @@ sources:
      kind: google_news, min_interval: 1200,
      query: "\"राजा भैया\" OR \"धनंजय सिंह\" OR \"बृजेश सिंह\" OR \"बृजभूषण शरण सिंह\" OR \"अफजाल अंसारी\" OR \"अब्बास अंसारी\" when:2d"}
   - {id: gn_up_election, site: news.google.com, name: Google News — UP elections, name_hi: गूगल न्यूज़ — यूपी चुनाव, kind: google_news,
-     query: "(यूपी OR \"उत्तर प्रदेश\") (उपचुनाव OR टिकट OR \"चुनाव आयोग\" OR प्रत्याशी) when:1d", min_interval: 900}
+     query: "(यूपी OR \"उत्तर प्रदेश\") (उपचुनाव OR टिकट OR \"चुनाव आयोग\" OR प्रत्याशी) when:1d", min_interval: 900, up_section: false}
 
   # Targeted political searches (verified live). The fastest tier runs every collection.
   - {id: gn_q_controversy, site: news.google.com, name: Google News — UP political rows, name_hi: गूगल न्यूज़ — यूपी सियासी वार-पलटवार,
      kind: google_news, min_interval: 280, live_wire: true,
-     query: "(सपा OR भाजपा OR बसपा OR कांग्रेस) (पलटवार OR निशाना OR आरोप OR तंज) (यूपी OR \"उत्तर प्रदेश\" OR लखनऊ) when:1d"}
+     query: "(सपा OR भाजपा OR बसपा OR कांग्रेस) (पलटवार OR निशाना OR आरोप OR तंज) (यूपी OR \"उत्तर प्रदेश\" OR लखनऊ) when:1d", up_section: false}
   - {id: gn_q_yogi, site: news.google.com, name: Google News — Yogi Adityanath, name_hi: गूगल न्यूज़ — योगी आदित्यनाथ,
      kind: google_news, min_interval: 280, query: "\"योगी आदित्यनाथ\" OR \"सीएम योगी\" when:1d"}
   - {id: gn_q_akhilesh, site: news.google.com, name: Google News — Akhilesh Yadav / SP, name_hi: गूगल न्यूज़ — अखिलेश यादव / सपा,
@@ -278,13 +278,13 @@ sources:
   - {id: gn_q_mayawati, site: news.google.com, name: Google News — Mayawati / BSP, name_hi: गूगल न्यूज़ — मायावती / बसपा,
      kind: google_news, min_interval: 600, query: "मायावती OR बसपा OR \"आकाश आनंद\" when:1d"}
   - {id: gn_q_cabinet, site: news.google.com, name: Google News — UP government, name_hi: गूगल न्यूज़ — यूपी सरकार,
-     kind: google_news, min_interval: 600, query: "(\"योगी कैबिनेट\" OR \"यूपी कैबिनेट\" OR \"यूपी सरकार\" OR शासनादेश) when:1d"}
+     kind: google_news, min_interval: 600, query: "(\"योगी कैबिनेट\" OR \"यूपी कैबिनेट\" OR \"यूपी सरकार\" OR शासनादेश) when:1d", up_section: false}
   - {id: gn_q_bahubali, site: news.google.com, name: "Google News — bahubali / strongmen", name_hi: गूगल न्यूज़ — बाहुबली नेता,
      kind: google_news, min_interval: 900,
-     query: "(बाहुबली OR माफिया OR \"पूर्व सांसद\" OR \"पूर्व विधायक\") (यूपी OR \"उत्तर प्रदेश\") when:2d"}
+     query: "(बाहुबली OR माफिया OR \"पूर्व सांसद\" OR \"पूर्व विधायक\") (यूपी OR \"उत्तर प्रदेश\") when:2d", up_section: false}
   - {id: gn_q_panchayat, site: news.google.com, name: "Google News — panchayat, MLC, bypolls", name_hi: "गूगल न्यूज़ — पंचायत, एमएलसी, उपचुनाव",
      kind: google_news, min_interval: 900,
-     query: "(\"पंचायत चुनाव\" OR \"विधान परिषद\" OR एमएलसी OR उपचुनाव) (यूपी OR \"उत्तर प्रदेश\") when:2d"}
+     query: "(\"पंचायत चुनाव\" OR \"विधान परिषद\" OR एमएलसी OR उपचुनाव) (यूपी OR \"उत्तर प्रदेश\") when:2d", up_section: false}
   - {id: gn_geo_lucknow, name: Google News — Lucknow section, name_hi: गूगल न्यूज़ — लखनऊ,
      kind: google_news, min_interval: 600,
      urls: ["https://news.google.com/rss/headlines/section/geo/Lucknow?hl=hi&gl=IN&ceid=IN:hi"]}

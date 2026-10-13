@@ -160,6 +160,10 @@ class Pipeline:
             if not c.is_up:
                 self.skipped["not_up"] += 1
                 continue
+            # Gists are Hindi like the headlines; English descriptions are kept only
+            # when the optional AI step will turn them into Hindi.
+            shown_summary = summary if summary and (
+                devanagari_share(summary) >= self.settings.min_hindi_share or self.settings.ai_enabled) else None
 
             suspect = bool(raw.published_at and raw.published_at > now + FUTURE_TOLERANCE)
             sort_at = raw.published_at if raw.published_at and not suspect else now
@@ -191,8 +195,8 @@ class Pipeline:
                 "url": raw.url,
                 "title": raw.title,
                 "title_norm": title_norm,
-                "summary": summary,
-                "summary_origin": "publisher" if summary else None,
+                "summary": shown_summary,
+                "summary_origin": "publisher" if shown_summary else None,
                 "publisher": raw.publisher,
                 "author": raw.author,
                 "handle": raw.handle,
@@ -242,12 +246,18 @@ class Pipeline:
                 removed += 1
                 continue
             data = dict(it["data"])
+            extra: dict = {}
+            if (it["summary"] and it["summary_origin"] in ("publisher", "page") and not self.settings.ai_enabled
+                    and devanagari_share(it["summary"]) < self.settings.min_hindi_share):
+                # English gist: drop it (and re-send the story) and try the page again.
+                extra = {"summary": None, "summary_origin": None, "changed_at": iso(utcnow())}
+                data.pop("gist_tried", None)
             data.update(categories=c.categories, entities=c.entities, breaking=c.breaking,
                         breaking_score=c.breaking_score, reasons=c.reasons, labels=c.labels,
                         statement=c.statement, statement_type=c.statement_type, legal_status=c.legal_status)
             # changed_at is left alone: re-labelling must not make the small delta feed
             # as big as the full one. Apps pick up new labels on their next full sync.
-            self.store.update_item(it["id"], data=data)
+            self.store.update_item(it["id"], data=data, **extra)
             n += 1
         self.store.set_meta("rules", sig)
         log.info("re-labelled %d stored items, removed %d, rules %s", n, removed, sig)
