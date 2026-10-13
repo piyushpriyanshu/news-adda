@@ -71,12 +71,13 @@ BREAKING_SIGNALS: list[tuple[list[str], int, str]] = [
     (_kw("हाईकोर्ट", "हाई कोर्ट", "सुप्रीम कोर्ट", "High Court", "Supreme Court"), 2, "उच्च/सर्वोच्च न्यायालय"),
     (_kw("सजा", "दोषी करार", "बरी", "जमानत", "convicted", "acquitted"), 2, "अदालती फैसला"),
     (_kw("छापा", "छापेमारी", "ईडी", "सीबीआई", "raid"), 2, "जांच एजेंसी की कार्रवाई"),
-    (_kw("निधन", "passes away"), 3, "निधन"),
+    (_kw("निधन", "passes away"), 2, "निधन"),
     (_kw("गठबंधन टूटा", "गठबंधन", "alliance"), 1, "गठबंधन"),
     (_kw("कैबिनेट विस्तार", "मंत्रिमंडल विस्तार", "शपथ"), 2, "मंत्रिमंडल/शपथ"),
     (_kw("हंगामा", "बवाल", "लाठीचार्ज"), 1, "हंगामा"),
 ]
 BREAKING_THRESHOLD = 3
+_LIVE = re.compile(r"\blive\b|लाइव", re.I)
 
 ALLEGATION = _kw("आरोप", "आरोपों", "आरोपित", "आरोप लगाया", "accused", "alleges", "alleged")
 COUNTER = _kw("पलटवार", "जवाबी हमला", "जवाब दिया", "पलटवार किया", "पलटवार करते", "hits back")
@@ -144,7 +145,10 @@ class Classifier:
 
         reasons: list[str] = []
         score = 0
+        live_blog = bool(_LIVE.search(title or ""))
         for kws, weight, reason in BREAKING_SIGNALS:
+            if live_blog and reason == "प्रकाशक ने ब्रेकिंग बताया":
+                continue  # running live pages always say "breaking"
             if _hits(kws, tp):
                 score += weight
                 reasons.append(reason)

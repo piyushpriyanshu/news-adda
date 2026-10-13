@@ -20,7 +20,8 @@ from .registry import load_sources
 from .timeutil import iso, utcnow
 
 UP_KEYWORDS = ("uttar", "up-", "-up", "/up", "lucknow", "pradesh", "politics", "rajneeti", "state")
-MAX_DISCOVERED = 12
+MAX_DISCOVERED = 25
+PRIORITY = ("uttar-pradesh", "uttarpradesh", "lucknow", "up-election", "/up/", "uttar")
 
 
 async def _robots_ok(client: httpx.AsyncClient, url: str, ua: str, cache: dict) -> bool:
@@ -97,6 +98,7 @@ async def discover(settings: Settings | None = None, only: list[str] | None = No
                         rec["error"] = f"{type(exc).__name__}"
                         links = []
                     entry["listing"].append(rec)
+                    links.sort(key=lambda u: next((i for i, k in enumerate(PRIORITY) if k in u.lower()), len(PRIORITY)))
                     for link in links:
                         if link in tested or len(entry["discovered"]) >= MAX_DISCOVERED:
                             continue

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 from datetime import datetime, timedelta
 
 from .classify import Classifier
@@ -11,7 +12,7 @@ from .dedup import WINDOW, Clusterer
 from .entities import EntityIndex
 from .fetcher import Fetcher, FetchResult
 from .parser import RawItem, item_id
-from .registry import Source, load_sources
+from .registry import Source, load_blocked_publishers, load_sources
 from .store import Store
 from .textutil import normalize, short_summary
 from .timeutil import from_iso, iso, utcnow
@@ -22,18 +23,32 @@ FUTURE_TOLERANCE = timedelta(minutes=10)
 
 
 def _base_name(name: str) -> str:
-    return normalize(name.split("(")[0]).strip()
+    """'UP Tak', 'UPTak' and 'www.uptak.in' all become 'uptak'."""
+    n = normalize(name.split("(")[0]).strip()
+    n = re.sub(r"^www\.", "", n)
+    n = re.sub(r"\.(com|in|co\.in|net|org)$", "", n)
+    return re.sub(r"[^0-9a-z\u0900-\u097f]", "", n)
+
+
+def _names(s: Source) -> set[str]:
+    return {_base_name(x) for x in [s.name, s.name_hi, *s.aliases] if x}
 
 
 def publisher_key(sources: list[Source], src: Source, publisher: str | None) -> str:
+    """One stable key per outlet, however it reached us (own feed, several
+    section feeds, or Google News under a slightly different name)."""
     if publisher is None and src.kind != "google_news":
-        names = {_base_name(src.name), _base_name(src.name_hi)}
+        names = _names(src)
     else:
         names = {_base_name(publisher or "")}
     for s in sources:
-        if s.kind in ("rss",) and names & {_base_name(s.name), _base_name(s.name_hi)}:
+        if s.kind == "rss" and names & _names(s):
             return s.id.split("_")[0]
-    return next(iter(names)) or src.id
+    return next(iter(names), "") or src.id
+
+
+# Promotional/live-TV pages that are not news reports.
+PROMO = re.compile(r"live\s*tv|लाइव\s*टीवी|watch\s+live|देखें\s+लाइव", re.I)
 
 
 class Pipeline:
@@ -46,6 +61,7 @@ class Pipeline:
     def reload(self):
         """Re-read sources and entities (they are plain files, editable live)."""
         self.sources: list[Source] = load_sources(self.settings.sources_path)
+        self.blocked = {_base_name(b) for b in load_blocked_publishers(self.settings.sources_path)}
         self.entities = EntityIndex(self.settings.entities_path)
         self.classifier = Classifier(self.entities)
 
@@ -85,6 +101,10 @@ class Pipeline:
                         touched.add(existing["cluster_id"])
                 continue
 
+            if raw.publisher and _base_name(raw.publisher) in self.blocked:
+                continue  # social posts / aggregators surfaced by Google News
+            if PROMO.search(raw.title):
+                continue
             title_norm = " ".join(normalize(raw.title).split())
             pub_key = self.publisher_key(src, raw.publisher)
             same = self.store.find_same_title(title_norm, now - WINDOW)

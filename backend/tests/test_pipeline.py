@@ -195,3 +195,51 @@ def test_write_feed_files(settings, router, tmp_path):
         for r in st["reports"]:
             assert r["url"].startswith("https://")
             assert r["source_name"]
+
+
+def test_publisher_aliases_blocklist_and_promo(settings, router, tmp_path):
+    from newsadda.pipeline import publisher_key
+    from newsadda.registry import load_sources
+
+    srcs = load_sources("newsadda/data/sources.yaml")
+    by = {s.id: s for s in srcs}
+    gn = by["gn_up_politics"]
+    assert publisher_key(srcs, gn, "UPTak") == publisher_key(srcs, gn, "UP Tak") == "uptak"
+    assert publisher_key(srcs, gn, "TV9 Hindi") == publisher_key(srcs, by["tv9_up"], None) == "tv9"
+    assert publisher_key(srcs, by["amarujala_lucknow"], None) == publisher_key(srcs, by["amarujala_up"], None)
+    assert publisher_key(srcs, gn, "Jagran") == "jagran"
+
+    standard_routes(router)
+    router.routes["https://news.google.com/rss/search"] = httpx.Response(200, content=rss([
+        {"title": "अखिलेश यादव की रैली - Facebook", "link": "https://news.google.com/rss/articles/fb",
+         "source": "Facebook", "date": _now_rfc(-2)},
+        {"title": "AajTak Live TV: देखें लाइव - AajTak", "link": "https://news.google.com/rss/articles/tv",
+         "source": "AajTak", "date": _now_rfc(-2)},
+    ]))
+    settings.sources_path = str(tmp_path / "s.yaml")
+    from .conftest import TEST_SOURCES
+    (tmp_path / "s.yaml").write_text(TEST_SOURCES + "\nblocked_publishers: [Facebook]\n", encoding="utf-8")
+    p = make(settings, router)
+    run(p)
+    titles = [s["title"] for s in build_feed(p)["stories"]]
+    assert not any("Facebook" in t or "रैली" in t for t in titles)
+    assert not any("Live TV" in t for t in titles)
+
+
+def test_live_blog_is_not_breaking_by_label_alone():
+    from newsadda.classify import Classifier
+    from newsadda.entities import EntityIndex
+
+    c = Classifier(EntityIndex()).classify("UP News Today Live: उत्तर प्रदेश ब्रेकिंग न्यूज़, भाजपा", None, up_section=True)
+    assert not c.breaking
+
+
+def test_real_registry_and_entities_load():
+    from newsadda.entities import EntityIndex
+    from newsadda.registry import load_sources
+
+    srcs = load_sources("newsadda/data/sources.yaml")
+    assert len({s.id for s in srcs}) == len(srcs) > 20
+    assert all(s.feed_urls or s.kind == "x" or s.kind == "rss" for s in srcs)
+    e = EntityIndex()
+    assert len(e.districts) == 75 and len(e.leaders) >= 12
