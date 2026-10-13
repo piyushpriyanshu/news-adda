@@ -11,6 +11,7 @@ import com.newsadda.app.data.Prefs
  */
 data class Str(val hindi: Boolean) {
     private fun t(en: String, hi: String) = if (hindi) hi else en
+    private fun pl(n: Int, one: String, many: String) = if (n == 1) one else many
 
     companion object {
         fun of(ctx: Context) = Str(Prefs.get(ctx).language == "hi")
@@ -118,7 +119,7 @@ data class Str(val hindi: Boolean) {
     // ---- story card
     val viaGoogle get() = t(" (Google News)", " (गूगल न्यूज़)")
     val seenPrefix get() = t("seen ", "देखा ")
-    fun moreSources(n: Int) = t("+$n sources", "+$n स्रोत")
+    fun moreSources(n: Int) = t("+$n " + pl(n, "source", "sources"), "+$n स्रोत")
     val actOriginal get() = t("Original", "मूल खबर")
     val actSave get() = t("Save", "सहेजें")
     val actSaved get() = t("Saved", "सहेजा गया")
@@ -137,7 +138,7 @@ data class Str(val hindi: Boolean) {
         "यह स्रोत के शब्दों पर आधारित है। आरोप, एफआईआर, गिरफ्तारी या जांच दोषसिद्धि नहीं है; अंतिम स्थिति अदालत तय करती है।")
     val related get() = t("Related", "संबंधित")
     val priorityReasons get() = t("Why it is prioritised", "प्राथमिकता के कारण")
-    fun sourcesHeader(reports: Int, publishers: Int) = t("Sources ($reports reports, $publishers publishers)", "स्रोत ($reports रिपोर्ट, $publishers प्रकाशक)")
+    fun sourcesHeader(reports: Int, publishers: Int) = t("Sources ($reports " + pl(reports, "report", "reports") + ", $publishers " + pl(publishers, "publisher", "publishers") + ")", "स्रोत ($reports रिपोर्ट, $publishers प्रकाशक)")
     val openOriginal get() = t("Open original", "मूल खबर खोलें")
     val copyLinks get() = t("Copy headline & links", "शीर्षक व लिंक कॉपी करें")
     val shareStory get() = t("Share", "शेयर करें")
@@ -157,7 +158,7 @@ data class Str(val hindi: Boolean) {
     // ---- lists
     val allUp get() = t("All UP news", "सभी यूपी खबरें")
     val politicsOnly get() = t("Politics only", "केवल राजनीति")
-    fun newStories(n: Int) = t("$n new stories", "$n नई खबरें आई हैं")
+    fun newStories(n: Int) = t("$n new " + pl(n, "story", "stories"), "$n नई खबरें आई हैं")
     val markSeen get() = t("Mark seen", "देख लिया")
     val emptyHome get() = t("No news yet", "अभी कोई खबर नहीं")
     val emptyHomeBody get() = t("Tap “Update now” or pull down.", "ऊपर “अभी अपडेट करें” दबाएं या नीचे खींचें।")
@@ -183,7 +184,7 @@ data class Str(val hindi: Boolean) {
     val xUnavailable get() = t("X (Twitter) posts are not available — the backend has no X API key. Below are leaders' statements reported in the news.",
         "X (ट्विटर) पोस्ट अभी उपलब्ध नहीं हैं — बैकएंड में X API कुंजी सेट नहीं है। नीचे समाचारों में छपे नेताओं के बयान हैं।")
     val districtPick get() = t("Choose a district. ★ = your favourite districts.", "जिला चुनें। ★ = आपके पसंदीदा जिले।")
-    fun storyCount(n: Int) = t("$n stories", "$n खबरें")
+    fun storyCount(n: Int) = t("$n " + pl(n, "story", "stories"), "$n खबरें")
     val allDistricts get() = t("← All districts", "← सभी जिले")
     val makeFavourite get() = t("Add to favourites", "पसंदीदा बनाएं")
     val removeFavourite get() = t("Remove favourite", "पसंदीदा से हटाएं")
@@ -201,7 +202,7 @@ data class Str(val hindi: Boolean) {
     val allCategories get() = t("All categories", "सभी श्रेणियां")
     val allPeoplePlaces get() = t("All leaders/districts", "सभी नेता/जिले")
     val allSources get() = t("All sources", "सभी स्रोत")
-    fun results(n: Int) = t("$n results", "$n परिणाम")
+    fun results(n: Int) = t("$n " + pl(n, "result", "results"), "$n परिणाम")
     val searchStart get() = t("Type or choose a filter to search", "खोजने के लिए लिखें या फ़िल्टर चुनें")
     val noResults get() = t("No results", "कोई परिणाम नहीं")
     val searchScope get() = t("Search covers the last 3 days of news saved on this phone.", "खोज फ़ोन पर सहेजी गई पिछले 3 दिनों की खबरों में होती है।")
@@ -215,7 +216,7 @@ data class Str(val hindi: Boolean) {
     val showingCached get() = t(" — showing saved stories", " — सहेजी गई खबरें दिखाई जा रही हैं")
     val retry get() = t("Retry", "फिर कोशिश")
     fun feedStale(ago: String) = t("The server feed was built $ago — collection may be delayed.", "सर्वर की फ़ीड $ago बनी थी — संग्रह में देरी हो सकती है।")
-    fun sourcesFailing(n: Int) = t("$n sources have errors; news is still coming from the rest.", "$n स्रोत अभी त्रुटि में हैं; बाकी से खबरें आ रही हैं।")
+    fun sourcesFailing(n: Int) = t(pl(n, "1 source has an error", "$n sources have errors") + "; news is still coming from the rest.", "$n स्रोत अभी त्रुटि में हैं; बाकी से खबरें आ रही हैं।")
     val view get() = t("View", "देखें")
     fun updateReady(v: String) = t("Version $v is downloaded", "नया संस्करण $v डाउनलोड हो चुका है")
     val install get() = t("Install", "इंस्टॉल करें")
@@ -272,7 +273,7 @@ data class Str(val hindi: Boolean) {
         else -> code
     }
     fun lastOk(s: String) = t("last OK: $s", "अंतिम सफल: $s")
-    fun itemCount(n: Int) = t("$n stories", "$n खबरें")
+    fun itemCount(n: Int) = t("$n " + pl(n, "story", "stories"), "$n खबरें")
     val textSize get() = t("Text size", "अक्षर आकार")
     val textSizes get() = if (hindi) listOf("छोटा", "सामान्य", "बड़ा", "बहुत बड़ा") else listOf("Small", "Normal", "Large", "Extra large")
     val backendAddress get() = t("Backend (feed) address", "बैकएंड (फ़ीड) पता")
@@ -310,7 +311,7 @@ data class Str(val hindi: Boolean) {
     val chUpdatesDesc get() = t("When a new version of News Adda is available", "न्यूज़ अड्डा का नया संस्करण उपलब्ध होने पर")
     val nBreaking get() = t("Breaking", "ब्रेकिंग")
     val nNew get() = t("New story", "नई खबर")
-    fun nSummary(n: Int) = t("$n new breaking stories", "$n नई ब्रेकिंग खबरें")
+    fun nSummary(n: Int) = t("$n new breaking " + pl(n, "story", "stories"), "$n नई ब्रेकिंग खबरें")
     val nOpenApp get() = t("Open News Adda to read them", "न्यूज़ अड्डा खोलकर देखें")
     fun nUpdateTitle(v: String) = t("News Adda $v is available", "न्यूज़ अड्डा $v उपलब्ध")
     val nUpdateReady get() = t("Downloaded — tap to install", "डाउनलोड हो चुका है — इंस्टॉल करने के लिए टैप करें")
