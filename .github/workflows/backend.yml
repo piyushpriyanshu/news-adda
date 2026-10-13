@@ -1,0 +1,62 @@
+name: Backend tests and source check
+
+# Runs the test suite and a live check of every configured feed URL (plus feed
+# autodiscovery on publisher RSS pages). Results are published to the
+# `ci-backend` branch: pytest.txt, discovery.json, discovery.txt.
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 1 * * *"   # daily source re-check (06:47 IST)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+      - run: pip install -r backend/requirements-dev.txt
+
+      - name: Tests
+        id: tests
+        working-directory: backend
+        run: |
+          set +e
+          python -m pytest -q -W ignore::DeprecationWarning 2>&1 | tee ../pytest.txt
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Live source check
+        working-directory: backend
+        run: |
+          set +e
+          python -m newsadda discover --out ../discovery.json 2>&1 | grep -v " INFO " | tee ../discovery.txt
+          true
+
+      - name: Publish report
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p report
+          cp pytest.txt discovery.json discovery.txt report/ 2>/dev/null || true
+          echo "commit=${GITHUB_SHA} tests_exit=${{ steps.tests.outputs.code }} at=$(date -u +%FT%TZ)" > report/status.txt
+          .github/scripts/publish_branch.sh ci-backend report "backend report ${GITHUB_SHA::7}"
+
+      - name: Fail if tests failed
+        if: steps.tests.outputs.code != '0'
+        run: exit 1

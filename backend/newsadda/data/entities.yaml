@@ -1,0 +1,300 @@
+# Entities News Adda recognises in headlines and summaries.
+# Edit freely: the backend reloads this file on every run and ships the lists
+# to the app inside feed.json, so the app picks up changes without an update.
+#
+# Matching is on whole words after normalisation (nukta and chandrabindu are
+# folded, so "आज़ाद"/"आजाद" and "बाँदा"/"बांदा" match the same alias).
+# Prefer full names over surnames that many people share.
+
+leaders:
+  - id: yogi
+    name_hi: योगी आदित्यनाथ
+    name: Yogi Adityanath
+    party: bjp
+    role_hi: मुख्यमंत्री
+    aliases: [योगी आदित्यनाथ, सीएम योगी, मुख्यमंत्री योगी, योगी सरकार, योगी, Yogi Adityanath, CM Yogi, Yogi]
+  - id: akhilesh
+    name_hi: अखिलेश यादव
+    name: Akhilesh Yadav
+    party: sp
+    role_hi: सपा अध्यक्ष
+    aliases: [अखिलेश यादव, अखिलेश, Akhilesh Yadav, Akhilesh]
+  - id: mayawati
+    name_hi: मायावती
+    name: Mayawati
+    party: bsp
+    role_hi: बसपा प्रमुख
+    aliases: [मायावती, बसपा सुप्रीमो, Mayawati]
+  - id: op_rajbhar
+    name_hi: ओम प्रकाश राजभर
+    name: Om Prakash Rajbhar
+    party: sbsp
+    role_hi: सुभासपा प्रमुख
+    aliases: [ओम प्रकाश राजभर, ओमप्रकाश राजभर, ओपी राजभर, Om Prakash Rajbhar, OP Rajbhar]
+  - id: keshav_maurya
+    name_hi: केशव प्रसाद मौर्य
+    name: Keshav Prasad Maurya
+    party: bjp
+    role_hi: उपमुख्यमंत्री
+    aliases: [केशव प्रसाद मौर्य, केशव मौर्य, डिप्टी सीएम केशव, Keshav Prasad Maurya, Keshav Maurya]
+  - id: brajesh_pathak
+    name_hi: ब्रजेश पाठक
+    name: Brajesh Pathak
+    party: bjp
+    role_hi: उपमुख्यमंत्री
+    aliases: [ब्रजेश पाठक, बृजेश पाठक, डिप्टी सीएम पाठक, Brajesh Pathak]
+  - id: dimple
+    name_hi: डिंपल यादव
+    name: Dimple Yadav
+    party: sp
+    role_hi: सांसद
+    aliases: [डिंपल यादव, डिंपल, Dimple Yadav]
+  - id: shivpal
+    name_hi: शिवपाल सिंह यादव
+    name: Shivpal Singh Yadav
+    party: sp
+    role_hi: सपा नेता
+    aliases: [शिवपाल सिंह यादव, शिवपाल यादव, शिवपाल, Shivpal Singh Yadav, Shivpal Yadav, Shivpal]
+  - id: jayant
+    name_hi: जयंत चौधरी
+    name: Jayant Chaudhary
+    party: rld
+    role_hi: रालोद प्रमुख
+    aliases: [जयंत चौधरी, Jayant Chaudhary, Jayant Chaudhari]
+  - id: sanjay_nishad
+    name_hi: संजय निषाद
+    name: Sanjay Nishad
+    party: nishad
+    role_hi: निषाद पार्टी प्रमुख
+    aliases: [संजय निषाद, डॉ संजय निषाद, Sanjay Nishad]
+  - id: anupriya
+    name_hi: अनुप्रिया पटेल
+    name: Anupriya Patel
+    party: apnadal_s
+    role_hi: अपना दल (एस) प्रमुख
+    aliases: [अनुप्रिया पटेल, अनुप्रिया, Anupriya Patel]
+  - id: chandrashekhar
+    name_hi: चंद्रशेखर आजाद
+    name: Chandrashekhar Azad
+    party: asp
+    role_hi: आजाद समाज पार्टी प्रमुख
+    aliases: [चंद्रशेखर आजाद, चन्द्रशेखर आजाद, चंद्रशेखर रावण, Chandrashekhar Azad, Chandra Shekhar Azad]
+  - id: ajay_rai
+    name_hi: अजय राय
+    name: Ajay Rai
+    party: inc
+    role_hi: कांग्रेस नेता
+    aliases: [अजय राय, Ajay Rai]
+  - id: azam_khan
+    name_hi: आजम खान
+    name: Azam Khan
+    party: sp
+    role_hi: सपा नेता
+    aliases: [आजम खान, आजम खां, Azam Khan]
+  - id: pankaj_chaudhary
+    name_hi: पंकज चौधरी
+    name: Pankaj Chaudhary
+    party: bjp
+    role_hi: भाजपा नेता
+    aliases: [पंकज चौधरी, Pankaj Chaudhary]
+  - id: akash_anand
+    name_hi: आकाश आनंद
+    name: Akash Anand
+    party: bsp
+    role_hi: बसपा नेता
+    aliases: [आकाश आनंद, Akash Anand]
+  - id: swami_prasad
+    name_hi: स्वामी प्रसाद मौर्य
+    name: Swami Prasad Maurya
+    party: other
+    role_hi: नेता
+    aliases: [स्वामी प्रसाद मौर्य, Swami Prasad Maurya]
+  - id: avdhesh_prasad
+    name_hi: अवधेश प्रसाद
+    name: Awadhesh Prasad
+    party: sp
+    role_hi: सांसद, फैजाबाद
+    aliases: [अवधेश प्रसाद, Awadhesh Prasad, Avadhesh Prasad]
+
+# Influential regional figures ("सीट और बाहुबली" section).
+# The app never labels anyone a criminal. Legal-status chips only repeat what
+# the matched report itself says (allegation, FIR, arrest, conviction ...).
+regional_figures:
+  - id: raja_bhaiya
+    name_hi: रघुराज प्रताप सिंह 'राजा भैया'
+    name: Raghuraj Pratap Singh (Raja Bhaiya)
+    area_hi: कुंडा, प्रतापगढ़
+    aliases: [राजा भैया, रघुराज प्रताप सिंह, Raja Bhaiya, Raghuraj Pratap Singh]
+  - id: dhananjay_singh
+    name_hi: धनंजय सिंह
+    name: Dhananjay Singh
+    area_hi: जौनपुर
+    aliases: [धनंजय सिंह, Dhananjay Singh]
+  - id: brijesh_singh
+    name_hi: बृजेश सिंह
+    name: Brijesh Singh
+    area_hi: वाराणसी
+    aliases: [बृजेश सिंह, ब्रजेश सिंह, Brijesh Singh]
+  - id: brij_bhushan
+    name_hi: बृजभूषण शरण सिंह
+    name: Brij Bhushan Sharan Singh
+    area_hi: कैसरगंज, गोंडा
+    aliases: [बृजभूषण शरण सिंह, बृजभूषण सिंह, बृजभूषण, Brij Bhushan Sharan Singh, Brij Bhushan]
+  - id: afzal_ansari
+    name_hi: अफजाल अंसारी
+    name: Afzal Ansari
+    area_hi: गाजीपुर
+    aliases: [अफजाल अंसारी, Afzal Ansari]
+  - id: abbas_ansari
+    name_hi: अब्बास अंसारी
+    name: Abbas Ansari
+    area_hi: मऊ
+    aliases: [अब्बास अंसारी, Abbas Ansari]
+  - id: abhay_singh
+    name_hi: अभय सिंह
+    name: Abhay Singh
+    area_hi: गोसाईगंज, अयोध्या
+    aliases: [विधायक अभय सिंह, Abhay Singh MLA]
+  - id: amarmani
+    name_hi: अमरमणि त्रिपाठी
+    name: Amarmani Tripathi
+    area_hi: महराजगंज
+    aliases: [अमरमणि त्रिपाठी, अमरमणि, Amarmani Tripathi]
+  - id: vijay_mishra
+    name_hi: विजय मिश्रा
+    name: Vijay Mishra
+    area_hi: भदोही
+    aliases: [विजय मिश्रा, Vijay Mishra]
+
+parties:
+  - id: bjp
+    name_hi: भाजपा
+    aliases: [भाजपा, बीजेपी, भारतीय जनता पार्टी, BJP]
+  - id: sp
+    name_hi: सपा
+    aliases: [सपा, समाजवादी पार्टी, Samajwadi Party]
+  - id: bsp
+    name_hi: बसपा
+    aliases: [बसपा, बहुजन समाज पार्टी, BSP]
+  - id: inc
+    name_hi: कांग्रेस
+    aliases: [कांग्रेस, Congress, INC]
+  - id: rld
+    name_hi: रालोद
+    aliases: [रालोद, राष्ट्रीय लोक दल, RLD]
+  - id: sbsp
+    name_hi: सुभासपा
+    aliases: [सुभासपा, सुहेलदेव भारतीय समाज पार्टी, SBSP]
+  - id: apnadal_s
+    name_hi: अपना दल (एस)
+    aliases: [अपना दल, अपना दल (एस), Apna Dal]
+  - id: nishad
+    name_hi: निषाद पार्टी
+    aliases: [निषाद पार्टी, Nishad Party]
+  - id: asp
+    name_hi: आजाद समाज पार्टी
+    aliases: [आजाद समाज पार्टी, भीम आर्मी, Azad Samaj Party, Bhim Army]
+  - id: aap
+    name_hi: आप
+    aliases: [आम आदमी पार्टी, AAP]
+  - id: other
+    name_hi: अन्य
+    aliases: []
+
+# All 75 districts of Uttar Pradesh. `key: true` marks politically significant
+# districts shown first in the app.
+districts:
+  - {id: agra, name_hi: आगरा, aliases: [आगरा, Agra]}
+  - {id: aligarh, name_hi: अलीगढ़, aliases: [अलीगढ़, Aligarh]}
+  - {id: ambedkar_nagar, name_hi: अंबेडकर नगर, aliases: [अंबेडकर नगर, अंबेडकरनगर, Ambedkar Nagar]}
+  - {id: amethi, name_hi: अमेठी, key: true, aliases: [अमेठी, Amethi]}
+  - {id: amroha, name_hi: अमरोहा, aliases: [अमरोहा, Amroha]}
+  - {id: auraiya, name_hi: औरैया, aliases: [औरैया, Auraiya]}
+  - {id: ayodhya, name_hi: अयोध्या, key: true, aliases: [अयोध्या, फैजाबाद, Ayodhya, Faizabad]}
+  - {id: azamgarh, name_hi: आजमगढ़, key: true, aliases: [आजमगढ़, Azamgarh]}
+  - {id: baghpat, name_hi: बागपत, key: true, aliases: [बागपत, Baghpat]}
+  - {id: bahraich, name_hi: बहराइच, aliases: [बहराइच, Bahraich]}
+  - {id: ballia, name_hi: बलिया, key: true, aliases: [बलिया, Ballia]}
+  - {id: balrampur, name_hi: बलरामपुर, aliases: [बलरामपुर, Balrampur]}
+  - {id: banda, name_hi: बांदा, aliases: [बांदा, Banda]}
+  - {id: barabanki, name_hi: बाराबंकी, aliases: [बाराबंकी, Barabanki]}
+  - {id: bareilly, name_hi: बरेली, aliases: [बरेली, Bareilly]}
+  - {id: basti, name_hi: बस्ती, aliases: [बस्ती, Basti]}
+  - {id: bhadohi, name_hi: भदोही, aliases: [भदोही, संत रविदास नगर, Bhadohi]}
+  - {id: bijnor, name_hi: बिजनौर, aliases: [बिजनौर, Bijnor]}
+  - {id: budaun, name_hi: बदायूं, aliases: [बदायूं, बदायूँ, Budaun, Badaun]}
+  - {id: bulandshahr, name_hi: बुलंदशहर, aliases: [बुलंदशहर, Bulandshahr]}
+  - {id: chandauli, name_hi: चंदौली, aliases: [चंदौली, Chandauli]}
+  - {id: chitrakoot, name_hi: चित्रकूट, aliases: [चित्रकूट, Chitrakoot]}
+  - {id: deoria, name_hi: देवरिया, aliases: [देवरिया, Deoria]}
+  - {id: etah, name_hi: एटा, aliases: [एटा, Etah]}
+  - {id: etawah, name_hi: इटावा, aliases: [इटावा, Etawah]}
+  - {id: farrukhabad, name_hi: फर्रुखाबाद, aliases: [फर्रुखाबाद, Farrukhabad]}
+  - {id: fatehpur, name_hi: फतेहपुर, aliases: [फतेहपुर, Fatehpur]}
+  - {id: firozabad, name_hi: फिरोजाबाद, aliases: [फिरोजाबाद, Firozabad]}
+  - {id: gautam_buddh_nagar, name_hi: गौतमबुद्ध नगर, aliases: [गौतमबुद्ध नगर, गौतम बुद्ध नगर, नोएडा, ग्रेटर नोएडा, Noida, Greater Noida, Gautam Buddh Nagar]}
+  - {id: ghaziabad, name_hi: गाजियाबाद, aliases: [गाजियाबाद, Ghaziabad]}
+  - {id: ghazipur, name_hi: गाजीपुर, key: true, aliases: [गाजीपुर, Ghazipur]}
+  - {id: gonda, name_hi: गोंडा, aliases: [गोंडा, Gonda]}
+  - {id: gorakhpur, name_hi: गोरखपुर, key: true, aliases: [गोरखपुर, Gorakhpur]}
+  - {id: hamirpur, name_hi: हमीरपुर, aliases: [हमीरपुर, Hamirpur]}
+  - {id: hapur, name_hi: हापुड़, aliases: [हापुड़, Hapur]}
+  - {id: hardoi, name_hi: हरदोई, aliases: [हरदोई, Hardoi]}
+  - {id: hathras, name_hi: हाथरस, aliases: [हाथरस, Hathras]}
+  - {id: jalaun, name_hi: जालौन, aliases: [जालौन, उरई, Jalaun, Orai]}
+  - {id: jaunpur, name_hi: जौनपुर, key: true, aliases: [जौनपुर, Jaunpur]}
+  - {id: jhansi, name_hi: झांसी, aliases: [झांसी, Jhansi]}
+  - {id: kannauj, name_hi: कन्नौज, key: true, aliases: [कन्नौज, Kannauj]}
+  - {id: kanpur_dehat, name_hi: कानपुर देहात, aliases: [कानपुर देहात, Kanpur Dehat]}
+  - {id: kanpur_nagar, name_hi: कानपुर, aliases: [कानपुर, कानपुर नगर, Kanpur]}
+  - {id: kasganj, name_hi: कासगंज, aliases: [कासगंज, Kasganj]}
+  - {id: kaushambi, name_hi: कौशांबी, aliases: [कौशांबी, Kaushambi]}
+  - {id: kushinagar, name_hi: कुशीनगर, aliases: [कुशीनगर, Kushinagar]}
+  - {id: lakhimpur_kheri, name_hi: लखीमपुर खीरी, aliases: [लखीमपुर खीरी, लखीमपुर, Lakhimpur Kheri, Lakhimpur]}
+  - {id: lalitpur, name_hi: ललितपुर, aliases: [ललितपुर, Lalitpur]}
+  - {id: lucknow, name_hi: लखनऊ, key: true, aliases: [लखनऊ, Lucknow]}
+  - {id: maharajganj, name_hi: महराजगंज, aliases: [महराजगंज, महाराजगंज, Maharajganj]}
+  - {id: mahoba, name_hi: महोबा, aliases: [महोबा, Mahoba]}
+  - {id: mainpuri, name_hi: मैनपुरी, key: true, aliases: [मैनपुरी, Mainpuri]}
+  - {id: mathura, name_hi: मथुरा, aliases: [मथुरा, वृंदावन, Mathura, Vrindavan]}
+  - {id: mau, name_hi: मऊ, key: true, aliases: [मऊ, Mau]}
+  - {id: meerut, name_hi: मेरठ, key: true, aliases: [मेरठ, Meerut]}
+  - {id: mirzapur, name_hi: मिर्जापुर, aliases: [मिर्जापुर, Mirzapur]}
+  - {id: moradabad, name_hi: मुरादाबाद, key: true, aliases: [मुरादाबाद, Moradabad]}
+  - {id: muzaffarnagar, name_hi: मुजफ्फरनगर, key: true, aliases: [मुजफ्फरनगर, Muzaffarnagar]}
+  - {id: pilibhit, name_hi: पीलीभीत, aliases: [पीलीभीत, Pilibhit]}
+  - {id: pratapgarh, name_hi: प्रतापगढ़, key: true, aliases: [प्रतापगढ़, Pratapgarh]}
+  - {id: prayagraj, name_hi: प्रयागराज, key: true, aliases: [प्रयागराज, इलाहाबाद, Prayagraj, Allahabad]}
+  - {id: rae_bareli, name_hi: रायबरेली, key: true, aliases: [रायबरेली, Rae Bareli, Raebareli]}
+  - {id: rampur, name_hi: रामपुर, key: true, aliases: [रामपुर, Rampur]}
+  - {id: saharanpur, name_hi: सहारनपुर, key: true, aliases: [सहारनपुर, Saharanpur]}
+  - {id: sambhal, name_hi: संभल, key: true, aliases: [संभल, Sambhal]}
+  - {id: sant_kabir_nagar, name_hi: संत कबीर नगर, aliases: [संत कबीर नगर, संतकबीरनगर, Sant Kabir Nagar]}
+  - {id: shahjahanpur, name_hi: शाहजहांपुर, aliases: [शाहजहांपुर, Shahjahanpur]}
+  - {id: shamli, name_hi: शामली, aliases: [शामली, Shamli]}
+  - {id: shravasti, name_hi: श्रावस्ती, aliases: [श्रावस्ती, Shravasti]}
+  - {id: siddharthnagar, name_hi: सिद्धार्थनगर, aliases: [सिद्धार्थनगर, सिद्धार्थ नगर, Siddharthnagar]}
+  - {id: sitapur, name_hi: सीतापुर, aliases: [सीतापुर, Sitapur]}
+  - {id: sonbhadra, name_hi: सोनभद्र, aliases: [सोनभद्र, Sonbhadra]}
+  - {id: sultanpur, name_hi: सुल्तानपुर, aliases: [सुल्तानपुर, Sultanpur]}
+  - {id: unnao, name_hi: उन्नाव, aliases: [उन्नाव, Unnao]}
+  - {id: varanasi, name_hi: वाराणसी, key: true, aliases: [वाराणसी, बनारस, काशी, Varanasi, Banaras]}
+
+# Constituencies whose names differ from district names, plus closely watched
+# assembly seats. District-named seats are already covered above.
+seats:
+  - {id: kairana, name_hi: कैराना, aliases: [कैराना, Kairana]}
+  - {id: nagina, name_hi: नगीना, aliases: [नगीना, Nagina]}
+  - {id: kaiserganj, name_hi: कैसरगंज, aliases: [कैसरगंज, Kaiserganj]}
+  - {id: phulpur, name_hi: फूलपुर, aliases: [फूलपुर, Phulpur]}
+  - {id: kunda, name_hi: कुंडा, aliases: [कुंडा, Kunda]}
+  - {id: malhani, name_hi: मल्हनी, aliases: [मल्हनी, Malhani]}
+  - {id: karhal, name_hi: करहल, aliases: [करहल, Karhal]}
+  - {id: jaswantnagar, name_hi: जसवंतनगर, aliases: [जसवंतनगर, Jaswantnagar]}
+  - {id: mohanlalganj, name_hi: मोहनलालगंज, aliases: [मोहनलालगंज, Mohanlalganj]}
+  - {id: salempur, name_hi: सलेमपुर, aliases: [सलेमपुर, Salempur]}
+  - {id: robertsganj, name_hi: रॉबर्ट्सगंज, aliases: [रॉबर्ट्सगंज, राबर्ट्सगंज, Robertsganj]}
+  - {id: domariyaganj, name_hi: डुमरियागंज, aliases: [डुमरियागंज, Domariyaganj]}
+  - {id: milkipur, name_hi: मिल्कीपुर, aliases: [मिल्कीपुर, Milkipur]}
+  - {id: kundarki, name_hi: कुंदरकी, aliases: [कुंदरकी, Kundarki]}
+  - {id: sisamau, name_hi: सीसामऊ, aliases: [सीसामऊ, Sisamau]}
