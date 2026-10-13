@@ -17,12 +17,14 @@ data class Settings(
     val autoDownloadUpdates: Boolean = true,
     val textScale: Float = 1.0f,
     val politicsOnlyHome: Boolean = false,
+    /** "en" or "hi": interface language only; news stays in Hindi. */
+    val language: String = "en",
 )
 
 object Prefs {
     val REFRESH_OPTIONS = listOf(1, 5, 10, 15, 30)
     val UPDATE_OPTIONS = listOf(1, 3, 6, 12)
-    val TEXT_SCALES = listOf(0.9f to "छोटा", 1.0f to "सामान्य", 1.15f to "बड़ा", 1.3f to "बहुत बड़ा")
+    val TEXT_SCALES = listOf(0.9f, 1.0f, 1.15f, 1.3f)
 
     private const val FILE = "settings"
     private val state = MutableStateFlow(Settings())
@@ -54,6 +56,7 @@ object Prefs {
             autoDownloadUpdates = p.getBoolean("auto_download", true),
             textScale = p.getFloat("text_scale", 1.0f),
             politicsOnlyHome = p.getBoolean("politics_only", false),
+            language = if (p.getString("lang", "en") == "hi") "hi" else "en",
         )
         loaded = true
     }
@@ -74,6 +77,7 @@ object Prefs {
             .putBoolean("auto_download", s.autoDownloadUpdates)
             .putFloat("text_scale", s.textScale)
             .putBoolean("politics_only", s.politicsOnlyHome)
+            .putString("lang", s.language)
             .apply()
     }
 

@@ -35,6 +35,7 @@ import java.time.Instant
 fun StoryDetailSheet(s: Story, names: Names, saved: Boolean, onSave: () -> Unit, onDismiss: () -> Unit) {
     val ctx = LocalContext.current
     val c = LocalNewsColors.current
+    val str = LocalStr.current
     val now = Instant.now()
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
         Column(
@@ -50,65 +51,64 @@ fun StoryDetailSheet(s: Story, names: Names, saved: Boolean, onSave: () -> Unit,
             if (s.summary != null) {
                 Text(s.summary, style = MaterialTheme.typography.bodyLarge)
                 Text(
-                    if (s.summaryOrigin == "ai") "सारांश: प्रकाशक के विवरण से AI द्वारा हिंदी में संक्षेप"
-                    else "सारांश: प्रकाशक के फ़ीड विवरण से",
+                    if (s.summaryOrigin == "ai") str.summaryAi else str.summaryPublisher,
                     style = MaterialTheme.typography.bodySmall, color = c.muted,
                 )
             } else {
-                Text("केवल शीर्षक उपलब्ध — पूरी जानकारी के लिए मूल खबर खोलें।", style = MaterialTheme.typography.bodyMedium, color = c.muted)
+                Text(str.headlineOnly, style = MaterialTheme.typography.bodyMedium, color = c.muted)
             }
 
             if (s.corroboration == "single") {
                 Spacer(Modifier.height(10.dp))
                 Text(
-                    "अभी केवल एक स्रोत ने रिपोर्ट किया है; स्वतंत्र पुष्टि उपलब्ध नहीं।",
+                    str.singleSource,
                     style = MaterialTheme.typography.bodyMedium, color = c.caution,
                 )
             }
-            if ("आरोप" in s.labels) {
+            if ("allegation" in s.labels) {
                 Text(
-                    "इसमें आरोप शामिल हैं। आरोप सिद्ध तथ्य नहीं है; बयान उसी व्यक्ति/संगठन का है जिसने आरोप लगाया।",
+                    str.allegationNote,
                     style = MaterialTheme.typography.bodyMedium, color = c.allegation,
                 )
             }
             if (s.legalStatus.isNotEmpty()) {
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "रिपोर्ट में उल्लेख: " + s.legalStatus.joinToString(", "),
+                    str.legalMentioned + s.legalStatus.joinToString(", ") { str.legal(it) },
                     style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium,
                 )
                 Text(
-                    "यह स्रोत के शब्दों पर आधारित है। आरोप, एफआईआर, गिरफ्तारी या जांच दोषसिद्धि नहीं है; अंतिम स्थिति अदालत तय करती है।",
+                    str.legalNote,
                     style = MaterialTheme.typography.bodySmall, color = c.muted,
                 )
             }
 
             val who = names.entityLine(s)
             if (who.isNotBlank() || s.entities.parties.isNotEmpty()) {
-                SectionLabelInline("संबंधित")
+                SectionLabelInline(str.related)
                 val parties = s.entities.parties.mapNotNull { names.parties[it] }.joinToString(", ")
                 Text(listOf(who, parties, names.categoryLine(s)).filter { it.isNotBlank() }.joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium)
             }
             if (s.reasons.isNotEmpty()) {
-                SectionLabelInline("प्राथमिकता के कारण")
-                Text(s.reasons.joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
+                SectionLabelInline(str.priorityReasons)
+                Text(s.reasons.joinToString(" · ") { str.reason(it, names::any) }, style = MaterialTheme.typography.bodyMedium)
             }
 
-            SectionLabelInline("स्रोत (${s.reports.size} रिपोर्ट, ${s.publisherCount} प्रकाशक)")
+            SectionLabelInline(str.sourcesHeader(s.reports.size, s.publisherCount))
             s.reports.forEach { r -> ReportRow(r) }
 
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { s.reports.firstOrNull()?.let { Actions.open(ctx, it.url) } }) { Text("मूल खबर खोलें") }
-                OutlinedButton(onClick = onSave) { Text(if (saved) "सहेजा गया" else "सहेजें") }
+                Button(onClick = { s.reports.firstOrNull()?.let { Actions.open(ctx, it.url, str) } }) { Text(str.openOriginal) }
+                OutlinedButton(onClick = onSave) { Text(if (saved) str.actSaved else str.actSave) }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TextButton(onClick = { Actions.copy(ctx, s) }) { Text("शीर्षक व लिंक कॉपी करें") }
-                TextButton(onClick = { Actions.share(ctx, s) }) { Text("शेयर करें") }
+                TextButton(onClick = { Actions.copy(ctx, s, str) }) { Text(str.copyLinks) }
+                TextButton(onClick = { Actions.share(ctx, s, str) }) { Text(str.shareStory) }
             }
             Text(
-                "पहली बार देखा: ${TimeFmt.full(FeedLogic.instant(s.firstSeenAt))}",
+                str.firstSeen(TimeFmt.full(FeedLogic.instant(s.firstSeenAt), str)),
                 style = MaterialTheme.typography.bodySmall, color = c.muted,
             )
             Spacer(Modifier.height(20.dp))
@@ -127,18 +127,19 @@ private fun SectionLabelInline(t: String) {
 private fun ReportRow(r: Report) {
     val ctx = LocalContext.current
     val c = LocalNewsColors.current
+    val str = LocalStr.current
     Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
         val head = buildString {
             append(r.publisherName())
             if (r.handle != null && r.publisher?.contains("@") != true) append(" (@${r.handle})")
-            if (r.via != null) append(" — ${r.via} के माध्यम से")
+            if (r.via != null) append(str.via(r.via))
         }
         Text(head, style = MaterialTheme.typography.labelLarge)
         if (r.kind == "post") {
             Text(r.title, style = MaterialTheme.typography.bodyMedium)
             when (r.postContext) {
-                "quote" -> Text("यह पोस्ट किसी और की पोस्ट को उद्धृत करती है", style = MaterialTheme.typography.bodySmall, color = c.muted)
-                "reply" -> Text("यह किसी पोस्ट का जवाब है", style = MaterialTheme.typography.bodySmall, color = c.muted)
+                "quote" -> Text(str.quotePost, style = MaterialTheme.typography.bodySmall, color = c.muted)
+                "reply" -> Text(str.replyPost, style = MaterialTheme.typography.bodySmall, color = c.muted)
             }
         } else {
             Text(r.title, style = MaterialTheme.typography.bodyMedium)
@@ -146,17 +147,17 @@ private fun ReportRow(r: Report) {
         val times = buildList {
             val pub = FeedLogic.instant(r.publishedAt)
             when {
-                pub == null -> add("प्रकाशन समय: स्रोत ने नहीं दिया")
-                r.publishedSuspect -> add("प्रकाशन समय (स्रोत के अनुसार, संदिग्ध): ${TimeFmt.full(pub)}")
-                r.tzAssumed -> add("प्रकाशित: ${TimeFmt.full(pub)} (समय-क्षेत्र IST माना गया)")
-                else -> add("प्रकाशित: ${TimeFmt.full(pub)}")
+                pub == null -> add(str.pubNotGiven)
+                r.publishedSuspect -> add(str.pubSuspect(TimeFmt.full(pub, str)))
+                r.tzAssumed -> add(str.pubAssumed(TimeFmt.full(pub, str)))
+                else -> add(str.published(TimeFmt.full(pub, str)))
             }
-            FeedLogic.instant(r.updatedAt)?.let { add("अपडेट: ${TimeFmt.full(it)}") }
-            add("न्यूज़ अड्डा ने देखा: ${TimeFmt.full(FeedLogic.instant(r.firstSeenAt))}")
+            FeedLogic.instant(r.updatedAt)?.let { add(str.updated(TimeFmt.full(it, str))) }
+            add(str.seenByApp(TimeFmt.full(FeedLogic.instant(r.firstSeenAt), str)))
         }
         times.forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = c.muted) }
-        TextButton(onClick = { Actions.open(ctx, r.url) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
-            Text(if (r.kind == "post") "पोस्ट खोलें" else "यह रिपोर्ट खोलें")
+        TextButton(onClick = { Actions.open(ctx, r.url, str) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
+            Text(if (r.kind == "post") str.openPost else str.openReport)
         }
         HorizontalDivider(color = c.divider)
     }

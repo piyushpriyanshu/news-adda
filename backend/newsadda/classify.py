@@ -24,61 +24,62 @@ UP_MARKERS = _kw("उत्तर प्रदेश", "यूपी", "Uttar Pr
 _UP_LATIN = re.compile(r"\bUP\b")
 
 CATEGORIES: dict[str, tuple[str, list[str]]] = {
-    "politics": ("राजनीति", _kw(
+    "politics": ("Politics", _kw(
         "राजनीति", "राजनीतिक", "सियासत", "सियासी", "विधायक", "सांसद", "मंत्री", "राज्यमंत्री",
         "मुख्यमंत्री", "उपमुख्यमंत्री", "विपक्ष", "रैली", "विधानसभा", "लोकसभा", "विधान परिषद",
         "एमएलसी", "प्रदेश अध्यक्ष", "जिलाध्यक्ष", "योगी सरकार", "गठबंधन", "politics", "MLA",
     )),
-    "controversy": ("राजनीतिक विवाद", _kw(
+    "controversy": ("Political controversy", _kw(
         "आरोप", "आरोपों", "पलटवार", "निशाना", "निशाने", "हमला बोला", "घेरा", "विवाद", "विवादित",
         "बयानबाजी", "घमासान", "तंज", "कटाक्ष", "माफी", "सफाई", "हंगामा", "साजिश", "घोटाला",
         "भ्रष्टाचार", "भड़के", "भड़कीं", "आपत्तिजनक", "अपमान", "controversy", "allegation",
     )),
-    "election": ("चुनाव", _kw(
+    "election": ("Elections", _kw(
         "चुनाव", "चुनावी", "उपचुनाव", "मतदान", "वोट", "वोटिंग", "टिकट", "प्रत्याशी", "उम्मीदवार",
         "नामांकन", "चुनाव आयोग", "निर्वाचन", "मतदाता सूची", "एसआईआर", "दलबदल", "पाला बदला",
         "बीएलओ", "पंचायत चुनाव", "election", "bypoll",
     )),
-    "legal": ("कोर्ट-कानून", _kw(
+    "legal": ("Courts & law", _kw(
         "कोर्ट", "अदालत", "हाईकोर्ट", "हाई कोर्ट", "सुप्रीम कोर्ट", "फैसला", "सजा", "जमानत", "बरी",
         "एफआईआर", "मुकदमा", "गिरफ्तार", "गिरफ्तारी", "चार्जशीट", "आरोप पत्र", "ईडी", "सीबीआई",
         "छापा", "छापेमारी", "कुर्क", "कुर्की", "गैंगस्टर", "court", "arrest", "FIR",
     )),
-    "administration": ("प्रशासन", _kw(
+    "administration": ("Administration", _kw(
         "तबादला", "तबादले", "निलंबित", "बर्खास्त", "डीएम", "आईएएस", "आईपीएस", "कैबिनेट",
         "शासनादेश", "अधिसूचना", "आदेश जारी", "बुलडोजर", "योजना", "बजट", "प्रशासन",
     )),
-    "protest": ("विरोध-प्रदर्शन", _kw(
+    "protest": ("Protests", _kw(
         "प्रदर्शन", "धरना", "आंदोलन", "घेराव", "अनशन", "विरोध प्रदर्शन", "protest",
     )),
-    "crime": ("अपराध", _kw(
+    "crime": ("Crime", _kw(
         "हत्या", "लूट", "दुष्कर्म", "अपहरण", "गोली मारकर", "मर्डर", "चोरी", "एनकाउंटर", "मुठभेड़",
         "बदमाश", "murder",
     )),
 }
-CATEGORY_NAMES = {k: v[0] for k, v in CATEGORIES.items()} | {"other": "अन्य"}
+CATEGORY_NAMES = {k: v[0] for k, v in CATEGORIES.items()} | {"other": "Other"}
 
-# Breaking signals in the *headline*, with weights and the reason shown.
+# Breaking signals in the *headline*: weight and a reason code (the app shows it
+# in the chosen language).
 BREAKING_SIGNALS: list[tuple[list[str], int, str]] = [
-    (_kw("ब्रेकिंग", "breaking", "बड़ी खबर", "बिग ब्रेकिंग"), 3, "प्रकाशक ने ब्रेकिंग बताया"),
-    (_kw("इस्तीफा", "इस्तीफे", "त्यागपत्र", "resigns"), 3, "इस्तीफा"),
-    (_kw("गिरफ्तार", "गिरफ्तारी", "हिरासत में", "arrested"), 3, "गिरफ्तारी"),
-    (_kw("निलंबित", "बर्खास्त", "निष्कासित", "पार्टी से निकाला", "suspended", "expelled"), 3, "निलंबन/निष्कासन"),
-    (_kw("में शामिल", "दलबदल", "पाला बदला", "थामा दामन", "दामन थामा", "joins"), 2, "दलबदल/पार्टी में शामिल"),
-    (_kw("टिकट", "प्रत्याशी घोषित", "उम्मीदवारों की सूची", "प्रत्याशियों की सूची", "उम्मीदवार घोषित"), 2, "टिकट/प्रत्याशी घोषणा"),
-    (_kw("चुनाव आयोग", "निर्वाचन आयोग", "Election Commission"), 2, "चुनाव आयोग"),
-    (_kw("उपचुनाव", "bypoll"), 2, "उपचुनाव"),
-    (_kw("हाईकोर्ट", "हाई कोर्ट", "सुप्रीम कोर्ट", "High Court", "Supreme Court"), 2, "उच्च/सर्वोच्च न्यायालय"),
-    (_kw("सजा", "दोषी करार", "बरी", "जमानत", "convicted", "acquitted"), 2, "अदालती फैसला"),
-    (_kw("छापा", "छापेमारी", "ईडी", "सीबीआई", "raid"), 2, "जांच एजेंसी की कार्रवाई"),
-    (_kw("निधन", "passes away"), 2, "निधन"),
-    (_kw("गठबंधन टूटा", "गठबंधन", "alliance"), 1, "गठबंधन"),
-    (_kw("कैबिनेट विस्तार", "मंत्रिमंडल विस्तार", "शपथ"), 2, "मंत्रिमंडल/शपथ"),
-    (_kw("हंगामा", "बवाल", "लाठीचार्ज"), 1, "हंगामा"),
+    (_kw("ब्रेकिंग", "breaking", "बड़ी खबर", "बिग ब्रेकिंग"), 3, "publisher_breaking"),
+    (_kw("इस्तीफा", "इस्तीफे", "त्यागपत्र", "resigns"), 3, "resignation"),
+    (_kw("गिरफ्तार", "गिरफ्तारी", "हिरासत में", "arrested"), 3, "arrest"),
+    (_kw("निलंबित", "बर्खास्त", "निष्कासित", "पार्टी से निकाला", "suspended", "expelled"), 3, "suspension"),
+    (_kw("में शामिल", "दलबदल", "पाला बदला", "थामा दामन", "दामन थामा", "joins"), 2, "defection"),
+    (_kw("टिकट", "प्रत्याशी घोषित", "उम्मीदवारों की सूची", "प्रत्याशियों की सूची", "उम्मीदवार घोषित"), 2, "ticket"),
+    (_kw("चुनाव आयोग", "निर्वाचन आयोग", "Election Commission"), 2, "election_commission"),
+    (_kw("उपचुनाव", "bypoll"), 2, "bypoll"),
+    (_kw("हाईकोर्ट", "हाई कोर्ट", "सुप्रीम कोर्ट", "High Court", "Supreme Court"), 2, "high_court"),
+    (_kw("सजा", "दोषी करार", "बरी", "जमानत", "convicted", "acquitted"), 2, "court_verdict"),
+    (_kw("छापा", "छापेमारी", "ईडी", "सीबीआई", "raid"), 2, "agency_action"),
+    (_kw("निधन", "passes away"), 2, "death"),
+    (_kw("गठबंधन टूटा", "गठबंधन", "alliance"), 1, "alliance"),
+    (_kw("कैबिनेट विस्तार", "मंत्रिमंडल विस्तार", "शपथ"), 2, "cabinet"),
+    (_kw("हंगामा", "बवाल", "लाठीचार्ज"), 1, "uproar"),
 ]
 BREAKING_THRESHOLD = 3
 # Bump when rules change: stored items are then re-labelled on the next run.
-RULES_VERSION = "2"
+RULES_VERSION = "3"
 _LIVE = re.compile(r"\blive\b|लाइव", re.I)
 
 ALLEGATION = _kw("आरोप", "आरोपों", "आरोपित", "आरोप लगाया", "accused", "alleges", "alleged")
@@ -94,16 +95,17 @@ STATEMENT = _kw(
 )
 ANNOUNCE = _kw("ऐलान", "घोषणा", "घोषित", "announces", "announced")
 
-# Legal status *as mentioned in the report*. Order: most final first.
+# Legal status *as mentioned in the report* (codes; the app shows names).
+# Order: most final first.
 LEGAL_STATUS: list[tuple[str, list[str]]] = [
-    ("दोषसिद्ध", _kw("दोषी करार", "दोषी ठहराया", "सजा सुनाई", "उम्रकैद", "कैद की सजा", "convicted")),
-    ("बरी", _kw("बरी", "acquitted")),
-    ("जमानत", _kw("जमानत", "bail")),
-    ("गिरफ्तारी", _kw("गिरफ्तार", "गिरफ्तारी", "हिरासत में", "arrested")),
-    ("आरोप-पत्र", _kw("चार्जशीट", "आरोप पत्र", "आरोपपत्र", "chargesheet")),
-    ("एफआईआर", _kw("एफआईआर", "मुकदमा दर्ज", "केस दर्ज", "रिपोर्ट दर्ज", "FIR")),
-    ("जांच", _kw("जांच", "ईडी", "सीबीआई", "एसआईटी", "छापा", "probe")),
-    ("आरोप", _kw("आरोप", "आरोपों", "आरोपित", "accused")),
+    ("convicted", _kw("दोषी करार", "दोषी ठहराया", "सजा सुनाई", "उम्रकैद", "कैद की सजा", "convicted")),
+    ("acquitted", _kw("बरी", "acquitted")),
+    ("bail", _kw("जमानत", "bail")),
+    ("arrest", _kw("गिरफ्तार", "गिरफ्तारी", "हिरासत में", "arrested")),
+    ("chargesheet", _kw("चार्जशीट", "आरोप पत्र", "आरोपपत्र", "chargesheet")),
+    ("fir", _kw("एफआईआर", "मुकदमा दर्ज", "केस दर्ज", "रिपोर्ट दर्ज", "FIR")),
+    ("investigation", _kw("जांच", "ईडी", "सीबीआई", "एसआईटी", "छापा", "probe")),
+    ("allegation", _kw("आरोप", "आरोपों", "आरोपित", "accused")),
 ]
 
 
@@ -149,7 +151,7 @@ class Classifier:
         score = 0
         live_blog = bool(_LIVE.search(title or ""))
         for kws, weight, reason in BREAKING_SIGNALS:
-            if live_blog and reason == "प्रकाशक ने ब्रेकिंग बताया":
+            if live_blog and reason == "publisher_breaking":
                 continue  # running live pages always say "breaking"
             if _hits(kws, tp):
                 score += weight
@@ -162,18 +164,17 @@ class Classifier:
                 cats = ["other"]
         breaking = political and score >= BREAKING_THRESHOLD
         if political_entity:
-            names = [e.name_hi for e in self.entities.leaders if e.id in ents["leaders"]]
-            names += [e.name_hi for e in self.entities.figures if e.id in ents["figures"]]
-            if names:
-                reasons.append("नेता: " + ", ".join(names[:3]))
+            ids = ents["leaders"][:3] + ents["figures"][:2]
+            if ids:
+                reasons.append("leaders:" + ",".join(ids))
 
         labels: list[str] = []
         if _hits(ALLEGATION, bp):
-            labels.append("आरोप")
+            labels.append("allegation")
         if _hits(COUNTER, bp):
-            labels.append("पलटवार")
+            labels.append("counter")
         if official_source or _hits(OFFICIAL, bp):
-            labels.append("आधिकारिक बयान")
+            labels.append("official")
 
         # Hindi headlines quote with "X बोले- ..." / "X का आरोप- ..." / "X: ...".
         quote_form = re.search(r"^[^:：\-–—]{3,60}(?:[:：]|\s?[-–—]\s)", title or "")
@@ -183,14 +184,14 @@ class Classifier:
         stype = None
         if statement:
             if _hits(COUNTER, bp):
-                stype = "प्रतिक्रिया"
+                stype = "response"
             elif _hits(ALLEGATION, bp):
-                stype = "आरोप"
+                stype = "allegation"
             elif _hits(ANNOUNCE, bp):
-                stype = "घोषणा"
+                stype = "announcement"
             else:
-                stype = "बयान/राय"
-            if "controversy" not in cats and ("आरोप" in labels or "पलटवार" in labels):
+                stype = "statement"
+            if "controversy" not in cats and ("allegation" in labels or "counter" in labels):
                 cats.append("controversy")
 
         legal = [name for name, kws in LEGAL_STATUS if _hits(kws, bp)]

@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val settings by vm.settings.collectAsState()
-            NewsAddaTheme(settings.textScale) { NewsAddaApp(vm) }
+            NewsAddaTheme(settings.textScale, hindi = settings.language == "hi") { NewsAddaApp(vm) }
         }
 
         lifecycle.addObserver(object : DefaultLifecycleObserver {

@@ -168,36 +168,47 @@ regional_figures:
 
 parties:
   - id: bjp
+    name: "BJP"
     name_hi: भाजपा
     aliases: [भाजपा, बीजेपी, भारतीय जनता पार्टी, BJP]
   - id: sp
+    name: "Samajwadi Party"
     name_hi: सपा
     aliases: [सपा, समाजवादी पार्टी, Samajwadi Party]
   - id: bsp
+    name: "BSP"
     name_hi: बसपा
     aliases: [बसपा, बहुजन समाज पार्टी, BSP]
   - id: inc
+    name: "Congress"
     name_hi: कांग्रेस
     aliases: [कांग्रेस, Congress, INC]
   - id: rld
+    name: "RLD"
     name_hi: रालोद
     aliases: [रालोद, राष्ट्रीय लोक दल, RLD]
   - id: sbsp
+    name: "SBSP"
     name_hi: सुभासपा
     aliases: [सुभासपा, सुहेलदेव भारतीय समाज पार्टी, SBSP]
   - id: apnadal_s
+    name: "Apna Dal (S)"
     name_hi: अपना दल (एस)
     aliases: [अपना दल, अपना दल (एस), Apna Dal]
   - id: nishad
+    name: "Nishad Party"
     name_hi: निषाद पार्टी
     aliases: [निषाद पार्टी, Nishad Party]
   - id: asp
+    name: "Azad Samaj Party"
     name_hi: आजाद समाज पार्टी
     aliases: [आजाद समाज पार्टी, भीम आर्मी, Azad Samaj Party, Bhim Army]
   - id: aap
+    name: "AAP"
     name_hi: आप
     aliases: [आम आदमी पार्टी, AAP]
   - id: other
+    name: "Other"
     name_hi: अन्य
     aliases: []
 

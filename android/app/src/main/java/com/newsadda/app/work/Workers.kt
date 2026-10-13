@@ -23,6 +23,7 @@ import com.newsadda.app.R
 import com.newsadda.app.data.NewsRepository
 import com.newsadda.app.data.Prefs
 import com.newsadda.app.data.model.Story
+import com.newsadda.app.ui.Str
 import com.newsadda.app.update.UpdateManager
 import java.util.concurrent.TimeUnit
 
@@ -32,16 +33,18 @@ object Notifier {
     const val EXTRA_STORY = "story_id"
     const val EXTRA_INSTALL = "install_update"
 
+    /** (Re)creates channels; names follow the interface language. */
     fun createChannels(ctx: Context) {
+        val str = Str.of(ctx)
         val nm = ctx.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(
-            NotificationChannel(CH_BREAKING, "ब्रेकिंग न्यूज़", NotificationManager.IMPORTANCE_HIGH).apply {
-                description = "अनुसरित नेताओं और जिलों की ब्रेकिंग खबरें"
+            NotificationChannel(CH_BREAKING, str.chBreaking, NotificationManager.IMPORTANCE_HIGH).apply {
+                description = str.chBreakingDesc
             }
         )
         nm.createNotificationChannel(
-            NotificationChannel(CH_UPDATES, "ऐप अपडेट", NotificationManager.IMPORTANCE_DEFAULT).apply {
-                description = "न्यूज़ अड्डा का नया संस्करण उपलब्ध होने पर"
+            NotificationChannel(CH_UPDATES, str.chUpdates, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = str.chUpdatesDesc
             }
         )
     }
@@ -63,7 +66,7 @@ object Notifier {
         val src = s.reports.firstOrNull()?.let { it.publisher ?: it.sourceName } ?: ""
         val n = NotificationCompat.Builder(ctx, CH_BREAKING)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(if (s.breaking) "ब्रेकिंग" else "नई खबर")
+            .setContentTitle(if (s.breaking) Str.of(ctx).nBreaking else Str.of(ctx).nNew)
             .setContentText(s.title)
             .setStyle(NotificationCompat.BigTextStyle().bigText("${s.title}\n— $src"))
             .setAutoCancel(true)
@@ -77,8 +80,8 @@ object Notifier {
         if (!allowed(ctx)) return
         val n = NotificationCompat.Builder(ctx, CH_BREAKING)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("$count नई ब्रेकिंग खबरें")
-            .setContentText("न्यूज़ अड्डा खोलकर देखें")
+            .setContentTitle(Str.of(ctx).nSummary(count))
+            .setContentText(Str.of(ctx).nOpenApp)
             .setAutoCancel(true)
             .setContentIntent(openApp(ctx, 1) {})
             .build()
@@ -90,8 +93,8 @@ object Notifier {
         if (!allowed(ctx)) return
         val n = NotificationCompat.Builder(ctx, CH_UPDATES)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("न्यूज़ अड्डा $versionName उपलब्ध")
-            .setContentText(if (ready) "डाउनलोड हो चुका है — इंस्टॉल करने के लिए टैप करें" else "अपडेट करने के लिए टैप करें")
+            .setContentTitle(Str.of(ctx).nUpdateTitle(versionName))
+            .setContentText(if (ready) Str.of(ctx).nUpdateReady else Str.of(ctx).nUpdateTap)
             .setAutoCancel(true)
             .setContentIntent(openApp(ctx, 2) { putExtra(EXTRA_INSTALL, true) })
             .build()

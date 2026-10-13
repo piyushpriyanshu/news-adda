@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,7 +57,8 @@ fun NewsAddaApp(vm: MainViewModel) {
     LaunchedEffect(msg) { msg?.let { snack.showSnackbar(it); vm.message.value = null } }
 
     val cache = repo.cache
-    val names = remember(cache.entities, cache.categories) { Names(cache.entities, cache.categories) }
+    val str = LocalStr.current
+    val names = remember(cache.entities, str) { Names(cache.entities, str) }
     val visible = remember(cache.stories, settings.hiddenSources) {
         cache.stories.filter { FeedLogic.visible(it, settings.hiddenSources) }
     }
@@ -79,15 +80,15 @@ fun NewsAddaApp(vm: MainViewModel) {
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                     navigationIcon = {
                         if (searchOpen) IconButton(onClick = { vm.searchOpen.value = false }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "वापस")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = str.back)
                         }
                     },
                     title = {
                         Column {
-                            Text(if (searchOpen) "खोज" else "न्यूज़ अड्डा", style = MaterialTheme.typography.titleLarge)
+                            Text(if (searchOpen) str.search else str.appName, style = MaterialTheme.typography.titleLarge)
                             val last = repo.lastSuccessMs.takeIf { it > 0 }?.let { Instant.ofEpochMilli(it) }
                             Text(
-                                if (last == null) "उत्तर प्रदेश राजनीति" else "अपडेट: ${TimeFmt.short(last, now)} (${TimeFmt.ago(last, now)})",
+                                if (last == null) str.tagline else str.updatedAt(TimeFmt.short(last, now, str), TimeFmt.ago(last, now, str)),
                                 style = MaterialTheme.typography.bodySmall, color = LocalNewsColors.current.muted,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis,
                             )
@@ -95,10 +96,10 @@ fun NewsAddaApp(vm: MainViewModel) {
                     },
                     actions = {
                         if (!searchOpen) IconButton(onClick = { vm.searchOpen.value = true }) {
-                            Icon(Icons.Filled.Search, contentDescription = "खोजें")
+                            Icon(Icons.Filled.Search, contentDescription = str.search)
                         }
                         TextButton(onClick = { vm.refresh("button") }, enabled = !repo.refreshing) {
-                            Text(if (repo.refreshing) "अपडेट हो रहा…" else "अभी अपडेट करें")
+                            Text(if (repo.refreshing) str.updating else str.updateNow)
                         }
                     },
                 )
@@ -108,7 +109,7 @@ fun NewsAddaApp(vm: MainViewModel) {
                         containerColor = MaterialTheme.colorScheme.background) {
                         Section.entries.forEach { sec ->
                             Tab(selected = sec == section, onClick = { vm.section.value = sec },
-                                text = { Text(sec.title, maxLines = 1) })
+                                text = { Text(sec.title(str), maxLines = 1) })
                         }
                     }
                 }
@@ -118,7 +119,7 @@ fun NewsAddaApp(vm: MainViewModel) {
     ) { pad ->
         Box(Modifier.padding(pad).fillMaxSize()) {
             if (searchOpen) {
-                SearchScreen(visible, cache.entities, cache.sources, cache.categories, env)
+                SearchScreen(visible, cache.entities, cache.sources, env)
             } else when (section) {
                 Section.HOME -> HomeScreen(vm, visible, env)
                 Section.BREAKING -> BreakingScreen(visible, env)
@@ -128,7 +129,7 @@ fun NewsAddaApp(vm: MainViewModel) {
                 Section.STATEMENTS -> StatementsScreen(vm, visible, env)
                 Section.DISTRICTS -> DistrictsScreen(vm, visible, env)
                 Section.SAVED -> SavedScreen(vm, env)
-                Section.SETTINGS -> SettingsScreen(vm)
+                Section.SETTINGS -> SettingsScreen(vm, names)
             }
         }
     }
@@ -146,34 +147,35 @@ private fun StatusBanners(vm: MainViewModel, now: Instant) {
     val repo by vm.repo.collectAsState()
     val up by vm.updates.collectAsState()
     val c = LocalNewsColors.current
+    val str = LocalStr.current
     val cache = repo.cache
     repo.error?.let { err ->
         val text = when (err) {
-            FetchOutcome.Kind.OFFLINE -> "इंटरनेट उपलब्ध नहीं"
-            FetchOutcome.Kind.TIMEOUT -> "सर्वर ने समय पर जवाब नहीं दिया"
-            FetchOutcome.Kind.SERVER -> "सर्वर से त्रुटि (${repo.errorDetail ?: ""})"
-            FetchOutcome.Kind.BAD_DATA -> "सर्वर से गलत डेटा मिला"
-            FetchOutcome.Kind.BAD_URL -> "बैकएंड पता गलत है — सेटिंग्स देखें"
+            FetchOutcome.Kind.OFFLINE -> str.offline
+            FetchOutcome.Kind.TIMEOUT -> str.timeout
+            FetchOutcome.Kind.SERVER -> str.serverError(repo.errorDetail ?: "")
+            FetchOutcome.Kind.BAD_DATA -> str.badData
+            FetchOutcome.Kind.BAD_URL -> str.badUrl
         }
-        val suffix = if (cache.stories.isNotEmpty()) " — सहेजी गई खबरें दिखाई जा रही हैं" else ""
-        Notice(text + suffix, c.breaking, "फिर कोशिश" to { vm.refresh("retry") })
+        val suffix = if (cache.stories.isNotEmpty()) str.showingCached else ""
+        Notice(text + suffix, c.breaking, str.retry to { vm.refresh("retry") })
     }
     val generated = FeedLogic.instant(cache.generatedAt)
     if (repo.error == null && generated != null && java.time.Duration.between(generated, now).toMinutes() > 45) {
-        Notice("सर्वर की फ़ीड ${TimeFmt.ago(generated, now)} बनी थी — संग्रह में देरी हो सकती है।", c.caution)
+        Notice(str.feedStale(TimeFmt.ago(generated, now, str)), c.caution)
     }
     val failing = cache.sources.count { it.status == "error" }
     if (failing > 0 && repo.error == null) {
-        Notice("$failing स्रोत अभी त्रुटि में हैं; बाकी से खबरें आ रही हैं।", c.muted, "देखें" to { vm.section.value = Section.SETTINGS })
+        Notice(str.sourcesFailing(failing), c.muted, str.view to { vm.section.value = Section.SETTINGS })
     }
     val info = up.available
     if (info != null) {
         if (up.readyFile != null) {
-            Notice("नया संस्करण ${info.versionName} डाउनलोड हो चुका है", c.multi, "इंस्टॉल करें" to { vm.installUpdate() })
+            Notice(str.updateReady(info.versionName), c.multi, str.install to { vm.installUpdate() })
         } else if (!up.downloading) {
-            Notice("नया संस्करण ${info.versionName} उपलब्ध है", c.multi, "डाउनलोड" to { vm.downloadUpdate() })
+            Notice(str.updateAvailable(info.versionName), c.multi, str.download to { vm.downloadUpdate() })
         } else {
-            Notice("नया संस्करण डाउनलोड हो रहा है… ${(up.progress * 100).toInt()}%", c.multi)
+            Notice(str.downloading((up.progress * 100).toInt()), c.multi)
         }
     }
 }

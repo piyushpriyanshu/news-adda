@@ -20,17 +20,17 @@ FEED_VERSION = 1
 SWARM_WINDOW = timedelta(hours=2)
 SWARM_MIN = 3
 
-STATUS_HI = {
-    "ok": "काम कर रहा है",
-    "error": "त्रुटि",
-    "unavailable": "उपलब्ध नहीं",
-    "disabled": "बंद",
-    "pending": "अभी जांचा नहीं गया",
+STATUS_TEXT = {
+    "ok": "Working",
+    "error": "Error",
+    "unavailable": "Unavailable",
+    "disabled": "Off",
+    "pending": "Not checked yet",
 }
-ERROR_HI = {
-    "no_public_feed": "इस प्रकाशक की कोई सार्वजनिक फ़ीड अभी नहीं मिली",
-    "x_token_missing": "X API कुंजी सेट नहीं है, इसलिए X पोस्ट नहीं आ रहीं",
-    "timeout": "समय सीमा समाप्त",
+ERROR_TEXT = {
+    "no_public_feed": "No public feed found for this publisher; covered via Google News where possible",
+    "x_token_missing": "X API key not set, so X posts are not collected",
+    "timeout": "Timed out",
 }
 
 
@@ -39,8 +39,8 @@ def _report(it: dict, pipeline: Pipeline) -> dict:
     return {
         "id": it["id"],
         "source_id": it["source_id"],
-        "source_name": src.name_hi if src else it["source_id"],
-        "publisher": it["publisher"] or (src.name_hi if src else None),
+        "source_name": src.name if src else it["source_id"],
+        "publisher": it["publisher"] or (src.name if src else None),
         "via": src.via if src else None,
         "kind": it["kind"],
         "url": it["url"],
@@ -103,13 +103,13 @@ def build_stories(pipeline: Pipeline, items: list[dict]) -> list[dict]:
         }
         if political and len(swarm) >= SWARM_MIN:
             breaking = True
-            reasons.append(f"{len(swarm)} स्रोतों ने 2 घंटे में रिपोर्ट किया")
+            reasons.append(f"swarm:{len(swarm)}")
         corroboration = "multi" if len(pubs) >= 2 else "single"
         if corroboration == "multi":
-            labels.append("एकाधिक स्रोतों से रिपोर्ट")
-        elif political and (breaking or "आरोप" in labels or legal):
+            labels.append("multi_source")
+        elif political and (breaking or "allegation" in labels or legal):
             # Single-source political claims are flagged; ordinary local crime reports are not.
-            labels.append("पुष्टि की प्रतीक्षा")
+            labels.append("awaiting_confirmation")
         statements = [m for m in members if m["data"]["statement"]]
         summary_item = next((m for m in members if m["summary"]), None)
         sort_at = min(m["sort_at"] for m in members)
@@ -125,8 +125,7 @@ def build_stories(pipeline: Pipeline, items: list[dict]) -> list[dict]:
             "last_report_at": max(m["first_seen_at"] for m in members),
             "changed_at": max(m["changed_at"] for m in members),
             "categories": categories,
-            "category_names": [CATEGORY_NAMES[c] for c in categories],
-            "entities": entities,
+                "entities": entities,
             "breaking": breaking,
             "reasons": reasons,
             "labels": labels,
@@ -151,11 +150,11 @@ def source_status(pipeline: Pipeline) -> list[dict]:
         out.append({
             **s.public(),
             "status": status,
-            "status_hi": STATUS_HI.get(status, status),
+            "status_text": STATUS_TEXT.get(status, status),
             "last_ok_at": st.get("last_ok_at"),
             "last_attempt_at": st.get("last_attempt_at"),
             "error": err,
-            "error_hi": ERROR_HI.get(err or "", err),
+            "error_text": ERROR_TEXT.get(err or "", err),
             "consecutive_failures": st.get("consecutive_failures", 0),
             "last_item_count": st.get("last_item_count", 0),
             "total_items": st.get("total_items", 0),

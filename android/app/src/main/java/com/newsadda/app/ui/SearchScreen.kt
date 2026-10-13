@@ -9,19 +9,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.newsadda.app.data.FeedLogic
+import com.newsadda.app.data.TimeFmt
 import com.newsadda.app.data.model.Entities
 import com.newsadda.app.data.model.SourceStatus
 import com.newsadda.app.data.model.Story
 import java.time.Duration
 
+private val CATEGORY_CODES = listOf("politics", "controversy", "election", "legal", "administration", "protest", "crime")
+
 /** Search runs over stories already on the phone; it never triggers scraping. */
 @Composable
-fun SearchScreen(all: List<Story>, entities: Entities, sources: List<SourceStatus>, categories: Map<String, String>, env: ListEnv) {
+fun SearchScreen(all: List<Story>, entities: Entities, sources: List<SourceStatus>, env: ListEnv) {
+    val str = LocalStr.current
     var q by rememberSaveable { mutableStateOf("") }
     var party by rememberSaveable { mutableStateOf<String?>(null) }
     var category by rememberSaveable { mutableStateOf<String?>(null) }
@@ -29,8 +34,10 @@ fun SearchScreen(all: List<Story>, entities: Entities, sources: List<SourceStatu
     var source by rememberSaveable { mutableStateOf<String?>(null) }
     var who by rememberSaveable { mutableStateOf<String?>(null) }
 
+    // English entity names let "yogi" or "lucknow" find Hindi headlines.
+    val extras = remember(all, entities) { all.associate { it.id to env.names.searchExtra(it, entities) } }
     val results = all.filter { s ->
-        (q.isBlank() || FeedLogic.matchesQuery(s, q)) &&
+        (q.isBlank() || FeedLogic.matchesQuery(s, q, extras[s.id] ?: "")) &&
             (party == null || party in s.entities.parties) &&
             (category == null || category in s.categories || (category == "controversy" && FeedLogic.isControversy(s))) &&
             (source == null || s.reports.any { it.sourceId == source }) &&
@@ -39,7 +46,7 @@ fun SearchScreen(all: List<Story>, entities: Entities, sources: List<SourceStatu
                 val t = FeedLogic.instant(s.sortAt) ?: return@run false
                 val hours = Duration.between(t, env.now).toHours()
                 when (period) {
-                    "today" -> t.atZone(com.newsadda.app.data.TimeFmt.IST).toLocalDate() == env.now.atZone(com.newsadda.app.data.TimeFmt.IST).toLocalDate()
+                    "today" -> t.atZone(TimeFmt.IST).toLocalDate() == env.now.atZone(TimeFmt.IST).toLocalDate()
                     "24h" -> hours < 24
                     "3d" -> hours < 72
                     else -> true
@@ -47,28 +54,24 @@ fun SearchScreen(all: List<Story>, entities: Entities, sources: List<SourceStatu
             })
     }
     val activeSources = sources.filter { it.status == "ok" || it.totalItems > 0 }
+    val noFilter = q.isBlank() && listOf(party, category, period, source, who).all { it == null }
 
     Column(Modifier.fillMaxSize()) {
         OutlinedTextField(
             value = q, onValueChange = { q = it }, singleLine = true,
-            placeholder = { Text("नेता, दल, जिला, शब्द… (हिंदी या English)") },
+            placeholder = { Text(str.searchPlaceholder) },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
         )
-        StoryList(
-            results, env,
-            if (q.isBlank() && listOf(party, category, period, source, who).all { it == null }) "खोजने के लिए लिखें या फ़िल्टर चुनें" else "कोई परिणाम नहीं",
-            "खोज फ़ोन पर सहेजी गई पिछले 3 दिनों की खबरों में होती है।",
-        ) {
+        StoryList(results, env, if (noFilter) str.searchStart else str.noResults, str.searchScope) {
             item(key = "filters") {
-                ChipRow(listOf<Pair<String?, String>>(null to "कभी भी", "today" to "आज", "24h" to "24 घंटे", "3d" to "3 दिन"), period) { period = it }
-                ChipRow(listOf<Pair<String?, String>>(null to "सभी दल") + entities.parties.map { it.id to it.nameHi }, party) { party = it }
-                ChipRow(listOf<Pair<String?, String>>(null to "सभी श्रेणियां") +
-                    categories.filterKeys { it != "other" }.map { (k, v) -> k to v }, category) { category = it }
-                ChipRow(listOf<Pair<String?, String>>(null to "सभी नेता/जिले") +
-                    entities.leaders.map { it.id to it.nameHi } + entities.figures.map { it.id to it.nameHi } +
-                    entities.seats.map { it.id to it.nameHi } + entities.districts.map { it.id to it.nameHi }, who) { who = it }
-                ChipRow(listOf<Pair<String?, String>>(null to "सभी स्रोत") + activeSources.map { it.id to it.nameHi }, source) { source = it }
-                SectionLabel("${results.size} परिणाम")
+                ChipRow(listOf<Pair<String?, String>>(null to str.anyTime, "today" to str.today, "24h" to str.last24h, "3d" to str.last3d), period) { period = it }
+                ChipRow(listOf<Pair<String?, String>>(null to str.allParties) + entities.parties.map { it.id to env.names.of(it) }, party) { party = it }
+                ChipRow(listOf<Pair<String?, String>>(null to str.allCategories) + CATEGORY_CODES.map { it to str.category(it) }, category) { category = it }
+                ChipRow(listOf<Pair<String?, String>>(null to str.allPeoplePlaces) +
+                    (entities.leaders + entities.figures + entities.seats + entities.districts).map { it.id to env.names.of(it) }, who) { who = it }
+                ChipRow(listOf<Pair<String?, String>>(null to str.allSources) +
+                    activeSources.map { it.id to (if (str.hindi) it.nameHi else it.name).ifBlank { it.id } }, source) { source = it }
+                SectionLabel(str.results(results.size))
             }
         }
     }

@@ -18,16 +18,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-enum class Section(val title: String) {
-    HOME("होम"),
-    BREAKING("ब्रेकिंग न्यूज़"),
-    LEADERS("नेता ट्रैकर"),
-    CONTROVERSY("राजनीतिक विवाद"),
-    SEATS("सीट और बाहुबली"),
-    STATEMENTS("नेताओं के बयान"),
-    DISTRICTS("जिला समाचार"),
-    SAVED("सहेजी गई"),
-    SETTINGS("सेटिंग्स"),
+enum class Section { HOME, BREAKING, LEADERS, CONTROVERSY, SEATS, STATEMENTS, DISTRICTS, SAVED, SETTINGS }
+
+fun Section.title(s: Str) = when (this) {
+    Section.HOME -> s.home
+    Section.BREAKING -> s.breaking
+    Section.LEADERS -> s.leaders
+    Section.CONTROVERSY -> s.controversy
+    Section.SEATS -> s.seats
+    Section.STATEMENTS -> s.statements
+    Section.DISTRICTS -> s.districts
+    Section.SAVED -> s.saved
+    Section.SETTINGS -> s.settings
 }
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
@@ -86,7 +88,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun installUpdate() {
         if (!UpdateManager.install(ctx)) {
             if (!UpdateManager.canInstall(ctx)) {
-                message.value = "इंस्टॉल की अनुमति दें, फिर वापस आकर दोबारा \"इंस्टॉल करें\" दबाएं"
+                message.value = Str.of(ctx).allowInstall
             }
         }
     }
@@ -104,6 +106,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             refresh("feed-url-changed")
         }
         if (before.refreshMinutes != after.refreshMinutes) startForegroundLoop()
+        if (before.language != after.language) com.newsadda.app.work.Notifier.createChannels(ctx)
         if (before.updateCheckHours != after.updateCheckHours || before.newsNotifications != after.newsNotifications) {
             Schedules.apply(ctx)
         }

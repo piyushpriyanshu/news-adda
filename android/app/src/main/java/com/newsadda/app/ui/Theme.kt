@@ -73,11 +73,12 @@ private val Type = Typography(
 )
 
 @Composable
-fun NewsAddaTheme(textScale: Float, content: @Composable () -> Unit) {
+fun NewsAddaTheme(textScale: Float, hindi: Boolean, content: @Composable () -> Unit) {
     val dark = isSystemInDarkTheme()
     val density = LocalDensity.current
     CompositionLocalProvider(
         LocalNewsColors provides if (dark) DarkNews else LightNews,
+        LocalStr provides Str(hindi),
         LocalDensity provides Density(density.density, density.fontScale * textScale),
     ) {
         MaterialTheme(colorScheme = if (dark) DarkScheme else LightScheme, typography = Type, content = content)

@@ -6,6 +6,7 @@ import com.newsadda.app.data.TimeFmt
 import com.newsadda.app.data.model.Cache
 import com.newsadda.app.data.model.Feed
 import com.newsadda.app.data.model.Story
+import com.newsadda.app.ui.Str
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -108,14 +109,44 @@ class FeedLogicTest {
     }
 
     @Test
-    fun timesRenderInIst() {
+    fun timesRenderInIstInBothLanguages() {
+        val en = Str(false)
+        val hi = Str(true)
         val now = Instant.parse("2026-10-13T10:00:00Z") // 15:30 IST
-        assertEquals("13:05", TimeFmt.short(Instant.parse("2026-10-13T07:35:00Z"), now))
-        assertEquals("कल 21:10", TimeFmt.short(Instant.parse("2026-10-12T15:40:00Z"), now))
-        assertEquals("10 अक्टू 09:00", TimeFmt.short(Instant.parse("2026-10-10T03:30:00Z"), now))
-        assertEquals("13 अक्टू 2026, 13:05 IST", TimeFmt.full(Instant.parse("2026-10-13T07:35:00Z")))
-        assertEquals("25 मिनट पहले", TimeFmt.ago(Instant.parse("2026-10-13T09:35:00Z"), now))
+        assertEquals("13:05", TimeFmt.short(Instant.parse("2026-10-13T07:35:00Z"), now, en))
+        assertEquals("Yesterday 21:10", TimeFmt.short(Instant.parse("2026-10-12T15:40:00Z"), now, en))
+        assertEquals("कल 21:10", TimeFmt.short(Instant.parse("2026-10-12T15:40:00Z"), now, hi))
+        assertEquals("10 Oct 09:00", TimeFmt.short(Instant.parse("2026-10-10T03:30:00Z"), now, en))
+        assertEquals("10 अक्टू 09:00", TimeFmt.short(Instant.parse("2026-10-10T03:30:00Z"), now, hi))
+        assertEquals("13 Oct 2026, 13:05 IST", TimeFmt.full(Instant.parse("2026-10-13T07:35:00Z"), en))
+        assertEquals("25 min ago", TimeFmt.ago(Instant.parse("2026-10-13T09:35:00Z"), now, en))
+        assertEquals("25 मिनट पहले", TimeFmt.ago(Instant.parse("2026-10-13T09:35:00Z"), now, hi))
         // Late UTC evening is already the next day in IST.
-        assertEquals("02:00", TimeFmt.short(Instant.parse("2026-10-12T20:30:00Z"), Instant.parse("2026-10-12T21:00:00Z")))
+        assertEquals("02:00", TimeFmt.short(Instant.parse("2026-10-12T20:30:00Z"), Instant.parse("2026-10-12T21:00:00Z"), en))
+    }
+
+    @Test
+    fun labelsAndReasonsLocalise() {
+        val en = Str(false)
+        val hi = Str(true)
+        val resign = sample.stories.first { it.title.contains("इस्तीफा") }
+        assertTrue("multi_source" in resign.labels)
+        assertTrue("resignation" in resign.reasons)
+        assertEquals("Resignation", en.reason("resignation") { it })
+        assertEquals("इस्तीफा", hi.reason("resignation") { it })
+        assertEquals("Leader: Yogi", en.reason("leaders:yogi") { "Yogi" })
+        assertEquals("Allegation", en.label("allegation"))
+        assertEquals("पुष्टि की प्रतीक्षा", hi.label("awaiting_confirmation"))
+        assertEquals("FIR", en.legal("fir"))
+        assertEquals("Politics", en.category("politics"))
+        // Every district has an English and a Hindi name.
+        assertTrue(sample.entities.districts.all { !it.name.isNullOrBlank() && it.nameHi.isNotBlank() })
+    }
+
+    @Test
+    fun englishSearchFindsHindiStoryThroughEntityNames() {
+        val s = story("y", "2026-10-13T07:00:00Z").copy(title = "लखनऊ में बैठक")
+        assertFalse(FeedLogic.matchesQuery(s, "lucknow"))
+        assertTrue(FeedLogic.matchesQuery(s, "lucknow", "Lucknow लखनऊ"))
     }
 }

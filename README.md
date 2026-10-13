@@ -2,7 +2,7 @@
 
 A fast, text-only Hindi news aggregator for **Uttar Pradesh politics**, built to spot political developments early so they can be researched and turned into news videos.
 
-- **Android app** (Kotlin + Jetpack Compose), Hindi/Devanagari interface, no images.
+- **Android app** (Kotlin + Jetpack Compose), text only, no images. The interface is in **English or Hindi** (switch in Settings → Language); the **news itself — headlines, summaries, statements — is always in Hindi**, exactly as published.
 - **Backend** (Python) that collects UP news from publisher RSS feeds and Google News, groups duplicate reports, tags leaders/districts/parties, marks breaking news and allegations, and publishes a feed for the app.
 - Runs for free on **GitHub Actions**: one workflow collects news every ~5 minutes, another builds and publishes the APK.
 
@@ -13,11 +13,11 @@ A fast, text-only Hindi news aggregator for **Uttar Pradesh politics**, built to
 
 After that the app updates itself:
 
-- It checks for a new version **every time it starts** and **in the background every 1, 3, 6 or 12 hours** (Settings → ऐप अपडेट).
-- A new version is downloaded automatically (can be turned off), verified (SHA-256, package name and version) and you get a notification. Tap **इंस्टॉल करें**; Android always asks you to confirm an install — no ordinary app can install silently.
+- It checks for a new version **every time it starts** and **in the background every 1, 3, 6 or 12 hours** (Settings → App updates).
+- A new version is downloaded automatically (can be turned off), verified (SHA-256, package name and version) and you get a notification. Tap **Install**; Android always asks you to confirm an install — no ordinary app can install silently.
 - The first time, Android asks you to allow News Adda to install apps; allow it once.
 
-`-debug.apk` files in each release are a separate test app ("न्यूज़ अड्डा (डीबग)"); they install alongside the normal app and never self-update.
+`-debug.apk` files in each release are a separate test app ("News Adda (debug)"); they install alongside the normal app and never self-update.
 
 ## How it works
 
@@ -38,19 +38,21 @@ The phone never scrapes publishers; it only reads the backend's feed. Each story
 
 ### App sections
 
-होम · ब्रेकिंग न्यूज़ · नेता ट्रैकर · राजनीतिक विवाद · सीट और बाहुबली · नेताओं के बयान · जिला समाचार · सहेजी गई · सेटिंग्स, plus search (Hindi or English) with filters for party, category, leader/district/seat, source and date.
+Home · Breaking · Leader tracker · Controversies · Seats & Bahubalis · Statements · Districts · Saved · Settings (in Hindi: होम · ब्रेकिंग न्यूज़ · नेता ट्रैकर · राजनीतिक विवाद · सीट और बाहुबली · नेताओं के बयान · जिला समाचार · सहेजी गई · सेटिंग्स), plus search with filters for party, category, leader/district/seat, source and date. Search accepts Hindi or English: typing "yogi" or "lucknow" finds Hindi headlines through the English names of leaders and districts.
 
 ### Labels and what they mean
 
+Labels are shown in the interface language (English names below, Hindi in brackets).
+
 | Label | Rule |
 |---|---|
-| ब्रेकिंग | Headline signals (resignation, arrest, suspension, defection, ticket/candidate list, Election Commission, bypoll, High/Supreme Court, conviction/bail, raids…) in a political story, **or** 3+ publishers reporting within 2 hours. Shown for 6 hours. The reasons are listed in every story. |
-| नई खबर | First seen in the last 30 minutes. |
-| आरोप / पलटवार | The report describes an allegation / counter-attack. An allegation is never presented as fact. |
-| आधिकारिक बयान | Official wording (government order, Commission, spokesperson…). |
-| N स्रोतों से रिपोर्ट | Reported by N different publishers (one outlet through several feeds counts once). |
-| पुष्टि की प्रतीक्षा | A political single-source report that is breaking, an allegation, or mentions legal action. |
-| रिपोर्ट में उल्लेख: … | Legal status words used by the report (आरोप, एफआईआर, जांच, गिरफ्तारी, आरोप-पत्र, जमानत, बरी, दोषसिद्ध). The app never calls anyone a criminal. |
+| Breaking (ब्रेकिंग) | Headline signals (resignation, arrest, suspension, defection, ticket/candidate list, Election Commission, bypoll, High/Supreme Court, conviction/bail, raids…) in a political story, **or** 3+ publishers reporting within 2 hours. Shown for 6 hours. The reasons are listed in every story. |
+| New (नई खबर) | First seen in the last 30 minutes. |
+| Allegation / Counter-attack (आरोप / पलटवार) | The report describes an allegation / counter-attack. An allegation is never presented as fact. |
+| Official statement (आधिकारिक बयान) | Official wording (government order, Commission, spokesperson…). |
+| Reported by N sources | Reported by N different publishers (one outlet through several feeds counts once). |
+| Awaiting confirmation (पुष्टि की प्रतीक्षा) | A political single-source report that is breaking, an allegation, or mentions legal action. |
+| Mentioned in report: … | Legal status words used by the report (allegation, FIR, investigation, arrest, chargesheet, bail, acquittal, conviction). The app never calls anyone a criminal. |
 
 All labels come from transparent keyword rules (`backend/newsadda/classify.py`), not popularity or ideology. They can be wrong; the reasons are always visible.
 
@@ -67,7 +69,7 @@ All labels come from transparent keyword rules (`backend/newsadda/classify.py`),
 | Topic searches: UP politics, leaders, regional figures, elections | Google News RSS | ✅ verified |
 | X (Twitter) posts of leaders | Official X API v2 | ⛔ needs `X_BEARER_TOKEN` (paid X API plan); shown as unavailable until set |
 
-Current per-source status is always in the app (Settings → समाचार स्रोत) and in `health.json` on the `data` branch. The daily **source check** re-tests every URL and autodiscovers feeds; results are on the `ci-backend` branch (`discovery.txt`).
+Current per-source status is always in the app (Settings → News sources) and in `health.json` on the `data` branch. The daily **source check** re-tests every URL and autodiscovers feeds; results are on the `ci-backend` branch (`discovery.txt`).
 
 ## Configuration
 
@@ -104,7 +106,7 @@ Debug builds use the id `com.newsadda.app.debug`, a different name, and no self-
 
 ### Backend
 
-The default backend is the **Collect news** workflow (nothing to set up). To get faster updates (the app supports a 1-minute refresh), run the server yourself and set its URL in the app (Settings → बैकएंड पता → `https://your-server/feed.json`):
+The default backend is the **Collect news** workflow (nothing to set up). To get faster updates (the app supports a 1-minute refresh), run the server yourself and set its URL in the app (Settings → Backend address → `https://your-server/feed.json`):
 
 ```bash
 cd backend
@@ -122,11 +124,11 @@ Tests: `pip install -r requirements-dev.txt && python -m pytest`.
 
 ## Tested
 
-- **Backend: 53 automated tests** — feed parsing, IST/UTC timestamps (missing, zone-less and future times are never invented or silently trusted), Hindi normalisation, UP relevance, entity tagging, breaking/allegation/statement/legal-status labels, near-duplicate grouping (same story grouped; different stories kept apart), publisher aliasing, source failures and fallbacks, conditional requests and backoff, incremental feed, API search and filters, X post parsing.
+- **Backend: 54 automated tests** — feed parsing, IST/UTC timestamps (missing, zone-less and future times are never invented or silently trusted), Hindi normalisation, UP relevance, entity tagging, breaking/allegation/statement/legal-status labels, near-duplicate grouping (same story grouped; different stories kept apart), publisher aliasing, source failures and fallbacks, conditional requests and backoff, incremental feed, API search and filters, X post parsing.
 - **Live sources** checked from GitHub Actions (table above) and the collector producing a real feed (~600+ stories in the first run).
-- **Android: 9 unit tests** — parsing the backend's feed format, cache merge/retention, new-story detection, search folding, refresh interval, source hiding, IST formatting.
+- **Android: 11 unit tests** — parsing the backend's feed format, cache merge/retention, new-story detection, search folding and English-name search, refresh interval, source hiding, IST formatting and labels in both languages.
 - **Release build** compiles, is signed and is published with `update.json`; `releases/latest/download/update.json` resolves.
-- **Emulator smoke test** against the live feed: app starts, Hindi renders, every section opens, background → foreground refresh, offline mode shows cached news with a notice, no crashes.
+- **Emulator smoke test** against the live feed: app starts in English, every section opens, switching to Hindi works with news unchanged, background → foreground refresh, offline mode shows cached news with a notice, no crashes.
 
 Not tested on a physical phone, and the in-app update install step needs a second release to exercise end to end.
 

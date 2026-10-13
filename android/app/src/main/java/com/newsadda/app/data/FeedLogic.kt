@@ -73,10 +73,11 @@ object FeedLogic {
         return sb.toString()
     }
 
-    fun matchesQuery(story: Story, query: String): Boolean {
+    fun matchesQuery(story: Story, query: String, extra: String = ""): Boolean {
         val words = normalize(query).split(' ', ',', '।').filter { it.isNotBlank() }
         if (words.isEmpty()) return true
         val hay = normalize(buildString {
+            append(extra).append(' ')
             append(story.title).append(' ')
             append(story.summary ?: "").append(' ')
             story.reports.forEach { append(it.title).append(' ').append(it.sourceName).append(' ').append(it.publisher ?: "").append(' ') }
@@ -100,7 +101,7 @@ object FeedLogic {
         hiddenSources.isEmpty() || story.reports.any { it.sourceId !in hiddenSources }
 
     fun isControversy(s: Story) =
-        "controversy" in s.categories || "आरोप" in s.labels || "पलटवार" in s.labels
+        "controversy" in s.categories || "allegation" in s.labels || "counter" in s.labels
 
     fun isSeatsAndFigures(s: Story) =
         s.entities.figures.isNotEmpty() || s.entities.seats.isNotEmpty() || "election" in s.categories

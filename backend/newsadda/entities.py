@@ -30,6 +30,10 @@ class Entity:
     def public(self) -> dict:
         d = {"id": self.id, "name_hi": self.name_hi}
         d.update(self.extra)
+        if not d.get("name"):
+            # First Latin-script alias is the English name (e.g. "Lucknow").
+            d["name"] = next((a for a in self.aliases if a.isascii() and not a.isupper()), None) or \
+                next((a for a in self.aliases if a.isascii()), self.name_hi)
         return d
 
 
@@ -39,7 +43,7 @@ class EntityIndex:
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         self.leaders = [self._mk(e, ("name", "party", "role_hi")) for e in raw.get("leaders", [])]
         self.figures = [self._mk(e, ("name", "area_hi")) for e in raw.get("regional_figures", [])]
-        self.parties = [self._mk(e, ()) for e in raw.get("parties", [])]
+        self.parties = [self._mk(e, ("name",)) for e in raw.get("parties", [])]
         self.districts = [self._mk(e, ("key",)) for e in raw.get("districts", [])]
         self.seats = [self._mk(e, ()) for e in raw.get("seats", [])]
 

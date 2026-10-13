@@ -61,8 +61,8 @@ def test_full_run_groups_reports_and_keeps_attribution(settings, router):
     assert "https://news.google.com/rss/articles/zz1" not in urls  # same publisher, same headline
     assert resign["publisher_count"] == 2
     assert resign["corroboration"] == "multi"
-    assert "एकाधिक स्रोतों से रिपोर्ट" in resign["labels"]
-    assert resign["breaking"] and "इस्तीफा" in resign["reasons"]
+    assert "multi_source" in resign["labels"]
+    assert resign["breaking"] and "resignation" in resign["reasons"]
     assert resign["summary"].startswith("आजमगढ़ के सपा विधायक")
 
 
@@ -177,7 +177,7 @@ def test_single_source_allegation_awaits_confirmation(settings, router):
     run(p)
     st = next(s for s in build_feed(p)["stories"] if "धांधली" in s["title"])
     assert st["corroboration"] == "single"
-    assert "पुष्टि की प्रतीक्षा" in st["labels"] and "आरोप" in st["labels"]
+    assert "awaiting_confirmation" in st["labels"] and "allegation" in st["labels"]
     assert st["statement"] and "akhilesh" in st["entities"]["leaders"]
 
 
@@ -254,3 +254,14 @@ def test_rules_change_relabels_stored_items(settings, router):
     n = p.relabel_if_rules_changed()
     assert n == len(p.store.all_items()) > 0
     assert p.relabel_if_rules_changed() == 0
+
+
+def test_entities_have_english_names():
+    from newsadda.entities import EntityIndex
+
+    pub = EntityIndex().public()
+    d = {x["id"]: x for x in pub["districts"]}
+    assert d["lucknow"]["name"] == "Lucknow" and d["lucknow"]["name_hi"] == "लखनऊ"
+    assert {x["id"]: x["name"] for x in pub["parties"]}["bjp"] == "BJP"
+    assert {x["id"]: x["name"] for x in pub["leaders"]}["yogi"] == "Yogi Adityanath"
+    assert all(x["name"] for g in pub.values() for x in g)

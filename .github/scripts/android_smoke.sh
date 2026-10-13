@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Installs the debug APK on the CI emulator, opens every section against the
-# live feed, saves screenshots and checks logcat for crashes.
+# live feed in English, switches the interface to Hindi, saves screenshots and
+# checks logcat for crashes.
 set -u
 PKG=com.newsadda.app.debug
 OUT=smoke
@@ -18,36 +19,40 @@ adb shell am start -W -n $PKG/com.newsadda.app.MainActivity
 shot 01_home 30
 
 i=2
-for t in "ब्रेकिंग न्यूज़" "नेता ट्रैकर" "राजनीतिक विवाद" "सीट और बाहुबली" "नेताओं के बयान" "जिला समाचार" "सेटिंग्स"; do
+for t in "Breaking" "Leader tracker" "Controversies" "Seats & Bahubalis" "Statements" "Districts" "Settings"; do
   tap "$t"
-  shot "$(printf %02d $i)_$(echo "$t" | tr ' ' '_')" 3
+  shot "$(printf %02d $i)_$(echo "$t" | tr ' &' '__')" 3
   i=$((i+1))
 done
 
-# District detail, then home -> open first story's detail sheet.
-tap "जिला समाचार"; sleep 2; tap "अमेठी"; shot 10_district_detail 3
-adb shell input keyevent 4; sleep 2   # back -> home tab
+# District detail, then back to home and open a story's detail sheet.
+tap "Districts"; sleep 2; tap "Amethi"; shot 10_district_detail 3
+adb shell input keyevent 4; sleep 2
 shot 10b_back_home 2
-tap "मूल खबर" --above 220; shot 11_story_detail 3
+tap "Original" --above 220; shot 11_story_detail 3
 adb shell input keyevent 4; sleep 1
-tap "खोजें"; sleep 2; tap "नेता, दल, जिला"; sleep 1; adb shell input text "yogi"; shot 12_search 3
+tap "Search"; sleep 2; tap "Leader, party, district"; sleep 1; adb shell input text "yogi"; shot 12_search_english_query 3
 adb shell input keyevent 4; adb shell input keyevent 4; sleep 1
+
+# Switch the interface to Hindi; the news must stay as it is.
+tap "Settings"; sleep 2; tap "हिंदी"; shot 13_settings_hindi 3
+adb shell input keyevent 4; shot 14_home_hindi 3
 
 # Background/foreground cycle: the app must refresh on return without crashing.
 adb shell input keyevent 3; sleep 5
-adb shell am start -n $PKG/com.newsadda.app.MainActivity; shot 13_resume 8
+adb shell am start -n $PKG/com.newsadda.app.MainActivity; shot 15_resume 8
 
 # Offline: cached stories must still show, with an offline notice.
 adb shell svc wifi disable; adb shell svc data disable; sleep 2
-tap "अभी अपडेट करें"; shot 14_offline 6
+tap "अभी अपडेट करें"; shot 16_offline 6
 adb shell svc wifi enable; adb shell svc data enable
 
 adb logcat -d > "$OUT/logcat.txt"
-grep -E "NewsRepo|Update" "$OUT/logcat.txt" | tail -40 > "$OUT/app_log.txt" || true
+grep -E "NewsRepo|Update|AndroidRuntime" "$OUT/logcat.txt" | grep -v Hotword | tail -40 > "$OUT/app_log.txt" || true
 if grep -q "FATAL EXCEPTION" "$OUT/logcat.txt"; then
   grep -A 30 "FATAL EXCEPTION" "$OUT/logcat.txt" > "$OUT/CRASH.txt"
   echo "crash=yes" > "$OUT/result.txt"
 else
   echo "crash=no" > "$OUT/result.txt"
 fi
-adb shell dumpsys activity processes | grep -c "$PKG" >> "$OUT/result.txt" || true
+rm -f "$OUT/logcat.txt"   # large; the relevant lines are in app_log.txt / CRASH.txt

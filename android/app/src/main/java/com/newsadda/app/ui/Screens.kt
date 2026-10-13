@@ -73,18 +73,19 @@ fun StoryList(
 @Composable
 fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val settings by vm.settings.collectAsState()
+    val str = LocalStr.current
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
     val list = if (settings.politicsOnlyHome) all.filter(FeedLogic::isPolitical) else all
     val newCount = list.count { it.id in env.newIds }
-    StoryList(list, env, "अभी कोई खबर नहीं", "ऊपर “अभी अपडेट करें” दबाएं या नीचे खींचें।", state = state) {
+    StoryList(list, env, str.emptyHome, str.emptyHomeBody, state = state) {
         item(key = "home-head") {
             ChipRow(
-                listOf("all" to "सभी यूपी खबरें", "pol" to "केवल राजनीति"),
+                listOf("all" to str.allUp, "pol" to str.politicsOnly),
                 if (settings.politicsOnlyHome) "pol" else "all",
             ) { id -> vm.updateSettings { it.copy(politicsOnlyHome = id == "pol") } }
             if (newCount > 0) {
-                Notice("$newCount नई खबरें आई हैं", LocalNewsColors.current.newDot, "देख लिया" to {
+                Notice(str.newStories(newCount), LocalNewsColors.current.newDot, str.markSeen to {
                     scope.launch { state.animateScrollToItem(0) }
                     vm.acknowledgeNew()
                 })
@@ -95,15 +96,16 @@ fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 
 @Composable
 fun BreakingScreen(all: List<Story>, env: ListEnv) {
+    val str = LocalStr.current
     val list = all.filter { it.breaking && Duration.between(FeedLogic.instant(it.firstSeenAt) ?: Instant.EPOCH, env.now).toHours() < 24 }
-    StoryList(list, env, "पिछले 24 घंटों में कोई ब्रेकिंग खबर नहीं",
-        "ब्रेकिंग का निशान इस्तीफा, गिरफ्तारी, दलबदल, टिकट, चुनाव आयोग, अदालत जैसे संकेतों और कई स्रोतों की एक साथ रिपोर्ट से तय होता है — हर खबर में कारण दिखते हैं।")
+    StoryList(list, env, str.breakingEmpty, str.breakingEmptyBody)
 }
 
 @Composable
 fun LeadersScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val settings by vm.settings.collectAsState()
     val selected by vm.leaderFilter.collectAsState()
+    val str = LocalStr.current
     val leaders = vm.repo.collectAsState().value.cache.entities.leaders
     val ordered = remember(leaders, settings.followedLeaders) {
         leaders.sortedBy { if (it.id in settings.followedLeaders) 0 else 1 }
@@ -116,24 +118,24 @@ fun LeadersScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
             else -> s.entities.leaders.isNotEmpty()
         }
     }
-    StoryList(list, env, "इस नेता की कोई हालिया खबर नहीं") {
+    StoryList(list, env, str.leaderEmpty) {
         item(key = "leader-head") {
             ChipRow(
-                listOf<Pair<String?, String>>(null to if (follows.isEmpty()) "सभी नेता" else "अनुसरित (${follows.size})") +
-                    ordered.map { it.id to (if (it.id in follows) "★ " else "") + it.nameHi },
+                listOf<Pair<String?, String>>(null to if (follows.isEmpty()) str.allLeaders else str.following(follows.size)) +
+                    ordered.map { it.id to (if (it.id in follows) "★ " else "") + env.names.of(it) },
                 selected,
             ) { vm.leaderFilter.value = it }
             val sel = leaders.firstOrNull { it.id == selected }
             if (sel != null) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(listOfNotNull(sel.nameHi, sel.roleHi).joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
+                    Text(listOfNotNull(env.names.of(sel), sel.roleHi.takeIf { str.hindi }).joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
                     OutlinedButton(onClick = { vm.toggleFollowLeader(sel.id) }) {
-                        Text(if (sel.id in follows) "अनुसरण हटाएं" else "अनुसरण करें")
+                        Text(if (sel.id in follows) str.unfollow else str.follow)
                     }
                 }
             } else if (follows.isEmpty()) {
-                Notice("किसी नेता को चुनकर “अनुसरण करें” दबाएं — फिर उनकी खबरें यहां एक साथ और सूचनाओं में आएंगी।")
+                Notice(str.followHint)
             }
         }
     }
@@ -141,9 +143,10 @@ fun LeadersScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 
 @Composable
 fun ControversyScreen(all: List<Story>, env: ListEnv) {
-    StoryList(all.filter(FeedLogic::isControversy), env, "कोई हालिया राजनीतिक विवाद नहीं", showStatementType = true) {
+    val str = LocalStr.current
+    StoryList(all.filter(FeedLogic::isControversy), env, str.controversyEmpty, showStatementType = true) {
         item(key = "contro-head") {
-            Notice("आरोप और बयान संबंधित व्यक्ति/दल के दावे हैं, सिद्ध तथ्य नहीं। हर खबर में स्रोत और पुष्टि की स्थिति देखें।")
+            Notice(str.controversyNote)
         }
     }
 }
@@ -151,11 +154,12 @@ fun ControversyScreen(all: List<Story>, env: ListEnv) {
 @Composable
 fun SeatsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val selected by vm.seatFilter.collectAsState()
+    val str = LocalStr.current
     val ent = vm.repo.collectAsState().value.cache.entities
-    val chips = listOf<Pair<String?, String>>(null to "सभी") +
-        ent.figures.map { "figure:${it.id}" to it.nameHi } +
-        ent.seats.map { "seat:${it.id}" to it.nameHi } +
-        ent.districts.filter { it.key }.map { "district:${it.id}" to it.nameHi }
+    val chips = listOf<Pair<String?, String>>(null to str.all) +
+        ent.figures.map { "figure:${it.id}" to env.names.of(it) } +
+        ent.seats.map { "seat:${it.id}" to env.names.of(it) } +
+        ent.districts.filter { it.key }.map { "district:${it.id}" to env.names.of(it) }
     val list = all.filter { s ->
         val sel = selected
         when {
@@ -165,10 +169,10 @@ fun SeatsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
             else -> sel.removePrefix("district:") in s.entities.districts && FeedLogic.isPolitical(s)
         }
     }
-    StoryList(list, env, "इस चयन की कोई हालिया खबर नहीं") {
+    StoryList(list, env, str.selectionEmpty) {
         item(key = "seats-head") {
             ChipRow(chips, selected) { vm.seatFilter.value = it }
-            Notice("कानूनी स्थिति केवल रिपोर्ट के शब्दों के अनुसार दिखाई जाती है। आरोप या मुकदमा दोषसिद्धि नहीं है।")
+            Notice(str.seatsNote)
         }
     }
 }
@@ -176,10 +180,11 @@ fun SeatsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 @Composable
 fun StatementsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val xAvailable = vm.repo.collectAsState().value.cache.xAvailable
-    StoryList(all.filter { it.statement }, env, "कोई हालिया बयान नहीं", showStatementType = true) {
+    val str = LocalStr.current
+    StoryList(all.filter { it.statement }, env, str.statementsEmpty, showStatementType = true) {
         item(key = "stmt-head") {
             if (!xAvailable) {
-                Notice("X (ट्विटर) पोस्ट अभी उपलब्ध नहीं हैं — बैकएंड में X API कुंजी सेट नहीं है। नीचे समाचारों में छपे नेताओं के बयान हैं।")
+                Notice(str.xUnavailable)
             }
         }
     }
@@ -189,6 +194,7 @@ fun StatementsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val settings by vm.settings.collectAsState()
     val selected by vm.districtFilter.collectAsState()
+    val str = LocalStr.current
     val districts = vm.repo.collectAsState().value.cache.entities.districts
     val counts = remember(all) {
         val m = HashMap<String, Int>()
@@ -196,7 +202,7 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
         m
     }
     val ordered = remember(districts, settings.preferredDistricts) {
-        districts.sortedWith(compareBy({ if (it.id in settings.preferredDistricts) 0 else if (it.key) 1 else 2 }, { it.nameHi }))
+        districts.sortedWith(compareBy({ if (it.id in settings.preferredDistricts) 0 else if (it.key) 1 else 2 }, { env.names.of(it) }))
     }
     val sel = selected
     if (sel == null) {
@@ -204,15 +210,15 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
         val state = rememberLazyListState()
         LazyColumn(state = state, modifier = Modifier.fillMaxSize()) {
             item {
-                Notice("जिला चुनें। ★ = आपके पसंदीदा जिले (सेटिंग्स या नीचे से बदलें)।")
+                Notice(str.districtPick)
             }
             items(ordered, key = { it.id }) { d ->
                 Row(
                     Modifier.fillMaxWidth().clickable { vm.districtFilter.value = d.id }.padding(horizontal = 16.dp, vertical = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text((if (d.id in settings.preferredDistricts) "★ " else "") + d.nameHi, style = MaterialTheme.typography.bodyLarge)
-                    Text("${counts[d.id] ?: 0} खबरें", style = MaterialTheme.typography.bodySmall, color = LocalNewsColors.current.muted)
+                    Text((if (d.id in settings.preferredDistricts) "★ " else "") + env.names.of(d), style = MaterialTheme.typography.bodyLarge)
+                    Text(str.storyCount(counts[d.id] ?: 0), style = MaterialTheme.typography.bodySmall, color = LocalNewsColors.current.muted)
                 }
                 HorizontalDivider(color = LocalNewsColors.current.divider)
             }
@@ -220,18 +226,19 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
         return
     }
     val d = districts.firstOrNull { it.id == sel }
-    StoryList(all.filter { sel in it.entities.districts }, env, "${d?.nameHi ?: ""} की कोई हालिया खबर नहीं") {
+    val dName = d?.let { env.names.of(it) } ?: ""
+    StoryList(all.filter { sel in it.entities.districts }, env, str.districtEmpty(dName)) {
         item(key = "district-head") {
             Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                androidx.compose.material3.TextButton(onClick = { vm.districtFilter.value = null }) { Text("← सभी जिले") }
+                androidx.compose.material3.TextButton(onClick = { vm.districtFilter.value = null }) { Text(str.allDistricts) }
                 if (d != null) {
                     OutlinedButton(onClick = { vm.toggleDistrict(d.id) }) {
-                        Text(if (d.id in settings.preferredDistricts) "पसंदीदा से हटाएं" else "पसंदीदा बनाएं")
+                        Text(if (d.id in settings.preferredDistricts) str.removeFavourite else str.makeFavourite)
                     }
                 }
             }
-            Text(d?.nameHi ?: "", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 16.dp))
+            Text(dName, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 16.dp))
         }
     }
 }
@@ -239,5 +246,6 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 @Composable
 fun SavedScreen(vm: MainViewModel, env: ListEnv) {
     val saved = vm.repo.collectAsState().value.bookmarks
-    StoryList(saved, env, "कोई सहेजी गई खबर नहीं", "किसी खबर पर “सहेजें” दबाएं; वह यहां हमेशा रहेगी।")
+    val str = LocalStr.current
+    StoryList(saved, env, str.savedEmpty, str.savedEmptyBody)
 }

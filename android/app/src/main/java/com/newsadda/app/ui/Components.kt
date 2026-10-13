@@ -39,18 +39,23 @@ import androidx.compose.ui.unit.dp
 import com.newsadda.app.data.FeedLogic
 import com.newsadda.app.data.TimeFmt
 import com.newsadda.app.data.model.Entities
+import com.newsadda.app.data.model.Entity
 import com.newsadda.app.data.model.Report
 import com.newsadda.app.data.model.Story
 import java.time.Instant
 
-/** id -> Hindi name lookups, built once per feed. */
+/** id -> display name lookups in the interface language, built once per feed. */
 @Immutable
-class Names(e: Entities, val categories: Map<String, String>) {
-    val leaders = e.leaders.associate { it.id to it.nameHi }
-    val figures = e.figures.associate { it.id to it.nameHi }
-    val parties = e.parties.associate { it.id to it.nameHi }
-    val districts = e.districts.associate { it.id to it.nameHi }
-    val seats = e.seats.associate { it.id to it.nameHi }
+class Names(e: Entities, val str: Str) {
+    private fun Entity.label() = if (str.hindi) nameHi else (name ?: nameHi)
+    val leaders = e.leaders.associate { it.id to it.label() }
+    val figures = e.figures.associate { it.id to it.label() }
+    val parties = e.parties.associate { it.id to it.label() }
+    val districts = e.districts.associate { it.id to it.label() }
+    val seats = e.seats.associate { it.id to it.label() }
+
+    fun any(id: String): String = leaders[id] ?: figures[id] ?: districts[id] ?: seats[id] ?: parties[id] ?: id
+    fun of(e: Entity) = e.label()
 
     fun entityLine(s: Story): String {
         val parts = mutableListOf<String>()
@@ -62,7 +67,14 @@ class Names(e: Entities, val categories: Map<String, String>) {
     }
 
     fun categoryLine(s: Story): String =
-        (s.categoryNames.ifEmpty { s.categories.mapNotNull { categories[it] } }).filter { it != "अन्य" }.take(2).joinToString(", ")
+        s.categories.filter { it != "other" }.take(2).joinToString(", ") { str.category(it) }
+
+    /** Words that let English searches find Hindi stories ("yogi", "lucknow"). */
+    fun searchExtra(s: Story, e: Entities): String {
+        val ids = s.entities.leaders + s.entities.figures + s.entities.districts + s.entities.seats + s.entities.parties
+        val all = e.leaders + e.figures + e.districts + e.seats + e.parties
+        return all.filter { it.id in ids }.joinToString(" ") { "${it.name ?: ""} ${it.nameHi}" }
+    }
 }
 
 fun Report.displayTime(): Instant? =
@@ -86,17 +98,18 @@ fun Tag(text: String, color: Color, filled: Boolean = false) {
 @Composable
 fun StoryTags(s: Story, now: Instant, showStatementType: Boolean = false) {
     val c = LocalNewsColors.current
+    val str = LocalStr.current
     val tags = buildList {
-        if (FeedLogic.isBreakingNow(s, now)) add(Triple("ब्रेकिंग", c.breaking, true))
-        if (FeedLogic.isRecent(s, now)) add(Triple("नई खबर", c.newDot, false))
-        if (s.kind == "post") add(Triple("X पोस्ट", c.muted, false))
-        if (showStatementType && s.statementType != null) add(Triple(s.statementType, c.muted, false))
+        if (FeedLogic.isBreakingNow(s, now)) add(Triple(str.tagBreaking, c.breaking, true))
+        if (FeedLogic.isRecent(s, now)) add(Triple(str.tagNew, c.newDot, false))
+        if (s.kind == "post") add(Triple(str.tagXPost, c.muted, false))
+        if (showStatementType && s.statementType != null) add(Triple(str.statementType(s.statementType), c.muted, false))
         for (l in s.labels) {
             when (l) {
-                "आरोप", "पलटवार" -> add(Triple(l, c.allegation, false))
-                "पुष्टि की प्रतीक्षा" -> add(Triple(l, c.caution, false))
-                "एकाधिक स्रोतों से रिपोर्ट" -> add(Triple("${s.publisherCount} स्रोतों से रिपोर्ट", c.multi, false))
-                else -> add(Triple(l, c.muted, false))
+                "allegation", "counter" -> add(Triple(str.label(l), c.allegation, false))
+                "awaiting_confirmation" -> add(Triple(str.label(l), c.caution, false))
+                "multi_source" -> add(Triple(str.multiSource(s.publisherCount), c.multi, false))
+                else -> add(Triple(str.label(l), c.muted, false))
             }
         }
     }
@@ -120,6 +133,7 @@ fun StoryCard(
 ) {
     val ctx = LocalContext.current
     val c = LocalNewsColors.current
+    val str = LocalStr.current
     val lead = s.reports.firstOrNull()
     Column(
         Modifier
@@ -145,14 +159,14 @@ fun StoryCard(
         val meta = buildString {
             if (lead != null) {
                 append(lead.publisherName())
-                if (lead.via != null) append(" (गूगल न्यूज़)")
+                if (lead.via != null) append(str.viaGoogle)
                 append(" · ")
                 val t = lead.displayTime()
-                if (lead.publishedAt == null || lead.publishedSuspect) append("देखा ")
-                append(TimeFmt.short(t, now))
+                if (lead.publishedAt == null || lead.publishedSuspect) append(str.seenPrefix)
+                append(TimeFmt.short(t, now, str))
             }
             val others = s.reports.map { it.publisherName() }.distinct().size - 1
-            if (others > 0) append(" · +$others स्रोत")
+            if (others > 0) append(" · " + str.moreSources(others))
         }
         Text(meta, style = MaterialTheme.typography.bodySmall, color = c.muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
         val line = listOf(names.categoryLine(s), names.entityLine(s)).filter { it.isNotBlank() }.joinToString(" · ")
@@ -160,9 +174,9 @@ fun StoryCard(
             Text(line, style = MaterialTheme.typography.bodySmall, color = c.muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            SmallAction("मूल खबर") { lead?.let { Actions.open(ctx, it.url) } }
-            SmallAction(if (saved) "सहेजा गया" else "सहेजें", onSave)
-            SmallAction("शेयर") { Actions.share(ctx, s) }
+            SmallAction(str.actOriginal) { lead?.let { Actions.open(ctx, it.url, str) } }
+            SmallAction(if (saved) str.actSaved else str.actSave, onSave)
+            SmallAction(str.actShare) { Actions.share(ctx, s, str) }
         }
         HorizontalDivider(color = c.divider)
     }

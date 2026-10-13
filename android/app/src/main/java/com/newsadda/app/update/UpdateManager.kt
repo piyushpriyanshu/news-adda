@@ -11,6 +11,7 @@ import com.newsadda.app.BuildConfig
 import com.newsadda.app.data.Net
 import com.newsadda.app.data.Prefs
 import com.newsadda.app.data.model.UpdateInfo
+import com.newsadda.app.ui.Str
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +31,6 @@ data class UpdateState(
     val readyFile: String? = null,
     val error: String? = null,
     val lastCheckMs: Long = 0,
-    val lastResult: String? = null,
 )
 
 /**
@@ -82,7 +82,7 @@ object UpdateManager {
             Prefs.putLong(ctx, "update_last_check", now)
             info.exceptionOrNull()?.let { e ->
                 Log.w(TAG, "check ($reason) failed: $e")
-                _state.update { it.copy(checking = false, lastCheckMs = now, error = "अपडेट जांच विफल: ${e.message ?: "नेटवर्क"}") }
+                _state.update { it.copy(checking = false, lastCheckMs = now, error = Str.of(ctx).checkFailed(e.message ?: "network")) }
                 return@withLock _state.value.available
             }
             val remote = info.getOrNull()
@@ -92,7 +92,6 @@ object UpdateManager {
                 it.copy(
                     checking = false, lastCheckMs = now, available = newer,
                     readyFile = if (newer == null) null else it.readyFile?.takeIf { f -> f.endsWith("-${newer.versionCode}.apk") },
-                    lastResult = if (newer == null) "आप नवीनतम संस्करण (${BuildConfig.VERSION_NAME}) पर हैं" else "नया संस्करण ${newer.versionName} उपलब्ध है",
                 )
             }
             Log.i(TAG, "check ($reason): remote=${remote?.versionCode} local=${BuildConfig.VERSION_CODE}")
@@ -140,7 +139,7 @@ object UpdateManager {
                 val sha = digest.digest().joinToString("") { "%02x".format(it) }
                 if (!sha.equals(info.sha256.trim(), ignoreCase = true)) {
                     part.delete()
-                    error("SHA-256 मेल नहीं खाया — फ़ाइल हटा दी गई")
+                    error(Str.of(ctx).shaMismatch)
                 }
                 verifyArchive(ctx, part, info)
                 part.renameTo(target)
@@ -152,7 +151,7 @@ object UpdateManager {
             onSuccess = { f -> _state.update { it.copy(downloading = false, progress = 1f, readyFile = f.absolutePath) }; f },
             onFailure = { e ->
                 Log.w(TAG, "download failed: $e")
-                _state.update { it.copy(downloading = false, error = "डाउनलोड विफल: ${e.message}") }
+                _state.update { it.copy(downloading = false, error = Str.of(ctx).downloadFailed(e.message ?: "")) }
                 null
             },
         )
@@ -162,14 +161,14 @@ object UpdateManager {
         val pm = ctx.packageManager
         @Suppress("DEPRECATION")
         val pi = pm.getPackageArchiveInfo(file.absolutePath, 0) ?: run {
-            file.delete(); error("APK पढ़ा नहीं जा सका")
+            file.delete(); error(Str.of(ctx).apkUnreadable)
         }
         if (pi.packageName != ctx.packageName) {
-            file.delete(); error("APK किसी दूसरे ऐप का है")
+            file.delete(); error(Str.of(ctx).wrongPackage)
         }
         val code = if (Build.VERSION.SDK_INT >= 28) pi.longVersionCode.toInt() else @Suppress("DEPRECATION") pi.versionCode
         if (code != info.versionCode) {
-            file.delete(); error("APK का संस्करण अपेक्षित नहीं है")
+            file.delete(); error(Str.of(ctx).wrongVersion)
         }
     }
 
@@ -202,7 +201,7 @@ object UpdateManager {
             ctx.startActivity(intent)
             true
         } catch (e: Exception) {
-            _state.update { it.copy(error = "इंस्टॉलर नहीं खुल सका: ${e.message}") }
+            _state.update { it.copy(error = Str.of(ctx).installerFailed(e.message ?: "")) }
             false
         }
     }

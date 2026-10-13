@@ -1,7 +1,7 @@
 {
  "version": 1,
- "generated_at": "2026-10-13T08:14:44Z",
- "cursor": "2026-10-13T08:14:44Z",
+ "generated_at": "2026-10-13T08:40:42Z",
+ "cursor": "2026-10-13T08:40:42Z",
  "incremental": false,
  "supports_since": false,
  "window_hours": 36,
@@ -19,11 +19,11 @@
    "min_interval": 240,
    "note": null,
    "status": "ok",
-   "status_hi": "काम कर रहा है",
-   "last_ok_at": "2026-10-13T08:14:44Z",
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "status_text": "Working",
+   "last_ok_at": "2026-10-13T08:40:42Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": null,
-   "error_hi": null,
+   "error_text": null,
    "consecutive_failures": 0,
    "last_item_count": 2,
    "total_items": 2,
@@ -39,11 +39,11 @@
    "min_interval": 240,
    "note": null,
    "status": "ok",
-   "status_hi": "काम कर रहा है",
-   "last_ok_at": "2026-10-13T08:14:44Z",
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "status_text": "Working",
+   "last_ok_at": "2026-10-13T08:40:42Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": null,
-   "error_hi": null,
+   "error_text": null,
    "consecutive_failures": 0,
    "last_item_count": 1,
    "total_items": 1,
@@ -59,11 +59,11 @@
    "min_interval": 240,
    "note": null,
    "status": "ok",
-   "status_hi": "काम कर रहा है",
-   "last_ok_at": "2026-10-13T08:14:44Z",
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "status_text": "Working",
+   "last_ok_at": "2026-10-13T08:40:42Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": null,
-   "error_hi": null,
+   "error_text": null,
    "consecutive_failures": 0,
    "last_item_count": 2,
    "total_items": 1,
@@ -79,11 +79,11 @@
    "min_interval": 240,
    "note": null,
    "status": "error",
-   "status_hi": "त्रुटि",
+   "status_text": "Error",
    "last_ok_at": null,
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": "HTTP 503",
-   "error_hi": "HTTP 503",
+   "error_text": "HTTP 503",
    "consecutive_failures": 1,
    "last_item_count": 0,
    "total_items": 0,
@@ -99,11 +99,11 @@
    "min_interval": 240,
    "note": null,
    "status": "unavailable",
-   "status_hi": "उपलब्ध नहीं",
+   "status_text": "Unavailable",
    "last_ok_at": null,
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": "no_public_feed",
-   "error_hi": "इस प्रकाशक की कोई सार्वजनिक फ़ीड अभी नहीं मिली",
+   "error_text": "No public feed found for this publisher; covered via Google News where possible",
    "consecutive_failures": 1,
    "last_item_count": 0,
    "total_items": 0,
@@ -119,11 +119,11 @@
    "min_interval": 240,
    "note": null,
    "status": "ok",
-   "status_hi": "काम कर रहा है",
-   "last_ok_at": "2026-10-13T08:14:44Z",
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "status_text": "Working",
+   "last_ok_at": "2026-10-13T08:40:42Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": null,
-   "error_hi": null,
+   "error_text": null,
    "consecutive_failures": 0,
    "last_item_count": 1,
    "total_items": 0,
@@ -139,11 +139,11 @@
    "min_interval": 240,
    "note": null,
    "status": "unavailable",
-   "status_hi": "उपलब्ध नहीं",
+   "status_text": "Unavailable",
    "last_ok_at": null,
-   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:40:42Z",
    "error": "x_token_missing",
-   "error_hi": "X API कुंजी सेट नहीं है, इसलिए X पोस्ट नहीं आ रहीं",
+   "error_text": "X API key not set, so X posts are not collected",
    "consecutive_failures": 1,
    "last_item_count": 0,
    "total_items": 0,
@@ -338,441 +338,541 @@
   "parties": [
    {
     "id": "bjp",
-    "name_hi": "भाजपा"
+    "name_hi": "भाजपा",
+    "name": "BJP"
    },
    {
     "id": "sp",
-    "name_hi": "सपा"
+    "name_hi": "सपा",
+    "name": "Samajwadi Party"
    },
    {
     "id": "bsp",
-    "name_hi": "बसपा"
+    "name_hi": "बसपा",
+    "name": "BSP"
    },
    {
     "id": "inc",
-    "name_hi": "कांग्रेस"
+    "name_hi": "कांग्रेस",
+    "name": "Congress"
    },
    {
     "id": "rld",
-    "name_hi": "रालोद"
+    "name_hi": "रालोद",
+    "name": "RLD"
    },
    {
     "id": "sbsp",
-    "name_hi": "सुभासपा"
+    "name_hi": "सुभासपा",
+    "name": "SBSP"
    },
    {
     "id": "apnadal_s",
-    "name_hi": "अपना दल (एस)"
+    "name_hi": "अपना दल (एस)",
+    "name": "Apna Dal (S)"
    },
    {
     "id": "nishad",
-    "name_hi": "निषाद पार्टी"
+    "name_hi": "निषाद पार्टी",
+    "name": "Nishad Party"
    },
    {
     "id": "asp",
-    "name_hi": "आजाद समाज पार्टी"
+    "name_hi": "आजाद समाज पार्टी",
+    "name": "Azad Samaj Party"
    },
    {
     "id": "aap",
-    "name_hi": "आप"
+    "name_hi": "आप",
+    "name": "AAP"
    }
   ],
   "districts": [
    {
     "id": "agra",
-    "name_hi": "आगरा"
+    "name_hi": "आगरा",
+    "name": "Agra"
    },
    {
     "id": "aligarh",
-    "name_hi": "अलीगढ़"
+    "name_hi": "अलीगढ़",
+    "name": "Aligarh"
    },
    {
     "id": "ambedkar_nagar",
-    "name_hi": "अंबेडकर नगर"
+    "name_hi": "अंबेडकर नगर",
+    "name": "Ambedkar Nagar"
    },
    {
     "id": "amethi",
     "name_hi": "अमेठी",
-    "key": true
+    "key": true,
+    "name": "Amethi"
    },
    {
     "id": "amroha",
-    "name_hi": "अमरोहा"
+    "name_hi": "अमरोहा",
+    "name": "Amroha"
    },
    {
     "id": "auraiya",
-    "name_hi": "औरैया"
+    "name_hi": "औरैया",
+    "name": "Auraiya"
    },
    {
     "id": "ayodhya",
     "name_hi": "अयोध्या",
-    "key": true
+    "key": true,
+    "name": "Ayodhya"
    },
    {
     "id": "azamgarh",
     "name_hi": "आजमगढ़",
-    "key": true
+    "key": true,
+    "name": "Azamgarh"
    },
    {
     "id": "baghpat",
     "name_hi": "बागपत",
-    "key": true
+    "key": true,
+    "name": "Baghpat"
    },
    {
     "id": "bahraich",
-    "name_hi": "बहराइच"
+    "name_hi": "बहराइच",
+    "name": "Bahraich"
    },
    {
     "id": "ballia",
     "name_hi": "बलिया",
-    "key": true
+    "key": true,
+    "name": "Ballia"
    },
    {
     "id": "balrampur",
-    "name_hi": "बलरामपुर"
+    "name_hi": "बलरामपुर",
+    "name": "Balrampur"
    },
    {
     "id": "banda",
-    "name_hi": "बांदा"
+    "name_hi": "बांदा",
+    "name": "Banda"
    },
    {
     "id": "barabanki",
-    "name_hi": "बाराबंकी"
+    "name_hi": "बाराबंकी",
+    "name": "Barabanki"
    },
    {
     "id": "bareilly",
-    "name_hi": "बरेली"
+    "name_hi": "बरेली",
+    "name": "Bareilly"
    },
    {
     "id": "basti",
-    "name_hi": "बस्ती"
+    "name_hi": "बस्ती",
+    "name": "Basti"
    },
    {
     "id": "bhadohi",
-    "name_hi": "भदोही"
+    "name_hi": "भदोही",
+    "name": "Bhadohi"
    },
    {
     "id": "bijnor",
-    "name_hi": "बिजनौर"
+    "name_hi": "बिजनौर",
+    "name": "Bijnor"
    },
    {
     "id": "budaun",
-    "name_hi": "बदायूं"
+    "name_hi": "बदायूं",
+    "name": "Budaun"
    },
    {
     "id": "bulandshahr",
-    "name_hi": "बुलंदशहर"
+    "name_hi": "बुलंदशहर",
+    "name": "Bulandshahr"
    },
    {
     "id": "chandauli",
-    "name_hi": "चंदौली"
+    "name_hi": "चंदौली",
+    "name": "Chandauli"
    },
    {
     "id": "chitrakoot",
-    "name_hi": "चित्रकूट"
+    "name_hi": "चित्रकूट",
+    "name": "Chitrakoot"
    },
    {
     "id": "deoria",
-    "name_hi": "देवरिया"
+    "name_hi": "देवरिया",
+    "name": "Deoria"
    },
    {
     "id": "etah",
-    "name_hi": "एटा"
+    "name_hi": "एटा",
+    "name": "Etah"
    },
    {
     "id": "etawah",
-    "name_hi": "इटावा"
+    "name_hi": "इटावा",
+    "name": "Etawah"
    },
    {
     "id": "farrukhabad",
-    "name_hi": "फर्रुखाबाद"
+    "name_hi": "फर्रुखाबाद",
+    "name": "Farrukhabad"
    },
    {
     "id": "fatehpur",
-    "name_hi": "फतेहपुर"
+    "name_hi": "फतेहपुर",
+    "name": "Fatehpur"
    },
    {
     "id": "firozabad",
-    "name_hi": "फिरोजाबाद"
+    "name_hi": "फिरोजाबाद",
+    "name": "Firozabad"
    },
    {
     "id": "gautam_buddh_nagar",
-    "name_hi": "गौतमबुद्ध नगर"
+    "name_hi": "गौतमबुद्ध नगर",
+    "name": "Noida"
    },
    {
     "id": "ghaziabad",
-    "name_hi": "गाजियाबाद"
+    "name_hi": "गाजियाबाद",
+    "name": "Ghaziabad"
    },
    {
     "id": "ghazipur",
     "name_hi": "गाजीपुर",
-    "key": true
+    "key": true,
+    "name": "Ghazipur"
    },
    {
     "id": "gonda",
-    "name_hi": "गोंडा"
+    "name_hi": "गोंडा",
+    "name": "Gonda"
    },
    {
     "id": "gorakhpur",
     "name_hi": "गोरखपुर",
-    "key": true
+    "key": true,
+    "name": "Gorakhpur"
    },
    {
     "id": "hamirpur",
-    "name_hi": "हमीरपुर"
+    "name_hi": "हमीरपुर",
+    "name": "Hamirpur"
    },
    {
     "id": "hapur",
-    "name_hi": "हापुड़"
+    "name_hi": "हापुड़",
+    "name": "Hapur"
    },
    {
     "id": "hardoi",
-    "name_hi": "हरदोई"
+    "name_hi": "हरदोई",
+    "name": "Hardoi"
    },
    {
     "id": "hathras",
-    "name_hi": "हाथरस"
+    "name_hi": "हाथरस",
+    "name": "Hathras"
    },
    {
     "id": "jalaun",
-    "name_hi": "जालौन"
+    "name_hi": "जालौन",
+    "name": "Jalaun"
    },
    {
     "id": "jaunpur",
     "name_hi": "जौनपुर",
-    "key": true
+    "key": true,
+    "name": "Jaunpur"
    },
    {
     "id": "jhansi",
-    "name_hi": "झांसी"
+    "name_hi": "झांसी",
+    "name": "Jhansi"
    },
    {
     "id": "kannauj",
     "name_hi": "कन्नौज",
-    "key": true
+    "key": true,
+    "name": "Kannauj"
    },
    {
     "id": "kanpur_dehat",
-    "name_hi": "कानपुर देहात"
+    "name_hi": "कानपुर देहात",
+    "name": "Kanpur Dehat"
    },
    {
     "id": "kanpur_nagar",
-    "name_hi": "कानपुर"
+    "name_hi": "कानपुर",
+    "name": "Kanpur"
    },
    {
     "id": "kasganj",
-    "name_hi": "कासगंज"
+    "name_hi": "कासगंज",
+    "name": "Kasganj"
    },
    {
     "id": "kaushambi",
-    "name_hi": "कौशांबी"
+    "name_hi": "कौशांबी",
+    "name": "Kaushambi"
    },
    {
     "id": "kushinagar",
-    "name_hi": "कुशीनगर"
+    "name_hi": "कुशीनगर",
+    "name": "Kushinagar"
    },
    {
     "id": "lakhimpur_kheri",
-    "name_hi": "लखीमपुर खीरी"
+    "name_hi": "लखीमपुर खीरी",
+    "name": "Lakhimpur Kheri"
    },
    {
     "id": "lalitpur",
-    "name_hi": "ललितपुर"
+    "name_hi": "ललितपुर",
+    "name": "Lalitpur"
    },
    {
     "id": "lucknow",
     "name_hi": "लखनऊ",
-    "key": true
+    "key": true,
+    "name": "Lucknow"
    },
    {
     "id": "maharajganj",
-    "name_hi": "महराजगंज"
+    "name_hi": "महराजगंज",
+    "name": "Maharajganj"
    },
    {
     "id": "mahoba",
-    "name_hi": "महोबा"
+    "name_hi": "महोबा",
+    "name": "Mahoba"
    },
    {
     "id": "mainpuri",
     "name_hi": "मैनपुरी",
-    "key": true
+    "key": true,
+    "name": "Mainpuri"
    },
    {
     "id": "mathura",
-    "name_hi": "मथुरा"
+    "name_hi": "मथुरा",
+    "name": "Mathura"
    },
    {
     "id": "mau",
     "name_hi": "मऊ",
-    "key": true
+    "key": true,
+    "name": "Mau"
    },
    {
     "id": "meerut",
     "name_hi": "मेरठ",
-    "key": true
+    "key": true,
+    "name": "Meerut"
    },
    {
     "id": "mirzapur",
-    "name_hi": "मिर्जापुर"
+    "name_hi": "मिर्जापुर",
+    "name": "Mirzapur"
    },
    {
     "id": "moradabad",
     "name_hi": "मुरादाबाद",
-    "key": true
+    "key": true,
+    "name": "Moradabad"
    },
    {
     "id": "muzaffarnagar",
     "name_hi": "मुजफ्फरनगर",
-    "key": true
+    "key": true,
+    "name": "Muzaffarnagar"
    },
    {
     "id": "pilibhit",
-    "name_hi": "पीलीभीत"
+    "name_hi": "पीलीभीत",
+    "name": "Pilibhit"
    },
    {
     "id": "pratapgarh",
     "name_hi": "प्रतापगढ़",
-    "key": true
+    "key": true,
+    "name": "Pratapgarh"
    },
    {
     "id": "prayagraj",
     "name_hi": "प्रयागराज",
-    "key": true
+    "key": true,
+    "name": "Prayagraj"
    },
    {
     "id": "rae_bareli",
     "name_hi": "रायबरेली",
-    "key": true
+    "key": true,
+    "name": "Rae Bareli"
    },
    {
     "id": "rampur",
     "name_hi": "रामपुर",
-    "key": true
+    "key": true,
+    "name": "Rampur"
    },
    {
     "id": "saharanpur",
     "name_hi": "सहारनपुर",
-    "key": true
+    "key": true,
+    "name": "Saharanpur"
    },
    {
     "id": "sambhal",
     "name_hi": "संभल",
-    "key": true
+    "key": true,
+    "name": "Sambhal"
    },
    {
     "id": "sant_kabir_nagar",
-    "name_hi": "संत कबीर नगर"
+    "name_hi": "संत कबीर नगर",
+    "name": "Sant Kabir Nagar"
    },
    {
     "id": "shahjahanpur",
-    "name_hi": "शाहजहांपुर"
+    "name_hi": "शाहजहांपुर",
+    "name": "Shahjahanpur"
    },
    {
     "id": "shamli",
-    "name_hi": "शामली"
+    "name_hi": "शामली",
+    "name": "Shamli"
    },
    {
     "id": "shravasti",
-    "name_hi": "श्रावस्ती"
+    "name_hi": "श्रावस्ती",
+    "name": "Shravasti"
    },
    {
     "id": "siddharthnagar",
-    "name_hi": "सिद्धार्थनगर"
+    "name_hi": "सिद्धार्थनगर",
+    "name": "Siddharthnagar"
    },
    {
     "id": "sitapur",
-    "name_hi": "सीतापुर"
+    "name_hi": "सीतापुर",
+    "name": "Sitapur"
    },
    {
     "id": "sonbhadra",
-    "name_hi": "सोनभद्र"
+    "name_hi": "सोनभद्र",
+    "name": "Sonbhadra"
    },
    {
     "id": "sultanpur",
-    "name_hi": "सुल्तानपुर"
+    "name_hi": "सुल्तानपुर",
+    "name": "Sultanpur"
    },
    {
     "id": "unnao",
-    "name_hi": "उन्नाव"
+    "name_hi": "उन्नाव",
+    "name": "Unnao"
    },
    {
     "id": "varanasi",
     "name_hi": "वाराणसी",
-    "key": true
+    "key": true,
+    "name": "Varanasi"
    }
   ],
   "seats": [
    {
     "id": "kairana",
-    "name_hi": "कैराना"
+    "name_hi": "कैराना",
+    "name": "Kairana"
    },
    {
     "id": "nagina",
-    "name_hi": "नगीना"
+    "name_hi": "नगीना",
+    "name": "Nagina"
    },
    {
     "id": "kaiserganj",
-    "name_hi": "कैसरगंज"
+    "name_hi": "कैसरगंज",
+    "name": "Kaiserganj"
    },
    {
     "id": "phulpur",
-    "name_hi": "फूलपुर"
+    "name_hi": "फूलपुर",
+    "name": "Phulpur"
    },
    {
     "id": "kunda",
-    "name_hi": "कुंडा"
+    "name_hi": "कुंडा",
+    "name": "Kunda"
    },
    {
     "id": "malhani",
-    "name_hi": "मल्हनी"
+    "name_hi": "मल्हनी",
+    "name": "Malhani"
    },
    {
     "id": "karhal",
-    "name_hi": "करहल"
+    "name_hi": "करहल",
+    "name": "Karhal"
    },
    {
     "id": "jaswantnagar",
-    "name_hi": "जसवंतनगर"
+    "name_hi": "जसवंतनगर",
+    "name": "Jaswantnagar"
    },
    {
     "id": "mohanlalganj",
-    "name_hi": "मोहनलालगंज"
+    "name_hi": "मोहनलालगंज",
+    "name": "Mohanlalganj"
    },
    {
     "id": "salempur",
-    "name_hi": "सलेमपुर"
+    "name_hi": "सलेमपुर",
+    "name": "Salempur"
    },
    {
     "id": "robertsganj",
-    "name_hi": "रॉबर्ट्सगंज"
+    "name_hi": "रॉबर्ट्सगंज",
+    "name": "Robertsganj"
    },
    {
     "id": "domariyaganj",
-    "name_hi": "डुमरियागंज"
+    "name_hi": "डुमरियागंज",
+    "name": "Domariyaganj"
    },
    {
     "id": "milkipur",
-    "name_hi": "मिल्कीपुर"
+    "name_hi": "मिल्कीपुर",
+    "name": "Milkipur"
    },
    {
     "id": "kundarki",
-    "name_hi": "कुंदरकी"
+    "name_hi": "कुंदरकी",
+    "name": "Kundarki"
    },
    {
     "id": "sisamau",
-    "name_hi": "सीसामऊ"
+    "name_hi": "सीसामऊ",
+    "name": "Sisamau"
    }
   ]
  },
  "categories": {
-  "politics": "राजनीति",
-  "controversy": "राजनीतिक विवाद",
-  "election": "चुनाव",
-  "legal": "कोर्ट-कानून",
-  "administration": "प्रशासन",
-  "protest": "विरोध-प्रदर्शन",
-  "crime": "अपराध",
-  "other": "अन्य"
+  "politics": "Politics",
+  "controversy": "Political controversy",
+  "election": "Elections",
+  "legal": "Courts & law",
+  "administration": "Administration",
+  "protest": "Protests",
+  "crime": "Crime",
+  "other": "Other"
  },
  "stories": [
   {
@@ -782,15 +882,12 @@
    "summary_origin": null,
    "headline_only": true,
    "kind": "article",
-   "sort_at": "2026-10-13T08:14:44Z",
-   "first_seen_at": "2026-10-13T08:14:44Z",
-   "last_report_at": "2026-10-13T08:14:44Z",
-   "changed_at": "2026-10-13T08:14:44Z",
+   "sort_at": "2026-10-13T08:40:42Z",
+   "first_seen_at": "2026-10-13T08:40:42Z",
+   "last_report_at": "2026-10-13T08:40:42Z",
+   "changed_at": "2026-10-13T08:40:42Z",
    "categories": [
     "other"
-   ],
-   "category_names": [
-    "अन्य"
    ],
    "entities": {
     "leaders": [],
@@ -813,8 +910,8 @@
     {
      "id": "09f58821f6f1dbbc",
      "source_id": "alpha_up",
-     "source_name": "अल्फा टाइम्स",
-     "publisher": "अल्फा टाइम्स",
+     "source_name": "Alpha Times",
+     "publisher": "Alpha Times",
      "via": null,
      "kind": "article",
      "url": "https://alpha.test/a2",
@@ -829,7 +926,7 @@
      "tz_assumed": false,
      "published_suspect": false,
      "updated_at": null,
-     "first_seen_at": "2026-10-13T08:14:44Z"
+     "first_seen_at": "2026-10-13T08:40:42Z"
     }
    ]
   },
@@ -840,15 +937,12 @@
    "summary_origin": null,
    "headline_only": true,
    "kind": "article",
-   "sort_at": "2026-10-13T08:11:43Z",
-   "first_seen_at": "2026-10-13T08:14:44Z",
-   "last_report_at": "2026-10-13T08:14:44Z",
-   "changed_at": "2026-10-13T08:14:44Z",
+   "sort_at": "2026-10-13T08:37:42Z",
+   "first_seen_at": "2026-10-13T08:40:42Z",
+   "last_report_at": "2026-10-13T08:40:42Z",
+   "changed_at": "2026-10-13T08:40:42Z",
    "categories": [
     "other"
-   ],
-   "category_names": [
-    "अन्य"
    ],
    "entities": {
     "leaders": [],
@@ -869,8 +963,8 @@
     {
      "id": "de6164af023940e5",
      "source_id": "gamma_nat",
-     "source_name": "गामा नेशनल",
-     "publisher": "गामा नेशनल",
+     "source_name": "Gamma National",
+     "publisher": "Gamma National",
      "via": null,
      "kind": "article",
      "url": "https://gamma.test/g2",
@@ -880,12 +974,12 @@
      "author": null,
      "handle": null,
      "post_context": null,
-     "published_at": "2026-10-13T08:11:43Z",
-     "published_raw": "Tue, 13 Oct 2026 08:11:43 GMT",
+     "published_at": "2026-10-13T08:37:42Z",
+     "published_raw": "Tue, 13 Oct 2026 08:37:42 GMT",
      "tz_assumed": false,
      "published_suspect": false,
      "updated_at": null,
-     "first_seen_at": "2026-10-13T08:14:44Z"
+     "first_seen_at": "2026-10-13T08:40:42Z"
     }
    ]
   },
@@ -896,15 +990,12 @@
    "summary_origin": "publisher",
    "headline_only": false,
    "kind": "article",
-   "sort_at": "2026-10-13T07:54:43Z",
-   "first_seen_at": "2026-10-13T08:14:44Z",
-   "last_report_at": "2026-10-13T08:14:44Z",
-   "changed_at": "2026-10-13T08:14:44Z",
+   "sort_at": "2026-10-13T08:20:42Z",
+   "first_seen_at": "2026-10-13T08:40:42Z",
+   "last_report_at": "2026-10-13T08:40:42Z",
+   "changed_at": "2026-10-13T08:40:42Z",
    "categories": [
     "politics"
-   ],
-   "category_names": [
-    "राजनीति"
    ],
    "entities": {
     "leaders": [],
@@ -919,22 +1010,22 @@
    },
    "breaking": true,
    "reasons": [
-    "इस्तीफा"
+    "resignation"
    ],
    "labels": [
-    "एकाधिक स्रोतों से रिपोर्ट"
+    "multi_source"
    ],
    "legal_status": [],
    "statement": true,
-   "statement_type": "बयान/राय",
+   "statement_type": "statement",
    "corroboration": "multi",
    "publisher_count": 2,
    "reports": [
     {
      "id": "34e85a4432b5bd31",
      "source_id": "alpha_up",
-     "source_name": "अल्फा टाइम्स",
-     "publisher": "अल्फा टाइम्स",
+     "source_name": "Alpha Times",
+     "publisher": "Alpha Times",
      "via": null,
      "kind": "article",
      "url": "https://alpha.test/a1",
@@ -944,18 +1035,18 @@
      "author": null,
      "handle": null,
      "post_context": null,
-     "published_at": "2026-10-13T07:54:43Z",
-     "published_raw": "Tue, 13 Oct 2026 07:54:43 GMT",
+     "published_at": "2026-10-13T08:20:42Z",
+     "published_raw": "Tue, 13 Oct 2026 08:20:42 GMT",
      "tz_assumed": false,
      "published_suspect": false,
      "updated_at": null,
-     "first_seen_at": "2026-10-13T08:14:44Z"
+     "first_seen_at": "2026-10-13T08:40:42Z"
     },
     {
      "id": "000cf57be38c609f",
      "source_id": "beta_up",
-     "source_name": "बीटा समाचार",
-     "publisher": "बीटा समाचार",
+     "source_name": "Beta Samachar",
+     "publisher": "Beta Samachar",
      "via": null,
      "kind": "article",
      "url": "https://beta.test/b1",
@@ -965,12 +1056,12 @@
      "author": null,
      "handle": null,
      "post_context": null,
-     "published_at": "2026-10-13T08:09:43Z",
-     "published_raw": "Tue, 13 Oct 2026 08:09:43 GMT",
+     "published_at": "2026-10-13T08:35:42Z",
+     "published_raw": "Tue, 13 Oct 2026 08:35:42 GMT",
      "tz_assumed": false,
      "published_suspect": false,
      "updated_at": null,
-     "first_seen_at": "2026-10-13T08:14:44Z"
+     "first_seen_at": "2026-10-13T08:40:42Z"
     }
    ]
   }
