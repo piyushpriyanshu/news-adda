@@ -26,16 +26,14 @@ for t in "Breaking" "Leader tracker" "Controversies" "Seats & Bahubalis" "Statem
   shot "$(printf %02d $i)_$(echo "$t" | tr ' &' '__')" 3
   i=$((i+1))
 done
+# Still on Districts: open one district, then back (returns to Home).
+tap "Amethi"; shot 10_district_detail 3
+adb shell input keyevent 4; sleep 2
+shot 10b_back_home 2
 tap "Settings"; shot 08_Settings 3
 adb shell input keyevent 4; sleep 2
 tap "Saved"; shot 09_Saved 2
 adb shell input keyevent 4; sleep 2
-
-# District detail, then back to home and open a story's detail sheet.
-tap "Districts"; sleep 2; tap "Amethi"; shot 10_district_detail 3
-adb shell input keyevent 4; sleep 2
-shot 10b_back_home 2
-tap "Home"; sleep 2
 tap "Original" --above 220; shot 11_story_detail 3
 adb shell input keyevent 4; sleep 1
 tap "Search"; sleep 2; tap "Leader, party, district"; sleep 1; adb shell input text "yogi"; shot 12_search_english_query 3
