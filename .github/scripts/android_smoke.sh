@@ -34,9 +34,11 @@ tap "Settings"; shot 08_Settings 3
 adb shell input keyevent 4; sleep 2
 tap "Saved"; shot 09_Saved 2
 adb shell input keyevent 4; sleep 2
-tap "Original" --above 220; shot 11_story_detail 3
-adb shell input keyevent 4; sleep 1
-tap "Search"; sleep 2; tap "Leader, party, district"; sleep 1; adb shell input text "yogi"; shot 12_search_english_query 3
+tap "BREAKING"; shot 11_story_detail 3                       # first card of the Breaking-now carousel
+adb shell input swipe 540 1800 540 600 400; shot 11b_story_detail_coverage 2
+adb shell input keyevent 4; sleep 2
+adb shell input tap 754 207; sleep 2                          # search icon in the top bar
+tap "Leader, party, district"; sleep 1; adb shell input text "yogi"; shot 12_search_english_query 3
 adb shell input keyevent 4; sleep 1; adb shell input keyevent 4; sleep 1   # hide keyboard, close search
 adb shell am start -n $PKG/com.newsadda.app.MainActivity; sleep 2          # in case back left the app
 
