@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "2-59/5 * * * *"   # every 5 min, off the busy top-of-hour slot
   workflow_dispatch:
+  # Lets an external scheduler (e.g. cron-job.org) start a run reliably; see README.
+  repository_dispatch:
+    types: [collect]
   push:
     branches: [main]
     paths: ["backend/newsadda/**", ".github/workflows/collect.yml"]

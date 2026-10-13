@@ -202,7 +202,6 @@ class Pipeline:
             return 0
         n = 0
         src_by = self.sources_by_id
-        now = iso(utcnow())
         for it in self.store.all_items():
             src = src_by.get(it["source_id"])
             c = self.classifier.classify(
@@ -213,7 +212,9 @@ class Pipeline:
             data.update(categories=c.categories, entities=c.entities, breaking=c.breaking,
                         breaking_score=c.breaking_score, reasons=c.reasons, labels=c.labels,
                         statement=c.statement, statement_type=c.statement_type, legal_status=c.legal_status)
-            self.store.update_item(it["id"], data=data, changed_at=now)
+            # changed_at is left alone: re-labelling must not make the small delta feed
+            # as big as the full one. Apps pick up new labels on their next full sync.
+            self.store.update_item(it["id"], data=data)
             n += 1
         self.store.set_meta("rules", sig)
         log.info("re-labelled %d stored items for rules %s", n, sig)

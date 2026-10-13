@@ -36,6 +36,19 @@ After that the app updates itself:
 
 The phone never scrapes publishers; it only reads the backend's feed. Each story keeps **every publisher's link**, publication time, update time and the time News Adda first saw it, all shown in IST.
 
+### What the app looks like
+
+A card feed on a neutral background. Every story shows the **publisher's own site icon** next to its name, how long ago it was published, the leaders and districts it mentions, and labels such as Breaking or Allegation. Stories carried by several outlets show their icons stacked with "N sources". Home opens with a red **Breaking now** carousel and the **Live wire** (see below), then the latest stories. When a new breaking story arrives while the app is open, a red banner slides in with a short vibration. Light and dark themes follow the phone.
+
+Publisher icons are the sites' own favicons, fetched by the phone from Google's favicon service and cached; if one cannot load, a lettered badge is shown instead.
+
+### Speed
+
+- The app refreshes when opened, when you return to it, every 1–30 minutes while open (5 by default), on pull-down and on **Update now**.
+- Each refresh downloads a small **delta** (stories changed in the last 45 minutes) instead of the whole feed, with a cache-buster so GitHub's CDN cannot serve a stale copy. The full feed is fetched only when the phone's copy is older than 40 minutes.
+- **Live wire**: on every refresh the phone also reads the fastest public feeds itself (Amar Ujala UP, News18 UP, TV9 UP, ABP UP and two Google News UP-politics searches; the list comes from `live_wire: true` in `sources.yaml`). New headlines can therefore appear within minutes of publication even before the backend's next run. They are shown as-is, marked "Direct", not yet grouped or labelled. You can turn this off in Settings.
+- The backend polls the fastest sources on every run.
+
 ### App sections
 
 Home · Breaking · Leader tracker · Controversies · Seats & Bahubalis · Statements · Districts · Saved · Settings (in Hindi: होम · ब्रेकिंग न्यूज़ · नेता ट्रैकर · राजनीतिक विवाद · सीट और बाहुबली · नेताओं के बयान · जिला समाचार · सहेजी गई · सेटिंग्स), plus search with filters for party, category, leader/district/seat, source and date. Search accepts Hindi or English: typing "yogi" or "lucknow" finds Hindi headlines through the English names of leaders and districts.
@@ -70,6 +83,22 @@ All labels come from transparent keyword rules (`backend/newsadda/classify.py`),
 | X (Twitter) posts of leaders | Official X API v2 | ⛔ needs `X_BEARER_TOKEN` (paid X API plan); shown as unavailable until set |
 
 Current per-source status is always in the app (Settings → News sources) and in `health.json` on the `data` branch. The daily **source check** re-tests every URL and autodiscovers feeds; results are on the `ci-backend` branch (`discovery.txt`).
+
+## Making collection run every 5 minutes reliably
+
+GitHub's built-in schedule is best-effort: runs can be late, and on this repository it had not started on its own a few hours after setup. Two ways to make collection dependable:
+
+**Option A — free external trigger (about 5 minutes to set up).**
+
+1. On GitHub: Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate. Repository access: only `news-adda`. Permissions: **Actions: Read and write**. Copy the token.
+2. On [cron-job.org](https://cron-job.org) (free), create a job:
+   - URL: `https://api.github.com/repos/piyushpriyanshu/news-adda/actions/workflows/collect.yml/dispatches`
+   - Schedule: every 5 minutes. Request method: **POST**.
+   - Headers: `Authorization: Bearer <your token>`, `Accept: application/vnd.github+json`, `Content-Type: application/json`
+   - Body: `{"ref":"main"}`
+3. The Actions tab will show a "Collect news" run every 5 minutes.
+
+**Option B — run the backend on a small always-on server** (any VPS or free-tier VM with Docker), then set its address in the app (Settings → Backend address). This gives the fastest results (sources checked every minute or two) and does not depend on GitHub at all. See *Backend* below.
 
 ## Configuration
 
@@ -134,7 +163,8 @@ Not tested on a physical phone, and the in-app update install step needs a secon
 
 ## Known limitations
 
-- **Freshness:** GitHub runs scheduled workflows "about" every 5 minutes and often later under load (5–15+ minutes; occasionally a run is skipped). Self-hosting the backend removes this limit.
+- **Freshness:** GitHub runs scheduled workflows on a best-effort basis (often 5–15+ minutes, sometimes skipped; on this repository the schedule had not started on its own a few hours after setup). Use one of the options in *Making collection run every 5 minutes reliably*. The phone's Live wire works regardless.
+- Running a news collector continuously on GitHub Actions is a grey area of GitHub's Actions terms, which are meant for software-project automation. A small server of your own (Option B) avoids that question entirely.
 - **Background on the phone:** Android runs background work at most every ~15 minutes and may delay it (battery saver, manufacturer restrictions). One-minute refresh applies only while the app is open.
 - **Google News links** open news.google.com, which forwards to the publisher; the publisher name is shown, marked "गूगल न्यूज़".
 - **X posts** need a paid X API plan; without it the statements section shows statements reported in the news.
