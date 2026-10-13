@@ -265,3 +265,29 @@ def test_entities_have_english_names():
     assert {x["id"]: x["name"] for x in pub["parties"]}["bjp"] == "BJP"
     assert {x["id"]: x["name"] for x in pub["leaders"]}["yogi"] == "Yogi Adityanath"
     assert all(x["name"] for g in pub.values() for x in g)
+
+
+def test_domains_delta_and_live_wire(settings, router, tmp_path):
+    from newsadda.export import build_delta
+    from newsadda.parser import site_domain
+
+    assert site_domain("https://api.livehindustan.com/feeds/rss/x.xml") == "livehindustan.com"
+    assert site_domain("https://www.amarujala.com/rss/up.xml") == "amarujala.com"
+    standard_routes(router)
+    router.routes["https://news.google.com/rss/search"] = httpx.Response(200, content=(
+        '<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>'
+        '<item><title>बलिया में सपा नेता गिरफ्तार - Example Times</title><link>https://news.google.com/rss/articles/q1</link>'
+        f'<pubDate>{_now_rfc(-1)}</pubDate><source url="https://www.exampletimes.in">Example Times</source></item>'
+        '</channel></rss>').encode())
+    p = make(settings, router)
+    run(p)
+    feed = build_feed(p)
+    reports = [r for s in feed["stories"] for r in s["reports"]]
+    assert any(r["domain"] == "exampletimes.in" for r in reports)  # from Google's <source url>
+    assert all(r["domain"] for r in reports if r["source_id"] == "alpha_up")  # derived from feed URL
+    delta = build_delta(feed, from_iso(feed["generated_at"]))
+    assert delta["incremental"] and "entities" not in delta
+    assert {s["id"] for s in delta["stories"]} <= {s["id"] for s in feed["stories"]}
+    assert isinstance(feed["live_wire"], list)
+    write_feed(p, tmp_path / "o")
+    assert (tmp_path / "o" / "delta.json").exists()

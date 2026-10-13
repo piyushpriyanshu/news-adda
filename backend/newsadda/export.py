@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from .classify import CATEGORY_NAMES
-from .pipeline import Pipeline, publisher_key
+from .pipeline import Pipeline, publisher_domain, publisher_key
 from .textutil import strip_html
 from .timeutil import from_iso, iso, utcnow
 
@@ -43,6 +43,8 @@ def _report(it: dict, pipeline: Pipeline) -> dict:
         "source_name": src.name if src else it["source_id"],
         "publisher": it["publisher"] or (src.name if src else None),
         "via": src.via if src else None,
+        "domain": it["data"].get("domain") or publisher_domain(pipeline.sources, it["publisher"])
+        or (src.domain if src else None),
         "kind": it["kind"],
         "url": it["url"],
         "title": it["title"],
@@ -181,6 +183,10 @@ def build_feed(pipeline: Pipeline, since: datetime | None = None, now: datetime 
         "window_hours": s.feed_hours,
         "story_count": len(stories),
         "x_available": bool(s.x_bearer_token) and bool(x_src and x_src.enabled),
+        "live_wire": [
+            {"id": x.id, "name": x.name, "name_hi": x.name_hi, "domain": x.domain, "url": x.feed_urls[0]}
+            for x in pipeline.sources if x.live_wire and x.enabled and x.feed_urls
+        ],
         "ai_summaries": bool(s.ai_enabled and s.ai_api_key),
         "sources": source_status(pipeline),
         "entities": pipeline.entities.public(),
@@ -189,13 +195,32 @@ def build_feed(pipeline: Pipeline, since: datetime | None = None, now: datetime 
     }
 
 
+DELTA_WINDOW = timedelta(minutes=45)
+
+
+def build_delta(feed: dict, now: datetime) -> dict:
+    """Small companion of feed.json: only stories changed in the last 45 minutes.
+    The app fetches this on every refresh and the full feed only when its
+    cache is older than the window, which keeps each 5-minute poll small."""
+    since = now - DELTA_WINDOW
+    delta = {k: v for k, v in feed.items() if k not in ("stories", "entities", "categories")}
+    delta["stories"] = [s for s in feed["stories"] if from_iso(s["changed_at"]) >= since]
+    delta["story_count"] = len(delta["stories"])
+    delta["incremental"] = True
+    delta["delta_since"] = iso(since)
+    return delta
+
+
 def write_feed(pipeline: Pipeline, out_dir: str | Path) -> Path:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    feed = build_feed(pipeline)
+    now = utcnow()
+    feed = build_feed(pipeline, now=now)
     body = json.dumps(feed, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     (out / "feed.json").write_bytes(body)
     (out / "feed.json.gz").write_bytes(gzip.compress(body, 6))
+    delta = build_delta(feed, now)
+    (out / "delta.json").write_bytes(json.dumps(delta, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
     health = {"generated_at": feed["generated_at"], "story_count": feed["story_count"], "sources": feed["sources"]}
     (out / "health.json").write_text(json.dumps(health, ensure_ascii=False, indent=1), encoding="utf-8")
     return out / "feed.json"

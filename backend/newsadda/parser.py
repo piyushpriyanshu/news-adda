@@ -27,6 +27,7 @@ class RawItem:
     publisher: str | None = None  # set when the item arrives via an aggregator
     author: str | None = None
     handle: str | None = None  # X posts only
+    publisher_domain: str | None = None  # site of the original publisher (for its icon)
     post_context: str | None = None  # X posts: quote | reply | None
 
 
@@ -41,6 +42,20 @@ def canonical_url(url: str) -> str:
         return url.strip()
     query = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if not _TRACKING.match(k)]
     return urlunsplit((parts.scheme.lower() or "https", parts.netloc.lower(), parts.path, urlencode(query), ""))
+
+
+def site_domain(url: str | None) -> str | None:
+    """'https://api.livehindustan.com/feeds/...' -> 'livehindustan.com'."""
+    if not url:
+        return None
+    try:
+        host = urlsplit(url.strip()).netloc.lower().split(":")[0]
+    except ValueError:
+        return None
+    for prefix in ("www.", "api.", "feeds.", "rss.", "m."):
+        if host.startswith(prefix):
+            host = host[len(prefix):]
+    return host or None
 
 
 def item_id(url: str) -> str:
@@ -73,9 +88,12 @@ def parse_feed(content: bytes, *, google_news: bool = False) -> list[RawItem]:
         if not link or not title or not link.startswith(("http://", "https://")):
             continue
         publisher = None
+        publisher_domain = None
         if google_news:
             src = e.get("source") or {}
             publisher = (src.get("title") if hasattr(src, "get") else None) or None
+            href = (src.get("href") or src.get("url")) if hasattr(src, "get") else None
+            publisher_domain = site_domain(href) if href else None
             title = _split_google_title(title, publisher)
             description = None  # Google's description only repeats the title/links
         else:
@@ -99,6 +117,7 @@ def parse_feed(content: bytes, *, google_news: bool = False) -> list[RawItem]:
                 tz_assumed=assumed,
                 publisher=publisher,
                 author=strip_html(e.get("author")) or None,
+                publisher_domain=publisher_domain,
             )
         )
     return items

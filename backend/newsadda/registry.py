@@ -27,6 +27,20 @@ class Source:
     status_note: str | None = None
     # Other names the same publisher appears under (e.g. on Google News).
     aliases: list[str] = field(default_factory=list)
+    # Publisher website, used for its icon in the app (derived from the feed URL if empty).
+    site: str | None = None
+    # The phone may also poll this feed directly for the fastest headlines ("Live wire").
+    live_wire: bool = False
+
+    @property
+    def domain(self) -> str | None:
+        if self.site:
+            return self.site
+        if self.kind in ("google_news", "x"):
+            return None
+        from .parser import site_domain
+
+        return site_domain(self.urls[0]) if self.urls else None
 
     @property
     def feed_urls(self) -> list[str]:
@@ -48,6 +62,7 @@ class Source:
             "enabled": self.enabled,
             "min_interval": self.min_interval,
             "note": self.status_note,
+            "domain": self.domain,
         }
 
 

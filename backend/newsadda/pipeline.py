@@ -47,6 +47,17 @@ def publisher_key(sources: list[Source], src: Source, publisher: str | None) -> 
     return next(iter(names), "") or src.id
 
 
+def publisher_domain(sources: list[Source], publisher: str | None) -> str | None:
+    """Website of a publisher known by name (for Google News items)."""
+    if not publisher:
+        return None
+    key = _base_name(publisher)
+    for s in sources:
+        if s.kind == "rss" and key in _names(s):
+            return s.domain
+    return None
+
+
 # Promotional/live-TV pages that are not news reports.
 PROMO = re.compile(r"live\s*tv|लाइव\s*टीवी|watch\s+live|देखें\s+लाइव", re.I)
 
@@ -145,6 +156,7 @@ class Pipeline:
                 "statement_type": c.statement_type,
                 "legal_status": c.legal_status,
                 "post_context": raw.post_context,
+                "domain": raw.publisher_domain,
             }
             self.store.insert_item({
                 "id": iid,
