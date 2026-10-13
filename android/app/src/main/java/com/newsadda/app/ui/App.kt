@@ -1,28 +1,43 @@
 package com.newsadda.app.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Tab
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,16 +45,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.newsadda.app.data.FeedLogic
 import com.newsadda.app.data.FetchOutcome
 import com.newsadda.app.data.TimeFmt
+import com.newsadda.app.data.model.Story
 import kotlinx.coroutines.delay
 import java.time.Instant
 
-@OptIn(ExperimentalMaterial3Api::class)
+private val NAV = listOf(
+    Section.HOME, Section.BREAKING, Section.LEADERS, Section.CONTROVERSY,
+    Section.SEATS, Section.STATEMENTS, Section.DISTRICTS,
+)
+
 @Composable
 fun NewsAddaApp(vm: MainViewModel) {
     val repo by vm.repo.collectAsState()
@@ -48,72 +72,58 @@ fun NewsAddaApp(vm: MainViewModel) {
     val searchOpen by vm.searchOpen.collectAsState()
     val openId by vm.openStoryId.collectAsState()
     val msg by vm.message.collectAsState()
+    val alert by vm.alert.collectAsState()
     val snack = remember { SnackbarHostState() }
+    val c = LocalNewsColors.current
+    val str = LocalStr.current
 
-    // Re-render relative times ("5 मिनट पहले") every 30 s.
+    // Re-render relative times ("5 min ago") every 30 s.
     var now by remember { mutableStateOf(Instant.now()) }
     LaunchedEffect(Unit) { while (true) { delay(30_000); now = Instant.now() } }
     LaunchedEffect(repo.lastAttemptMs) { now = Instant.now() }
     LaunchedEffect(msg) { msg?.let { snack.showSnackbar(it); vm.message.value = null } }
+    LaunchedEffect(alert?.id) { if (alert != null) { delay(20_000); vm.alert.value = null } }
 
     val cache = repo.cache
-    val str = LocalStr.current
     val names = remember(cache.entities, str) { Names(cache.entities, str) }
     val visible = remember(cache.stories, settings.hiddenSources) {
         cache.stories.filter { FeedLogic.visible(it, settings.hiddenSources) }
     }
     val savedIds = remember(repo.bookmarks) { repo.bookmarks.map { it.id }.toSet() }
+    val breakingCount = remember(visible, now) { visible.count { FeedLogic.isBreakingNow(it, now) } }
     val env = ListEnv(
         names = names, newIds = repo.newIds, savedIds = savedIds, now = now,
         refreshing = repo.refreshing, onRefresh = { vm.refresh("pull") },
         onOpen = { vm.openStoryId.value = it.id }, onSave = { vm.toggleBookmark(it) },
     )
+    val subPage = searchOpen || section == Section.SAVED || section == Section.SETTINGS
 
     BackHandler(enabled = searchOpen) { vm.searchOpen.value = false }
     BackHandler(enabled = !searchOpen && section != Section.HOME) { vm.section.value = Section.HOME }
 
     Scaffold(
+        containerColor = c.canvas,
         snackbarHost = { SnackbarHost(snack) },
         topBar = {
-            Column {
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-                    navigationIcon = {
-                        if (searchOpen) IconButton(onClick = { vm.searchOpen.value = false }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = str.back)
-                        }
-                    },
-                    title = {
-                        Column {
-                            Text(if (searchOpen) str.search else str.appName, style = MaterialTheme.typography.titleLarge)
-                            val last = repo.lastSuccessMs.takeIf { it > 0 }?.let { Instant.ofEpochMilli(it) }
-                            Text(
-                                if (last == null) str.tagline else str.updatedAt(TimeFmt.short(last, now, str), TimeFmt.ago(last, now, str)),
-                                style = MaterialTheme.typography.bodySmall, color = LocalNewsColors.current.muted,
-                                maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            )
-                        }
-                    },
-                    actions = {
-                        if (!searchOpen) IconButton(onClick = { vm.searchOpen.value = true }) {
-                            Icon(Icons.Filled.Search, contentDescription = str.search)
-                        }
-                        TextButton(onClick = { vm.refresh("button") }, enabled = !repo.refreshing) {
-                            Text(if (repo.refreshing) str.updating else str.updateNow)
-                        }
-                    },
-                )
-                if (repo.refreshing) LinearProgressIndicator(Modifier.fillMaxWidth())
-                if (!searchOpen) {
-                    PrimaryScrollableTabRow(selectedTabIndex = section.ordinal, edgePadding = 8.dp,
-                        containerColor = MaterialTheme.colorScheme.background) {
-                        Section.entries.forEach { sec ->
-                            Tab(selected = sec == section, onClick = { vm.section.value = sec },
-                                text = { Text(sec.title(str), maxLines = 1) })
+            Surface(color = c.card, shadowElevation = 1.dp) {
+                Column(Modifier.statusBarsPadding()) {
+                    TopRow(vm, subPage, searchOpen, section)
+                    StatusRow(vm, now)
+                    if (repo.refreshing) LinearProgressIndicator(Modifier.fillMaxWidth())
+                    if (!subPage) {
+                        Row(
+                            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            NAV.forEach { sec ->
+                                PillChip(sec.title(str), sec == section, if (sec == Section.BREAKING) breakingCount else 0) {
+                                    vm.section.value = sec
+                                }
+                            }
                         }
                     }
+                    StatusBanners(vm, now)
                 }
-                StatusBanners(vm, now)
             }
         },
     ) { pad ->
@@ -131,6 +141,16 @@ fun NewsAddaApp(vm: MainViewModel) {
                 Section.SAVED -> SavedScreen(vm, env)
                 Section.SETTINGS -> SettingsScreen(vm, names)
             }
+            AnimatedVisibility(
+                visible = alert != null,
+                enter = slideInVertically { -it }, exit = slideOutVertically { -it },
+                modifier = Modifier.align(Alignment.TopCenter),
+            ) {
+                alert?.let { a ->
+                    BreakingAlert(a, now, onRead = { vm.openStoryId.value = a.id; vm.alert.value = null },
+                        onDismiss = { vm.alert.value = null })
+                }
+            }
         }
     }
 
@@ -139,6 +159,101 @@ fun NewsAddaApp(vm: MainViewModel) {
             StoryDetailSheet(s, names, saved = id in savedIds, onSave = { vm.toggleBookmark(s) },
                 onDismiss = { vm.openStoryId.value = null })
         } ?: run { vm.openStoryId.value = null }
+    }
+}
+
+@Composable
+private fun TopRow(vm: MainViewModel, subPage: Boolean, searchOpen: Boolean, section: Section) {
+    val str = LocalStr.current
+    Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+        if (subPage) {
+            IconButton(onClick = { if (searchOpen) vm.searchOpen.value = false else vm.section.value = Section.HOME }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = str.back)
+            }
+            Text(if (searchOpen) str.search else section.title(str), style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.weight(1f))
+        } else {
+            Spacer(Modifier.width(12.dp))
+            BrandMark()
+            Spacer(Modifier.width(10.dp))
+            Text(str.appName, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f), maxLines = 1)
+        }
+        if (!searchOpen) IconButton(onClick = { vm.searchOpen.value = true }) {
+            Icon(Icons.Outlined.Search, contentDescription = str.search)
+        }
+        if (!subPage) {
+            IconButton(onClick = { vm.section.value = Section.SAVED }) {
+                Icon(Icons.Outlined.BookmarkBorder, contentDescription = str.saved)
+            }
+            IconButton(onClick = { vm.section.value = Section.SETTINGS }) {
+                Icon(Icons.Outlined.Settings, contentDescription = str.settings)
+            }
+        }
+    }
+}
+
+/** Text mark: the app's own initial on the brand red. */
+@Composable
+private fun BrandMark() {
+    val c = LocalNewsColors.current
+    Box(Modifier.size(32.dp).background(c.breaking, RoundedCornerShape(9.dp)), contentAlignment = Alignment.Center) {
+        Text("N", color = Color.White, fontWeight = FontWeight.Black, fontSize = 19.sp)
+    }
+}
+
+@Composable
+private fun StatusRow(vm: MainViewModel, now: Instant) {
+    val repo by vm.repo.collectAsState()
+    val str = LocalStr.current
+    val c = LocalNewsColors.current
+    val last = repo.lastSuccessMs.takeIf { it > 0 }?.let { Instant.ofEpochMilli(it) }
+    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 12.dp), verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        if (repo.error == null) LiveDot() else Box(Modifier.size(8.dp).background(c.faint, RoundedCornerShape(50)))
+        Text(str.live, style = MaterialTheme.typography.labelSmall, color = if (repo.error == null) c.live else c.faint)
+        Text(
+            if (last == null) str.tagline else str.updatedAt(TimeFmt.short(last, now, str), TimeFmt.ago(last, now, str)),
+            style = MaterialTheme.typography.bodySmall, color = c.muted, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        FilledTonalButton(
+            onClick = { vm.refresh("button") }, enabled = !repo.refreshing,
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
+            modifier = Modifier.padding(vertical = 2.dp),
+        ) {
+            Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
+            Spacer(Modifier.width(4.dp))
+            Text(if (repo.refreshing) str.updating else str.updateNow, style = MaterialTheme.typography.labelMedium)
+        }
+    }
+}
+
+@Composable
+private fun BreakingAlert(s: Story, now: Instant, onRead: () -> Unit, onDismiss: () -> Unit) {
+    val c = LocalNewsColors.current
+    val str = LocalStr.current
+    val lead = s.reports.firstOrNull()
+    Surface(color = c.breaking, shape = RoundedCornerShape(16.dp), shadowElevation = 8.dp,
+        modifier = Modifier.fillMaxWidth().padding(12.dp)) {
+        Column(Modifier.clickable(onClick = onRead).padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                LiveDot(Color.White, 8.dp)
+                Text(str.breakingAlert, style = MaterialTheme.typography.labelSmall, color = Color.White)
+                if (lead != null) {
+                    SourceIcon(lead.domain, lead.publisherName(), 18.dp)
+                    Text(lead.publisherName(), style = MaterialTheme.typography.labelMedium, color = Color.White, maxLines = 1,
+                        overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                }
+                Text("· " + TimeFmt.ago(FeedLogic.instant(s.firstSeenAt), now, str), style = MaterialTheme.typography.bodySmall,
+                    color = Color.White.copy(alpha = 0.85f))
+            }
+            Text(s.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = Color.White,
+                maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 6.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                TextButton(onClick = onDismiss) { Text(str.dismiss, color = Color.White.copy(alpha = 0.85f)) }
+                TextButton(onClick = onRead) { Text(str.read, color = Color.White, fontWeight = FontWeight.Bold) }
+            }
+        }
     }
 }
 
@@ -163,10 +278,6 @@ private fun StatusBanners(vm: MainViewModel, now: Instant) {
     val generated = FeedLogic.instant(cache.generatedAt)
     if (repo.error == null && generated != null && java.time.Duration.between(generated, now).toMinutes() > 45) {
         Notice(str.feedStale(TimeFmt.ago(generated, now, str)), c.caution)
-    }
-    val failing = cache.sources.count { it.status == "error" }
-    if (failing > 0 && repo.error == null) {
-        Notice(str.sourcesFailing(failing), c.muted, str.view to { vm.section.value = Section.SETTINGS })
     }
     val info = up.available
     if (info != null) {

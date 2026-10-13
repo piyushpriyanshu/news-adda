@@ -19,6 +19,8 @@ data class Settings(
     val politicsOnlyHome: Boolean = false,
     /** "en" or "hi": interface language only; news stays in Hindi. */
     val language: String = "en",
+    /** Phone also reads the fastest publisher feeds directly on every refresh. */
+    val liveWire: Boolean = true,
 )
 
 object Prefs {
@@ -57,6 +59,7 @@ object Prefs {
             textScale = p.getFloat("text_scale", 1.0f),
             politicsOnlyHome = p.getBoolean("politics_only", false),
             language = if (p.getString("lang", "en") == "hi") "hi" else "en",
+            liveWire = p.getBoolean("live_wire", true),
         )
         loaded = true
     }
@@ -78,6 +81,7 @@ object Prefs {
             .putFloat("text_scale", s.textScale)
             .putBoolean("politics_only", s.politicsOnlyHome)
             .putString("lang", s.language)
+            .putBoolean("live_wire", s.liveWire)
             .apply()
     }
 

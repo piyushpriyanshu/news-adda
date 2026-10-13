@@ -45,6 +45,7 @@ object FeedLogic {
             entities = if (feed.entities.districts.isEmpty()) cache.entities else feed.entities,
             categories = feed.categories.ifEmpty { cache.categories },
             xAvailable = feed.xAvailable,
+            liveWire = feed.liveWire.ifEmpty { cache.liveWire },
             generatedAt = feed.generatedAt ?: cache.generatedAt,
             cursor = feed.cursor ?: cache.cursor,
             supportsSince = feed.supportsSince,
@@ -113,6 +114,27 @@ object FeedLogic {
     /** Refresh is due when the chosen interval has passed since the last attempt. */
     fun refreshDue(lastAttemptMs: Long, intervalMin: Int, nowMs: Long): Boolean =
         lastAttemptMs <= 0 || nowMs - lastAttemptMs >= intervalMin * 60_000L - 1_000L
+
+    /**
+     * Which URL to fetch. A static feed (raw.githubusercontent.com etc.) has a
+     * small sibling delta.json with only the last 45 minutes of changes; use it
+     * when the cache is fresh enough, and the full feed otherwise. GitHub's CDN
+     * caches files for up to 5 minutes, so add a per-minute cache-buster there.
+     */
+    fun feedUrl(base: String, useDelta: Boolean, nowMs: Long): String {
+        var url = base.trim()
+        if (useDelta && url.substringBefore('?').endsWith("/feed.json")) {
+            url = url.substringBefore('?').removeSuffix("feed.json") + "delta.json"
+        }
+        if (url.contains("raw.githubusercontent.com")) {
+            url += (if ('?' in url) "&" else "?") + "t=" + (nowMs / 60_000)
+        }
+        return url
+    }
+
+    /** Delta is safe only if the last full sync is recent enough to leave no gap. */
+    fun canUseDelta(cache: Cache, lastFullMs: Long, nowMs: Long): Boolean =
+        cache.stories.isNotEmpty() && !cache.supportsSince && lastFullMs > 0 && nowMs - lastFullMs < 40 * 60_000L
 
     /** "1.0.12" style version compare used only as a fallback to versionCode. */
     fun isNewer(remoteCode: Int, localCode: Int) = remoteCode > localCode

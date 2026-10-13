@@ -46,6 +46,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val openStoryId = MutableStateFlow<String?>(null)
     val searchOpen = MutableStateFlow(false)
     val message = MutableStateFlow<String?>(null)
+    /** Newest breaking story that arrived while the app is open (shown as a banner). */
+    val alert = MutableStateFlow<Story?>(null)
 
     private var loop: Job? = null
 
@@ -58,11 +60,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         loop?.cancel()
         loop = viewModelScope.launch {
             NewsRepository.ensureLoaded(ctx)
-            refresh("foreground")
+            announce(NewsRepository.refresh(ctx, "foreground"))
             while (isActive) {
                 val minutes = settings.value.refreshMinutes
                 delay(minutes * 60_000L)
-                refresh("timer")
+                announce(NewsRepository.refresh(ctx, "timer"))
             }
         }
     }
@@ -73,7 +75,29 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun refresh(reason: String = "manual") {
-        viewModelScope.launch { NewsRepository.refresh(ctx, reason) }
+        viewModelScope.launch { announce(NewsRepository.refresh(ctx, reason)) }
+    }
+
+    private fun announce(fresh: Set<String>) {
+        if (fresh.isEmpty()) return
+        val hidden = settings.value.hiddenSources
+        val b = repo.value.cache.stories
+            .filter { it.id in fresh && it.breaking && FeedLogic.visible(it, hidden) }
+            .maxByOrNull { it.firstSeenAt } ?: return
+        alert.value = b
+        buzz()
+    }
+
+    private fun buzz() {
+        runCatching {
+            val v = if (android.os.Build.VERSION.SDK_INT >= 31) {
+                ctx.getSystemService(android.os.VibratorManager::class.java).defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                ctx.getSystemService(android.os.Vibrator::class.java)
+            }
+            v?.vibrate(android.os.VibrationEffect.createOneShot(120, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+        }
     }
 
     fun checkUpdates(reason: String) {

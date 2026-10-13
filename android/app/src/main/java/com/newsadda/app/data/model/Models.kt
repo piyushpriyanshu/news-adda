@@ -14,6 +14,8 @@ data class Feed(
     @SerialName("window_hours") val windowHours: Int = 36,
     @SerialName("x_available") val xAvailable: Boolean = false,
     @SerialName("ai_summaries") val aiSummaries: Boolean = false,
+    @SerialName("live_wire") val liveWire: List<LiveFeed> = emptyList(),
+    @SerialName("delta_since") val deltaSince: String? = null,
     val sources: List<SourceStatus> = emptyList(),
     val entities: Entities = Entities(),
     val categories: Map<String, String> = emptyMap(),
@@ -61,6 +63,7 @@ data class Report(
     @SerialName("source_name") val sourceName: String,
     val publisher: String? = null,
     val via: String? = null,
+    val domain: String? = null,
     val kind: String = "article",
     val url: String,
     val title: String,
@@ -93,6 +96,30 @@ data class SourceStatus(
     @SerialName("error_text") val errorText: String? = null,
     @SerialName("last_item_count") val lastItemCount: Int = 0,
     @SerialName("total_items") val totalItems: Int = 0,
+    val domain: String? = null,
+)
+
+/** A public RSS feed the phone may poll itself for the fastest headlines. */
+@Serializable
+data class LiveFeed(
+    val id: String,
+    val name: String = "",
+    @SerialName("name_hi") val nameHi: String = "",
+    val domain: String? = null,
+    val url: String,
+)
+
+/** A headline read straight from a publisher feed by the phone (not grouped or labelled by the backend). */
+@Serializable
+data class LiveItem(
+    val id: String,
+    val title: String,
+    val url: String,
+    val publisher: String,
+    val domain: String? = null,
+    val publishedAt: String? = null,
+    val seenAt: Long,
+    val breakingHint: Boolean = false,
 )
 
 @Serializable
@@ -123,6 +150,7 @@ data class Cache(
     val entities: Entities = Entities(),
     val categories: Map<String, String> = emptyMap(),
     val xAvailable: Boolean = false,
+    val liveWire: List<LiveFeed> = emptyList(),
     val generatedAt: String? = null,
     val cursor: String? = null,
     val supportsSince: Boolean = false,

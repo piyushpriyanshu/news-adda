@@ -77,6 +77,8 @@ fun SettingsScreen(vm: MainViewModel, names: Names) {
             }
         }
         Hint(str.refreshNote(s.refreshMinutes))
+        ToggleRow(str.liveWireSetting, s.liveWire) { v -> vm.updateSettings { it.copy(liveWire = v) } }
+        Hint(str.liveWireSettingNote)
         Hint(str.lastSuccess(
             TimeFmt.full(Instant.ofEpochMilli(repo.lastSuccessMs).takeIf { repo.lastSuccessMs > 0 }, str),
             TimeFmt.full(FeedLogic.instant(cache.generatedAt), str),
@@ -145,9 +147,12 @@ fun SettingsScreen(vm: MainViewModel, names: Names) {
         Header(str.newsSources(cache.sources.count { it.status == "ok" }))
         Hint(str.sourcesNote)
         cache.sources.forEach { src ->
-            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                val label = (if (str.hindi) src.nameHi else src.name).ifBlank { src.id }
+                SourceIcon(src.domain, label, 28.dp)
                 Column(Modifier.weight(1f)) {
-                    Text((if (str.hindi) src.nameHi else src.name).ifBlank { src.id }, style = MaterialTheme.typography.bodyLarge)
+                    Text(label, style = MaterialTheme.typography.bodyLarge)
                     val color = when (src.status) { "ok" -> c.multi; "error" -> c.breaking; else -> c.muted }
                     Text(
                         str.sourceStatus(src.status) +

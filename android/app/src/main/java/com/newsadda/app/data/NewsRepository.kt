@@ -77,25 +77,38 @@ object NewsRepository {
             val now = System.currentTimeMillis()
             _state.update { it.copy(refreshing = true) }
             Prefs.putLong(ctx, "last_attempt", now)
-            val urlKey = "etag:" + settings.feedUrl
             val cache = _state.value.cache
             val since = if (cache.supportsSince && cache.stories.isNotEmpty()) cache.cursor else null
-            // Without cached stories a 304 would leave the screen empty, so skip the validator.
-            val etag = if (cache.stories.isEmpty()) null else Prefs.getString(ctx, urlKey)
-            val outcome = client.fetch(settings.feedUrl, etag, since)
-            Log.i(TAG, "refresh($reason): ${outcome::class.simpleName}")
+            // Small delta.json when the cache is recent; full feed.json otherwise.
+            var useDelta = since == null && FeedLogic.canUseDelta(cache, Prefs.getLong(ctx, "last_full"), now)
+            suspend fun get(delta: Boolean): FetchOutcome {
+                val url = FeedLogic.feedUrl(settings.feedUrl, delta, now)
+                val key = "etag:" + url.substringBefore("?t=").substringBefore("&t=")
+                // Without cached stories a 304 would leave the screen empty, so skip the validator.
+                val etag = if (cache.stories.isEmpty()) null else Prefs.getString(ctx, key)
+                val out = client.fetch(url, etag, since)
+                if (out is FetchOutcome.Updated && since == null) Prefs.putString(ctx, key, out.etag)
+                return out
+            }
+            var outcome = get(useDelta)
+            if (useDelta && outcome is FetchOutcome.Failed && outcome.kind != FetchOutcome.Kind.OFFLINE) {
+                useDelta = false // no delta.json on this backend (or it failed): fall back to the full feed
+                outcome = get(false)
+            }
+            Log.i(TAG, "refresh($reason, delta=$useDelta): ${outcome::class.simpleName}")
             var fresh: Set<String> = emptySet()
             when (outcome) {
                 is FetchOutcome.Updated -> {
                     val wasEmpty = cache.stories.isEmpty()
                     val (merged, newIds) = FeedLogic.merge(cache, outcome.feed, now)
-                    fresh = newIds
+                    // On the very first load nothing counts as "new" (no alerts, no notification flood).
+                    fresh = if (wasEmpty) emptySet() else newIds
                     withContext(Dispatchers.IO) {
                         val tmp = File(ctx.filesDir, "cache.json.tmp")
                         tmp.writeText(Net.json.encodeToString(Cache.serializer(), merged))
                         tmp.renameTo(cacheFile(ctx))
                     }
-                    if (since == null) Prefs.putString(ctx, urlKey, outcome.etag)
+                    if (!useDelta && !outcome.feed.incremental) Prefs.putLong(ctx, "last_full", now)
                     Prefs.putLong(ctx, "last_success", now)
                     // The very first load is not "new news": everything would light up.
                     val ack = if (wasEmpty) now else _state.value.ackAtMs
@@ -106,6 +119,7 @@ object NewsRepository {
                     }
                 }
                 is FetchOutcome.NotModified -> {
+                    if (!useDelta) Prefs.putLong(ctx, "last_full", now)
                     Prefs.putLong(ctx, "last_success", now)
                     _state.update {
                         it.copy(refreshing = false, lastAttemptMs = now, lastSuccessMs = now, error = null, errorDetail = null)
@@ -114,6 +128,10 @@ object NewsRepository {
                 is FetchOutcome.Failed -> _state.update {
                     it.copy(refreshing = false, lastAttemptMs = now, error = outcome.kind, errorDetail = outcome.detail)
                 }
+            }
+            if (settings.liveWire) {
+                runCatching { LiveWire.refresh(_state.value.cache.liveWire, _state.value.cache.stories, now) }
+                    .onFailure { Log.w(TAG, "live wire: $it") }
             }
             if (_state.value.cache.stories.isEmpty()) emptySet() else fresh
         }
@@ -141,8 +159,9 @@ object NewsRepository {
 
     suspend fun clearCache(ctx: Context) = mutex.withLock {
         withContext(Dispatchers.IO) { cacheFile(ctx).delete() }
-        val keepSettings = Prefs.get(ctx)
-        Prefs.putString(ctx, "etag:" + keepSettings.feedUrl, null)
+        Prefs.putLong(ctx, "last_full", 0)
+        val base = Prefs.get(ctx).feedUrl
+        Prefs.putString(ctx, "etag:" + FeedLogic.feedUrl(base, false, 0).substringBefore("?t=").substringBefore("&t="), null)
         _state.update { it.copy(cache = Cache(), error = null) }
     }
 }

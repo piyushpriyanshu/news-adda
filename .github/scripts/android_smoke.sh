@@ -17,25 +17,35 @@ adb shell settings put global animator_duration_scale 0
 adb logcat -c
 adb shell am start -W -n $PKG/com.newsadda.app.MainActivity
 shot 01_home 30
+adb shell input swipe 540 1700 540 700 400; shot 01b_home_scrolled 2
+adb shell input swipe 540 700 540 1900 300; sleep 1
 
 i=2
-for t in "Breaking" "Leader tracker" "Controversies" "Seats & Bahubalis" "Statements" "Districts" "Settings"; do
+for t in "Breaking" "Leader tracker" "Controversies" "Seats & Bahubalis" "Statements" "Districts"; do
   tap "$t"
   shot "$(printf %02d $i)_$(echo "$t" | tr ' &' '__')" 3
   i=$((i+1))
 done
+tap "Settings"; shot 08_Settings 3
+adb shell input keyevent 4; sleep 2
+tap "Saved"; shot 09_Saved 2
+adb shell input keyevent 4; sleep 2
 
 # District detail, then back to home and open a story's detail sheet.
 tap "Districts"; sleep 2; tap "Amethi"; shot 10_district_detail 3
 adb shell input keyevent 4; sleep 2
 shot 10b_back_home 2
+tap "Home"; sleep 2
 tap "Original" --above 220; shot 11_story_detail 3
 adb shell input keyevent 4; sleep 1
 tap "Search"; sleep 2; tap "Leader, party, district"; sleep 1; adb shell input text "yogi"; shot 12_search_english_query 3
-adb shell input keyevent 4; adb shell input keyevent 4; sleep 1
+adb shell input keyevent 4; sleep 1; adb shell input keyevent 4; sleep 1   # hide keyboard, close search
+
+# Dark theme.
+adb shell cmd uimode night yes; sleep 3; shot 12b_home_dark 3
+adb shell cmd uimode night no; sleep 3
 
 # Switch the interface to Hindi; the news must stay as it is.
-for k in 1 2 3; do adb shell input swipe 1000 358 60 358 200; sleep 1; done   # scroll the tab row to the end
 tap "Settings"; sleep 2; tap "हिंदी"; shot 13_settings_hindi 3
 adb shell input keyevent 4; shot 14_home_hindi 3
 

@@ -116,6 +116,28 @@ data class Str(val hindi: Boolean) {
         }
     }
 
+    // ---- redesign: feed furniture
+    val live get() = t("LIVE", "लाइव")
+    val breakingNow get() = t("Breaking now", "अभी ब्रेकिंग")
+    val liveWire get() = t("Live wire", "लाइव वायर")
+    val liveWireNote get() = t("Straight from publishers' feeds, read by your phone on every refresh. Not yet grouped or checked.",
+        "प्रकाशकों की फ़ीड से सीधे, हर अपडेट पर आपका फ़ोन पढ़ता है। अभी समूहित या जांची नहीं गईं।")
+    val latest get() = t("Latest", "ताज़ा खबरें")
+    val seeAll get() = t("See all", "सभी देखें")
+    val showLess get() = t("Show less", "कम दिखाएं")
+    fun sources(n: Int) = t("$n " + pl(n, "source", "sources"), "$n स्रोत")
+    val read get() = t("Read", "पढ़ें")
+    val open get() = t("Open", "खोलें")
+    val coverage get() = t("Coverage", "कवरेज")
+    val breakingAlert get() = t("BREAKING", "ब्रेकिंग")
+    val dismiss get() = t("Dismiss", "हटाएं")
+    val direct get() = t("Direct", "सीधे")
+    val liveWireSetting get() = t("Live wire on this phone", "इस फ़ोन पर लाइव वायर")
+    val liveWireSettingNote get() = t("Your phone also reads the fastest publisher feeds itself on every refresh, so headlines can appear before the server's next run. Uses a little more data.",
+        "आपका फ़ोन हर अपडेट पर सबसे तेज़ प्रकाशक फ़ीड खुद भी पढ़ता है, ताकि सर्वर के अगले चक्र से पहले शीर्षक दिख सकें। थोड़ा अधिक डेटा लगता है।")
+    val savedTitle get() = t("Saved stories", "सहेजी गई खबरें")
+    val readMore get() = t("Read full story", "पूरी खबर पढ़ें")
+
     // ---- story card
     val viaGoogle get() = t(" (Google News)", " (गूगल न्यूज़)")
     val seenPrefix get() = t("seen ", "देखा ")

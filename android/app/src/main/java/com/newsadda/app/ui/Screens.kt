@@ -1,31 +1,49 @@
 package com.newsadda.app.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.newsadda.app.data.FeedLogic
+import com.newsadda.app.data.LiveWire
+import com.newsadda.app.data.TimeFmt
+import com.newsadda.app.data.model.LiveItem
 import com.newsadda.app.data.model.Story
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -55,7 +73,7 @@ fun StoryList(
     header: LazyListScope.() -> Unit = {},
 ) {
     PullToRefreshBox(isRefreshing = env.refreshing, onRefresh = env.onRefresh, modifier = Modifier.fillMaxSize()) {
-        LazyColumn(state = state, modifier = Modifier.fillMaxSize()) {
+        LazyColumn(state = state, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
             header()
             if (stories.isEmpty()) {
                 item { EmptyState(emptyTitle, emptyBody) }
@@ -73,22 +91,87 @@ fun StoryList(
 @Composable
 fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val settings by vm.settings.collectAsState()
+    val live by LiveWire.items.collectAsState()
     val str = LocalStr.current
+    val c = LocalNewsColors.current
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
+    var wireOpen by rememberSaveable { mutableStateOf(false) }
     val list = if (settings.politicsOnlyHome) all.filter(FeedLogic::isPolitical) else all
+    val breaking = remember(all, env.now) { all.filter { FeedLogic.isBreakingNow(it, env.now) }.take(10) }
     val newCount = list.count { it.id in env.newIds }
+
     StoryList(list, env, str.emptyHome, str.emptyHomeBody, state = state) {
-        item(key = "home-head") {
+        if (newCount > 0) {
+            item(key = "new-banner") {
+                Notice(str.newStories(newCount), c.newDot, str.markSeen to {
+                    scope.launch { state.animateScrollToItem(0) }
+                    vm.acknowledgeNew()
+                })
+            }
+        }
+        if (breaking.isNotEmpty()) {
+            item(key = "breaking-head") {
+                SectionLabel(str.breakingNow, trailing = {
+                    TextButton(onClick = { vm.section.value = Section.BREAKING }) { Text(str.seeAll) }
+                })
+            }
+            item(key = "breaking-row") {
+                LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    items(breaking, key = { "b-" + it.id }) { s ->
+                        BreakingCard(s, env.now, onOpen = { env.onOpen(s) }, modifier = Modifier.width(290.dp))
+                    }
+                }
+            }
+        }
+        if (settings.liveWire && live.isNotEmpty()) {
+            item(key = "wire-head") {
+                SectionLabel(str.liveWire, trailing = {
+                    TextButton(onClick = { wireOpen = !wireOpen }) { Text(if (wireOpen) str.showLess else str.seeAll) }
+                })
+            }
+            item(key = "wire-box") {
+                LiveWireBox(live.take(if (wireOpen) 30 else 4), env.now)
+            }
+        }
+        item(key = "home-filter") {
+            SectionLabel(str.latest)
             ChipRow(
                 listOf("all" to str.allUp, "pol" to str.politicsOnly),
                 if (settings.politicsOnlyHome) "pol" else "all",
             ) { id -> vm.updateSettings { it.copy(politicsOnlyHome = id == "pol") } }
-            if (newCount > 0) {
-                Notice(str.newStories(newCount), LocalNewsColors.current.newDot, str.markSeen to {
-                    scope.launch { state.animateScrollToItem(0) }
-                    vm.acknowledgeNew()
-                })
+        }
+    }
+}
+
+@Composable
+private fun LiveWireBox(items: List<LiveItem>, now: Instant) {
+    val c = LocalNewsColors.current
+    val str = LocalStr.current
+    val ctx = LocalContext.current
+    Surface(color = c.card, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
+        Column(Modifier.padding(vertical = 4.dp)) {
+            Text(str.liveWireNote, style = MaterialTheme.typography.bodySmall, color = c.faint,
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp))
+            items.forEachIndexed { i, it ->
+                if (i > 0) HorizontalDivider(color = c.divider, modifier = Modifier.padding(start = 46.dp))
+                Row(
+                    Modifier.fillMaxWidth().clickable { Actions.open(ctx, it.url, str) }.padding(horizontal = 14.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    SourceIcon(it.domain, it.publisher, 22.dp)
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(it.publisher, style = MaterialTheme.typography.labelMedium, maxLines = 1,
+                                overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                            val t = FeedLogic.instant(it.publishedAt) ?: Instant.ofEpochMilli(it.seenAt)
+                            Text(TimeFmt.ago(t, now, str), style = MaterialTheme.typography.bodySmall, color = c.newDot)
+                            if (it.breakingHint) Pill(str.tagBreaking.uppercase(), c.onBreaking, c.breaking)
+                            Pill(str.direct, c.muted, c.divider)
+                        }
+                        Text(it.title, style = MaterialTheme.typography.titleSmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
+                    }
+                }
             }
         }
     }
@@ -127,9 +210,12 @@ fun LeadersScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
             ) { vm.leaderFilter.value = it }
             val sel = leaders.firstOrNull { it.id == selected }
             if (sel != null) {
-                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically,
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(listOfNotNull(env.names.of(sel), sel.roleHi.takeIf { str.hindi }).joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
+                    Column(Modifier.weight(1f)) {
+                        Text(env.names.of(sel), style = MaterialTheme.typography.titleMedium)
+                        sel.roleHi?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = LocalNewsColors.current.muted) }
+                    }
                     OutlinedButton(onClick = { vm.toggleFollowLeader(sel.id) }) {
                         Text(if (sel.id in follows) str.unfollow else str.follow)
                     }
@@ -145,9 +231,7 @@ fun LeadersScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 fun ControversyScreen(all: List<Story>, env: ListEnv) {
     val str = LocalStr.current
     StoryList(all.filter(FeedLogic::isControversy), env, str.controversyEmpty, showStatementType = true) {
-        item(key = "contro-head") {
-            Notice(str.controversyNote)
-        }
+        item(key = "contro-head") { Notice(str.controversyNote) }
     }
 }
 
@@ -182,11 +266,7 @@ fun StatementsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val xAvailable = vm.repo.collectAsState().value.cache.xAvailable
     val str = LocalStr.current
     StoryList(all.filter { it.statement }, env, str.statementsEmpty, showStatementType = true) {
-        item(key = "stmt-head") {
-            if (!xAvailable) {
-                Notice(str.xUnavailable)
-            }
-        }
+        item(key = "stmt-head") { if (!xAvailable) Notice(str.xUnavailable) }
     }
 }
 
@@ -195,32 +275,39 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val settings by vm.settings.collectAsState()
     val selected by vm.districtFilter.collectAsState()
     val str = LocalStr.current
+    val c = LocalNewsColors.current
     val districts = vm.repo.collectAsState().value.cache.entities.districts
     val counts = remember(all) {
         val m = HashMap<String, Int>()
         all.forEach { s -> s.entities.districts.forEach { m[it] = (m[it] ?: 0) + 1 } }
         m
     }
-    val ordered = remember(districts, settings.preferredDistricts) {
+    val ordered = remember(districts, settings.preferredDistricts, env.names) {
         districts.sortedWith(compareBy({ if (it.id in settings.preferredDistricts) 0 else if (it.key) 1 else 2 }, { env.names.of(it) }))
     }
     val sel = selected
     if (sel == null) {
-        // District index: pick one.
-        val state = rememberLazyListState()
-        LazyColumn(state = state, modifier = Modifier.fillMaxSize()) {
+        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
+            item { Notice(str.districtPick) }
             item {
-                Notice(str.districtPick)
-            }
-            items(ordered, key = { it.id }) { d ->
-                Row(
-                    Modifier.fillMaxWidth().clickable { vm.districtFilter.value = d.id }.padding(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text((if (d.id in settings.preferredDistricts) "★ " else "") + env.names.of(d), style = MaterialTheme.typography.bodyLarge)
-                    Text(str.storyCount(counts[d.id] ?: 0), style = MaterialTheme.typography.bodySmall, color = LocalNewsColors.current.muted)
+                Surface(color = c.card, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth().padding(12.dp)) {
+                    Column {
+                        ordered.forEachIndexed { i, d ->
+                            if (i > 0) HorizontalDivider(color = c.divider)
+                            Row(
+                                Modifier.fillMaxWidth().clickable { vm.districtFilter.value = d.id }.padding(horizontal = 16.dp, vertical = 13.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text((if (d.id in settings.preferredDistricts) "★ " else "") + env.names.of(d), style = MaterialTheme.typography.bodyLarge)
+                                val n = counts[d.id] ?: 0
+                                Text(str.storyCount(n), style = MaterialTheme.typography.labelMedium,
+                                    color = if (n > 0) MaterialTheme.colorScheme.primary else c.faint,
+                                    modifier = Modifier.background(if (n > 0) MaterialTheme.colorScheme.primaryContainer else c.canvas, RoundedCornerShape(50))
+                                        .padding(horizontal = 10.dp, vertical = 3.dp))
+                            }
+                        }
+                    }
                 }
-                HorizontalDivider(color = LocalNewsColors.current.divider)
             }
         }
         return
@@ -229,16 +316,17 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val dName = d?.let { env.names.of(it) } ?: ""
     StoryList(all.filter { sel in it.entities.districts }, env, str.districtEmpty(dName)) {
         item(key = "district-head") {
-            Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
+            Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                androidx.compose.material3.TextButton(onClick = { vm.districtFilter.value = null }) { Text(str.allDistricts) }
+                TextButton(onClick = { vm.districtFilter.value = null }) { Text(str.allDistricts) }
                 if (d != null) {
                     OutlinedButton(onClick = { vm.toggleDistrict(d.id) }) {
                         Text(if (d.id in settings.preferredDistricts) str.removeFavourite else str.makeFavourite)
                     }
                 }
             }
-            Text(dName, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 16.dp))
+            Text(dName, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(horizontal = 16.dp))
+            Spacer(Modifier.height(6.dp))
         }
     }
 }
@@ -247,5 +335,7 @@ fun DistrictsScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
 fun SavedScreen(vm: MainViewModel, env: ListEnv) {
     val saved = vm.repo.collectAsState().value.bookmarks
     val str = LocalStr.current
-    StoryList(saved, env, str.savedEmpty, str.savedEmptyBody)
+    StoryList(saved, env, str.savedEmpty, str.savedEmptyBody) {
+        item(key = "saved-head") { SectionLabel(str.savedTitle) }
+    }
 }
