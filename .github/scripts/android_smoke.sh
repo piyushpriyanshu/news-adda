@@ -35,7 +35,7 @@ tap "Search"; sleep 2; tap "Leader, party, district"; sleep 1; adb shell input t
 adb shell input keyevent 4; adb shell input keyevent 4; sleep 1
 
 # Switch the interface to Hindi; the news must stay as it is.
-adb shell input swipe 1000 358 80 358 300; sleep 1   # scroll the tab row to the end
+for k in 1 2 3; do adb shell input swipe 1000 358 60 358 200; sleep 1; done   # scroll the tab row to the end
 tap "Settings"; sleep 2; tap "हिंदी"; shot 13_settings_hindi 3
 adb shell input keyevent 4; shot 14_home_hindi 3
 
