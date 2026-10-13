@@ -61,3 +61,9 @@ def test_ist_display_and_iso_roundtrip():
     dt = datetime(2026, 10, 13, 7, 35, tzinfo=timezone.utc)
     assert to_ist_str(dt) == "13-10-2026 13:05 IST"
     assert iso(dt.astimezone(IST)) == "2026-10-13T07:35:00Z"
+
+
+def test_escaped_html_in_feed_description_is_removed():
+    desc = '&lt;p style="text-align: justify;"&gt;उत्तर प्रदेश के अमेठी में गौरीगंज से विधायक राकेश प्रताप सिंह ने बयान दिया।&lt;/p&gt;'
+    s = short_summary(desc, "अमेठी की खबर")
+    assert s.startswith("उत्तर प्रदेश") and "<" not in s and "style" not in s

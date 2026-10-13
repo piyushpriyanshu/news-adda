@@ -53,7 +53,8 @@ _SUFFIXES = sorted(
 def strip_html(text: str | None) -> str:
     if not text:
         return ""
-    text = html.unescape(_TAG.sub(" ", text))
+    # Some feeds escape their HTML (&lt;p&gt;), so strip tags again after unescaping.
+    text = _TAG.sub(" ", html.unescape(_TAG.sub(" ", text)))
     text = _ZW.sub("", text)
     return _WS.sub(" ", text).strip()
 
