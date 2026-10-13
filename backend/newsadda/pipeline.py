@@ -16,6 +16,7 @@ from .fetcher import Fetcher, FetchResult
 from .parser import RawItem, item_id
 from .registry import Source, load_blocked_publishers, load_sources, load_trusted_publishers
 from .store import Store
+from .gist import hindi_only
 from .textutil import devanagari_share, normalize, short_summary
 from .timeutil import from_iso, iso, utcnow
 
@@ -167,8 +168,7 @@ class Pipeline:
                 continue
             # Gists are Hindi like the headlines; English descriptions are kept only
             # when the optional AI step will turn them into Hindi.
-            shown_summary = summary if summary and (
-                devanagari_share(summary) >= self.settings.min_hindi_share or self.ai_active) else None
+            shown_summary = summary if self.ai_active else hindi_only(summary)
 
             suspect = bool(raw.published_at and raw.published_at > now + FUTURE_TOLERANCE)
             sort_at = raw.published_at if raw.published_at and not suspect else now
@@ -252,12 +252,19 @@ class Pipeline:
                 continue
             data = dict(it["data"])
             extra: dict = {}
-            english = bool(it["summary"]) and devanagari_share(it["summary"]) < self.settings.min_hindi_share
-            if english and (it["summary_origin"] == "page" or it["summary_origin"] == "publisher" and not self.ai_active):
-                # English gist: drop it (and re-send the story) and try the page again.
-                extra = {"summary": None, "summary_origin": None, "changed_at": iso(utcnow())}
-                cleared += 1
-                data.pop("gist_tried", None)
+            if it["summary"] and (it["summary_origin"] == "page"
+                                  or it["summary_origin"] == "publisher" and not self.ai_active):
+                hi = hindi_only(it["summary"])
+                if hi is None or len(hi) < (40 if it["summary_origin"] == "page" else 15):
+                    # English gist: drop it (and re-send the story) and try the page again.
+                    extra = {"summary": None, "summary_origin": None, "changed_at": iso(utcnow())}
+                    cleared += 1
+                    data.pop("gist_tried", None)
+                elif " ".join(hi.split()) != " ".join(it["summary"].split()):
+                    extra = {"summary": hi}  # English lead-in or sentences removed
+                    if len(it["summary"]) - len(hi) > 40:
+                        extra["changed_at"] = iso(utcnow())  # a whole English sentence: re-send now
+                        cleared += 1
             data.update(categories=c.categories, entities=c.entities, breaking=c.breaking,
                         breaking_score=c.breaking_score, reasons=c.reasons, labels=c.labels,
                         statement=c.statement, statement_type=c.statement_type, legal_status=c.legal_status)

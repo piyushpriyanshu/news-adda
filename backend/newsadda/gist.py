@@ -51,21 +51,39 @@ def _meta_tags(page: str) -> dict[str, str]:
     return out
 
 
+_SENTENCES = re.compile(r"(?<=[।!?|])\s+|(?<=\.)\s+(?=\S)")
+_LATIN_LEAD = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ,'’&.()-]{0,120}:\s*(?=[\u0900-\u097F])")
+_BOILERPLATE = re.compile(r"^(follow\b|read more|और पढ़ें|पूरी खबर|यह भी पढ़ें)", re.I)
+
+
+def hindi_only(text: str | None) -> str | None:
+    """Keep only the Hindi sentences of a description.
+
+    Some publishers write "English SEO sentence. Follow X Latest Updates. Hindi
+    description"; the English and boilerplate sentences are dropped. Sentences
+    that are mostly Hindi with a few English words ("UP News: …") are kept."""
+    if not text:
+        return None
+    # Drop an English lead-in such as "who is X Join Samajwadi Party: " or "UP News: ".
+    text = _LATIN_LEAD.sub("", text.strip())
+    kept = [p.strip() for p in _SENTENCES.split(text)
+            if p.strip() and not _BOILERPLATE.match(p.strip()) and devanagari_share(p) >= 0.5]
+    out = " ".join(kept).strip()
+    return out if out and devanagari_share(out) >= 0.6 else None
+
+
 def description_from_page(page: str, title: str) -> tuple[str | None, str | None]:
     """(gist, canonical_url) from an article page's meta tags."""
     tags = _meta_tags(page)
     canonical = tags.get("og:url")
     for key in ("og:description", "description", "twitter:description"):
-        text = strip_html(tags.get(key))
-        if not text or len(text) < 40 or devanagari_share(text) < 0.5:
+        text = hindi_only(strip_html(tags.get(key)))
+        if not text or len(text) < 40:
             continue  # too short, or not Hindi (some sites write English SEO descriptions)
         nt, nd = normalize(title).strip(), normalize(text).strip()
         if nd == nt or nd.startswith(nt) and len(nd) - len(nt) < 25:
             continue
         if jaccard(content_terms(title), content_terms(text)) > 0.8:
-            continue
-        text = re.sub(r"\s*(Follow\b.*|और पढ़ें.*|पूरी खबर.*|Read more.*)$", "", text, flags=re.I).strip()
-        if len(text) < 40:
             continue
         if len(text) > GIST_LIMIT:
             cut = text[:GIST_LIMIT]

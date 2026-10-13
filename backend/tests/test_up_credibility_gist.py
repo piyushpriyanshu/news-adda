@@ -136,3 +136,14 @@ def test_english_page_descriptions_are_not_used_as_gists():
     assert gist.startswith("लखनऊ में भाजपा नेताओं") and "Follow" not in gist
     only_en = '<html><head><meta property="og:description" content="BJP leaders attack Akhilesh Yadav over politics in Lucknow today."></head></html>'
     assert description_from_page(only_en, "अखिलेश पर भाजपा का हमला")[0] is None
+
+
+def test_mixed_english_seo_and_hindi_description_keeps_only_hindi():
+    from newsadda.gist import hindi_only
+    d = ("CM Yogi Adityanath honors Gram Prahari in Orai. Follow Dainik Bhaskar Latest Updates. मुख्यमंत्री योगी "
+         "आदित्यनाथ द्वारा प्रदेश के समस्त ग्राम प्रहरियों को संबोधित कर सम्मानित किया गया।")
+    assert hindi_only(d).startswith("मुख्यमंत्री योगी") and "Orai" not in hindi_only(d)
+    assert hindi_only("UP News: लखनऊ में सपा कार्यकर्ताओं ने प्रदर्शन किया और ज्ञापन सौंपा।").startswith("लखनऊ में सपा")
+    assert hindi_only("who is Dharmendra Kashyap Join Samajwadi Party: यूपी चुनाव से पहले भाजपा को झटका").startswith("यूपी चुनाव")
+    assert hindi_only("आज 12 अक्टूबर को डॉ. राम मनोहर लोहिया की पुण्यतिथि है।").startswith("आज 12 अक्टूबर को डॉ. राम")
+    assert hindi_only("BJP leaders attack Akhilesh Yadav over politics.") is None

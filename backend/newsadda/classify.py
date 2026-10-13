@@ -88,7 +88,7 @@ BREAKING_SIGNALS: list[tuple[list[str], int, str]] = [
 ]
 BREAKING_THRESHOLD = 3
 # Bump when rules change: stored items are then re-labelled on the next run.
-RULES_VERSION = "7"
+RULES_VERSION = "8"
 _LIVE = re.compile(r"\blive\b|लाइव", re.I)
 
 ALLEGATION = _kw("आरोप", "आरोपों", "आरोपित", "आरोप लगाया", "accused", "alleges", "alleged")
