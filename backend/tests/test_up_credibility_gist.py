@@ -146,4 +146,5 @@ def test_mixed_english_seo_and_hindi_description_keeps_only_hindi():
     assert hindi_only("UP News: लखनऊ में सपा कार्यकर्ताओं ने प्रदर्शन किया और ज्ञापन सौंपा।").startswith("लखनऊ में सपा")
     assert hindi_only("who is Dharmendra Kashyap Join Samajwadi Party: यूपी चुनाव से पहले भाजपा को झटका").startswith("यूपी चुनाव")
     assert hindi_only("आज 12 अक्टूबर को डॉ. राम मनोहर लोहिया की पुण्यतिथि है।").startswith("आज 12 अक्टूबर को डॉ. राम")
+    assert hindi_only("Greater Noida News: 13 से 17 अक्टूबर तक मेला लगेगा").startswith("13 से 17")
     assert hindi_only("BJP leaders attack Akhilesh Yadav over politics.") is None

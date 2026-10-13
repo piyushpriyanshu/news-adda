@@ -52,7 +52,7 @@ def _meta_tags(page: str) -> dict[str, str]:
 
 
 _SENTENCES = re.compile(r"(?<=[।!?|])\s+|(?<=\.)\s+(?=\S)")
-_LATIN_LEAD = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ,'’&.()-]{0,120}:\s*(?=[\u0900-\u097F])")
+_LATIN_LEAD = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ,'’&.()-]{0,120}:\s*(?=[\u0900-\u097F0-9\"'‘“])")
 _BOILERPLATE = re.compile(r"^(follow\b|read more|और पढ़ें|पूरी खबर|यह भी पढ़ें)", re.I)
 
 
