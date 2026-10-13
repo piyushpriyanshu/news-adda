@@ -25,11 +25,13 @@ for t in "ब्रेकिंग न्यूज़" "नेता ट्र�
 done
 
 # District detail, then home -> open first story's detail sheet.
-tap "जिला समाचार"; sleep 2; tap "लखनऊ"; shot 10_district_lucknow 3
-tap "होम"; sleep 3
+tap "जिला समाचार"; sleep 2; tap "अमेठी"; shot 10_district_detail 3
+adb shell input keyevent 4; sleep 2   # back -> home tab
+shot 10b_back_home 2
 tap "मूल खबर" --above 220; shot 11_story_detail 3
 adb shell input keyevent 4; sleep 1
-tap "खोजें"; sleep 2; adb shell input text "yogi"; shot 12_search 3
+tap "खोजें"; sleep 2; tap "नेता, दल, जिला"; sleep 1; adb shell input text "yogi"; shot 12_search 3
+adb shell input keyevent 4; adb shell input keyevent 4; sleep 1
 
 # Background/foreground cycle: the app must refresh on return without crashing.
 adb shell input keyevent 3; sleep 5

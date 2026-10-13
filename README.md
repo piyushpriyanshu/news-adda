@@ -1,3 +1,142 @@
-# News Adda
+# न्यूज़ अड्डा (News Adda)
 
-उत्तर प्रदेश राजनीति समाचार एग्रीगेटर (काम जारी है)।
+A fast, text-only Hindi news aggregator for **Uttar Pradesh politics**, built to spot political developments early so they can be researched and turned into news videos.
+
+- **Android app** (Kotlin + Jetpack Compose), Hindi/Devanagari interface, no images.
+- **Backend** (Python) that collects UP news from publisher RSS feeds and Google News, groups duplicate reports, tags leaders/districts/parties, marks breaking news and allegations, and publishes a feed for the app.
+- Runs for free on **GitHub Actions**: one workflow collects news every ~5 minutes, another builds and publishes the APK.
+
+## Install
+
+1. On your phone, open **Releases** on this repository page and download the newest `NewsAdda-vX.Y.Z.apk`.
+2. Open it and allow "Install unknown apps" for your browser when asked.
+
+After that the app updates itself:
+
+- It checks for a new version **every time it starts** and **in the background every 1, 3, 6 or 12 hours** (Settings → ऐप अपडेट).
+- A new version is downloaded automatically (can be turned off), verified (SHA-256, package name and version) and you get a notification. Tap **इंस्टॉल करें**; Android always asks you to confirm an install — no ordinary app can install silently.
+- The first time, Android asks you to allow News Adda to install apps; allow it once.
+
+`-debug.apk` files in each release are a separate test app ("न्यूज़ अड्डा (डीबग)"); they install alongside the normal app and never self-update.
+
+## How it works
+
+```
+ Publisher RSS feeds ─┐
+ Google News RSS  ────┤   GitHub Actions "Collect news" (every ~5 min)
+ X API (optional) ────┘   fetch → parse → UP filter → tag → group → label
+                                     │
+                                     ▼
+                 data branch: feed.json, health.json, state.db.gz
+                                     │  (raw.githubusercontent.com)
+                                     ▼
+          Android app: refresh on open / on return / every 1–30 min /
+          pull-down / "अभी अपडेट करें"; cached for offline reading
+```
+
+The phone never scrapes publishers; it only reads the backend's feed. Each story keeps **every publisher's link**, publication time, update time and the time News Adda first saw it, all shown in IST.
+
+### App sections
+
+होम · ब्रेकिंग न्यूज़ · नेता ट्रैकर · राजनीतिक विवाद · सीट और बाहुबली · नेताओं के बयान · जिला समाचार · सहेजी गई · सेटिंग्स, plus search (Hindi or English) with filters for party, category, leader/district/seat, source and date.
+
+### Labels and what they mean
+
+| Label | Rule |
+|---|---|
+| ब्रेकिंग | Headline signals (resignation, arrest, suspension, defection, ticket/candidate list, Election Commission, bypoll, High/Supreme Court, conviction/bail, raids…) in a political story, **or** 3+ publishers reporting within 2 hours. Shown for 6 hours. The reasons are listed in every story. |
+| नई खबर | First seen in the last 30 minutes. |
+| आरोप / पलटवार | The report describes an allegation / counter-attack. An allegation is never presented as fact. |
+| आधिकारिक बयान | Official wording (government order, Commission, spokesperson…). |
+| N स्रोतों से रिपोर्ट | Reported by N different publishers (one outlet through several feeds counts once). |
+| पुष्टि की प्रतीक्षा | A political single-source report that is breaking, an allegation, or mentions legal action. |
+| रिपोर्ट में उल्लेख: … | Legal status words used by the report (आरोप, एफआईआर, जांच, गिरफ्तारी, आरोप-पत्र, जमानत, बरी, दोषसिद्ध). The app never calls anyone a criminal. |
+
+All labels come from transparent keyword rules (`backend/newsadda/classify.py`), not popularity or ideology. They can be wrong; the reasons are always visible.
+
+## Source status (live check, 13 Oct 2026, from GitHub Actions)
+
+| Publisher | How it is collected | Status |
+|---|---|---|
+| Amar Ujala (UP, Lucknow + 7 district editions) | Official RSS | ✅ UP and Lucknow verified; district feeds added (checked daily) |
+| News18 Hindi (UP) | Official RSS | ✅ verified |
+| TV9 Bharatvarsh (UP) | Official RSS | ✅ verified |
+| ABP News (UP/UK) | Official RSS | ✅ verified |
+| Live Hindustan | RSS (UP feed empty / 503) + Google News | ⚠️ direct feed not usable; covered via Google News |
+| Dainik Bhaskar, UP Tak, Dainik Jagran, Navbharat Times, Aaj Tak, Zee News, Jansatta, The Lallantop, Patrika, ETV Bharat | Google News RSS `site:` searches | ✅ via Google News (no reachable public feed: 404/403/none) |
+| Topic searches: UP politics, leaders, regional figures, elections | Google News RSS | ✅ verified |
+| X (Twitter) posts of leaders | Official X API v2 | ⛔ needs `X_BEARER_TOKEN` (paid X API plan); shown as unavailable until set |
+
+Current per-source status is always in the app (Settings → समाचार स्रोत) and in `health.json` on the `data` branch. The daily **source check** re-tests every URL and autodiscovers feeds; results are on the `ci-backend` branch (`discovery.txt`).
+
+## Configuration
+
+| What | Where |
+|---|---|
+| Sources (add, remove, disable, polling interval) | `backend/newsadda/data/sources.yaml` |
+| Leaders, regional figures, parties, 75 districts, seats | `backend/newsadda/data/entities.yaml` (sent to the app inside the feed, so no app update is needed) |
+| X API | repository secret `X_BEARER_TOKEN` |
+| Optional AI Hindi summaries of English publisher descriptions | secret `ANTHROPIC_API_KEY` + repository variable `NEWSADDA_AI_SUMMARY=1` (off by default; everything works without it) |
+| App signing key (recommended) | secrets `NEWSADDA_KEYSTORE_BASE64`, `NEWSADDA_KEYSTORE_PASSWORD`, `NEWSADDA_KEY_ALIAS`, `NEWSADDA_KEY_PASSWORD` |
+
+No secret is ever placed in the APK or the feed.
+
+## Building
+
+### APK on GitHub (no setup)
+
+Every push to `main` that changes `android/` runs **Build Android APK**: unit tests, debug + release APKs, and a GitHub Release with `update.json` for the in-app updater. The **emulator smoke test** workflow installs the debug build on an Android emulator, opens every section against the live feed, checks offline mode and fails on any crash; screenshots are on the `ci-android-smoke` branch.
+
+### APK locally
+
+Requirements: JDK 17 and the Android SDK (platform 36, build-tools 35).
+
+```bash
+cd android
+./gradlew testDebugUnitTest      # unit tests
+./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleRelease        # app/build/outputs/apk/release/app-release.apk (signed)
+```
+
+Debug builds use the id `com.newsadda.app.debug`, a different name, and no self-update. Release builds are minified and signed.
+
+**Signing note:** a release keystore is committed in `android/keystore/` (the same approach as this account's other app) so CI can sign builds that update over each other. Because the repository is public, anyone can read that key. For stronger protection, create your own key, store it in the secrets listed above (CI uses secrets first), and remove the committed one — note that changing the key means reinstalling the app once.
+
+### Backend
+
+The default backend is the **Collect news** workflow (nothing to set up). To get faster updates (the app supports a 1-minute refresh), run the server yourself and set its URL in the app (Settings → बैकएंड पता → `https://your-server/feed.json`):
+
+```bash
+cd backend
+pip install -r requirements.txt
+python -m newsadda serve --port 8000      # API + built-in scheduler
+# or
+docker build -t newsadda backend && docker run -p 8000:8000 -v newsadda:/data newsadda
+```
+
+Other commands: `python -m newsadda run --export out/` (one pass, write feed files), `python -m newsadda discover --out report.json` (live-check every feed), `python -m newsadda sources`. Settings are environment variables, listed in `backend/.env.example`.
+
+API: `GET /feed.json[?since=…]` (incremental), `GET /api/v1/stories` (search: `q, leader, figure, party, district, seat, source, category, label, breaking, statement, from, to`), `GET /api/v1/sources`, `GET /api/v1/entities`, `GET /health`, `POST /api/v1/refresh` (admin token).
+
+Tests: `pip install -r requirements-dev.txt && python -m pytest`.
+
+## Tested
+
+- **Backend: 53 automated tests** — feed parsing, IST/UTC timestamps (missing, zone-less and future times are never invented or silently trusted), Hindi normalisation, UP relevance, entity tagging, breaking/allegation/statement/legal-status labels, near-duplicate grouping (same story grouped; different stories kept apart), publisher aliasing, source failures and fallbacks, conditional requests and backoff, incremental feed, API search and filters, X post parsing.
+- **Live sources** checked from GitHub Actions (table above) and the collector producing a real feed (~600+ stories in the first run).
+- **Android: 9 unit tests** — parsing the backend's feed format, cache merge/retention, new-story detection, search folding, refresh interval, source hiding, IST formatting.
+- **Release build** compiles, is signed and is published with `update.json`; `releases/latest/download/update.json` resolves.
+- **Emulator smoke test** against the live feed: app starts, Hindi renders, every section opens, background → foreground refresh, offline mode shows cached news with a notice, no crashes.
+
+Not tested on a physical phone, and the in-app update install step needs a second release to exercise end to end.
+
+## Known limitations
+
+- **Freshness:** GitHub runs scheduled workflows "about" every 5 minutes and often later under load (5–15+ minutes; occasionally a run is skipped). Self-hosting the backend removes this limit.
+- **Background on the phone:** Android runs background work at most every ~15 minutes and may delay it (battery saver, manufacturer restrictions). One-minute refresh applies only while the app is open.
+- **Google News links** open news.google.com, which forwards to the publisher; the publisher name is shown, marked "गूगल न्यूज़".
+- **X posts** need a paid X API plan; without it the statements section shows statements reported in the news.
+- **No full-article extraction:** summaries are trimmed from what each publisher's feed provides; many items are headline-only.
+- **Rule-based classification** has false positives/negatives; grouping is conservative, so the same event may sometimes appear as two cards.
+- Scheduled workflows in public repositories pause after 60 days without repository activity; any push re-enables them.
+- Publishers' feeds and terms can change; the daily source check shows when a feed stops working.

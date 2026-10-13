@@ -65,6 +65,10 @@ MIGRATIONS: list[str] = [
     );
     CREATE INDEX fetch_log_at ON fetch_log(at);
     """,
+    # v2
+    """
+    CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT);
+    """,
 ]
 
 
@@ -111,6 +115,16 @@ class Store:
             "INSERT INTO fetch_log VALUES (?,?,?,?,?,?,?,?)",
             (sid, iso(utcnow()), int(ok), http_status, items, new_items, ms, error),
         )
+
+    def meta(self, key: str) -> str | None:
+        row = self.db.execute("SELECT value FROM meta WHERE key=?", (key,)).fetchone()
+        return row[0] if row else None
+
+    def set_meta(self, key: str, value: str):
+        self.db.execute("INSERT OR REPLACE INTO meta(key, value) VALUES (?, ?)", (key, value))
+
+    def all_items(self) -> list[dict]:
+        return [self._row(r) for r in self.db.execute("SELECT * FROM items")]
 
     # ---- items --------------------------------------------------------
     def has_item(self, item_id: str) -> bool:

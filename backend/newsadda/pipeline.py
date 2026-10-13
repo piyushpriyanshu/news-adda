@@ -6,7 +6,7 @@ import logging
 import re
 from datetime import datetime, timedelta
 
-from .classify import Classifier
+from .classify import RULES_VERSION, Classifier
 from .config import Settings
 from .dedup import WINDOW, Clusterer
 from .entities import EntityIndex
@@ -178,8 +178,38 @@ class Pipeline:
             self.store.db.execute("UPDATE items SET changed_at=? WHERE cluster_id=?", (iso(now), cid))
         return new_count, touched
 
+    def relabel_if_rules_changed(self) -> int:
+        """Re-run classification on stored items after a rules/entities change.
+        Grouping (cluster ids) is left untouched."""
+        import hashlib
+        from pathlib import Path
+
+        ent_hash = hashlib.sha1(Path(self.settings.entities_path).read_bytes()).hexdigest()[:12]
+        sig = f"{RULES_VERSION}:{ent_hash}"
+        if self.store.meta("rules") == sig:
+            return 0
+        n = 0
+        src_by = self.sources_by_id
+        now = iso(utcnow())
+        for it in self.store.all_items():
+            src = src_by.get(it["source_id"])
+            c = self.classifier.classify(
+                it["title"], it["summary"], up_section=src.up_section if src else True,
+                kind=it["kind"], official_source=bool(src and src.official),
+            )
+            data = dict(it["data"])
+            data.update(categories=c.categories, entities=c.entities, breaking=c.breaking,
+                        breaking_score=c.breaking_score, reasons=c.reasons, labels=c.labels,
+                        statement=c.statement, statement_type=c.statement_type, legal_status=c.legal_status)
+            self.store.update_item(it["id"], data=data, changed_at=now)
+            n += 1
+        self.store.set_meta("rules", sig)
+        log.info("re-labelled %d stored items for rules %s", n, sig)
+        return n
+
     async def run_once(self, force: bool = False, only: list[str] | None = None) -> list[FetchResult]:
         self.reload()
+        self.relabel_if_rules_changed()
         sources = [s for s in self.sources if not only or s.id in only]
         fetcher = Fetcher(self.store, self.settings, self.client)
         results = await fetcher.fetch_all(sources, force=force)

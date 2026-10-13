@@ -45,6 +45,7 @@ val LocalNewsColors = staticCompositionLocalOf { LightNews }
 private val LightScheme = lightColorScheme(
     primary = Color(0xFFA4161A), onPrimary = Color.White,
     secondary = Color(0xFF3D3A36), onSecondary = Color.White,
+    secondaryContainer = Color(0xFFF2DEDA), onSecondaryContainer = Color(0xFF5A0F12),
     background = Color(0xFFFAF8F5), onBackground = Color(0xFF1B1A19),
     surface = Color(0xFFFFFFFF), onSurface = Color(0xFF1B1A19),
     surfaceVariant = Color(0xFFF1EDE7), onSurfaceVariant = Color(0xFF5E5A55),
@@ -53,6 +54,7 @@ private val LightScheme = lightColorScheme(
 private val DarkScheme = darkColorScheme(
     primary = Color(0xFFE5484D), onPrimary = Color.White,
     secondary = Color(0xFFD9D4CE), onSecondary = Color(0xFF1B1A19),
+    secondaryContainer = Color(0xFF4A2224), onSecondaryContainer = Color(0xFFF6DADA),
     background = Color(0xFF141414), onBackground = Color(0xFFECE8E3),
     surface = Color(0xFF1C1C1C), onSurface = Color(0xFFECE8E3),
     surfaceVariant = Color(0xFF262524), onSurfaceVariant = Color(0xFFA8A29B),

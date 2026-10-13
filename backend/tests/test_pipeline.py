@@ -243,3 +243,14 @@ def test_real_registry_and_entities_load():
     assert all(s.feed_urls or s.kind == "x" or s.kind == "rss" for s in srcs)
     e = EntityIndex()
     assert len(e.districts) == 75 and len(e.leaders) >= 12
+
+
+def test_rules_change_relabels_stored_items(settings, router):
+    standard_routes(router)
+    p = make(settings, router)
+    run(p)
+    assert p.relabel_if_rules_changed() == 0  # unchanged rules: nothing to do
+    p.store.set_meta("rules", "old")
+    n = p.relabel_if_rules_changed()
+    assert n == len(p.store.all_items()) > 0
+    assert p.relabel_if_rules_changed() == 0

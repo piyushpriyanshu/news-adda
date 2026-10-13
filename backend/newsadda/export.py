@@ -107,7 +107,8 @@ def build_stories(pipeline: Pipeline, items: list[dict]) -> list[dict]:
         corroboration = "multi" if len(pubs) >= 2 else "single"
         if corroboration == "multi":
             labels.append("एकाधिक स्रोतों से रिपोर्ट")
-        elif breaking or "आरोप" in labels or legal:
+        elif political and (breaking or "आरोप" in labels or legal):
+            # Single-source political claims are flagged; ordinary local crime reports are not.
             labels.append("पुष्टि की प्रतीक्षा")
         statements = [m for m in members if m["data"]["statement"]]
         summary_item = next((m for m in members if m["summary"]), None)
