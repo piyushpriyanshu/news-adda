@@ -149,4 +149,13 @@ class FeedLogicTest {
         assertFalse(FeedLogic.matchesQuery(s, "lucknow"))
         assertTrue(FeedLogic.matchesQuery(s, "lucknow", "Lucknow लखनऊ"))
     }
+
+    @Test
+    fun liveWireHeadlinesArePoliticalOnlyWhenTheyNameParties() {
+        assertTrue(FeedLogic.isPoliticalHeadline("सपा विधायक ने भाजपा पर साधा निशाना"))
+        assertTrue(FeedLogic.isPoliticalHeadline("दंगा किया तो कमाई जब्त, उपद्रवियों को CM योगी की चेतावनी"))
+        assertTrue(FeedLogic.isPoliticalHeadline("राजा भैया का बड़ा बयान", listOf("राजा भैया")))
+        assertFalse(FeedLogic.isPoliticalHeadline("चेहरा तो चमक रहा मगर गर्दन पर जम गए हैं मैल? एक्सपर्ट ने दिया घरेलू उपाय"))
+        assertFalse(FeedLogic.isPoliticalHeadline("सहयोगी कंपनी ने खोला नया शोरूम"))  // whole words only
+    }
 }

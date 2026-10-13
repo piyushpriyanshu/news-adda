@@ -127,6 +127,25 @@ object FeedLogic {
         s.entities.leaders.isNotEmpty() || s.entities.figures.isNotEmpty() || s.entities.parties.isNotEmpty() ||
             s.categories.any { it == "politics" || it == "election" || it == "controversy" }
 
+    /** Words that make a raw headline (Live wire) a UP-politics item. */
+    private val POLITICAL_WORDS = listOf(
+        "भाजपा", "बीजेपी", "BJP", "सपा", "बसपा", "कांग्रेस", "रालोद", "सुभासपा", "अपना दल", "निषाद पार्टी",
+        "विधायक", "सांसद", "मंत्री", "मुख्यमंत्री", "उपमुख्यमंत्री", "सीएम", "CM", "डिप्टी सीएम", "राज्यमंत्री",
+        "विधानसभा", "विधान परिषद", "एमएलसी", "चुनाव", "उपचुनाव", "प्रत्याशी", "टिकट", "पार्टी", "नेता", "जिलाध्यक्ष",
+        "प्रदेश अध्यक्ष", "इस्तीफा", "पलटवार", "निशाना", "तंज", "आरोप", "बयान", "सियासत", "सियासी", "राजनीति",
+        "राजनीतिक", "सरकार", "योगी", "अखिलेश", "मायावती", "केशव", "ब्रजेश पाठक", "राजभर", "शिवपाल", "डिंपल",
+        "आजम", "अनुप्रिया", "जयंत", "चंद्रशेखर", "आकाश आनंद", "राहुल", "प्रियंका", "बाहुबली", "माफिया",
+        "पूर्व सांसद", "पूर्व विधायक", "दलबदल",
+    ).map { " " + normalize(it) + " " }
+    private val NON_WORD = Regex("[^\\p{L}\\p{M}\\p{N}]+")
+
+    /** True when a headline names a party, leader or political action (or one of [names]). */
+    fun isPoliticalHeadline(title: String, names: Collection<String> = emptyList()): Boolean {
+        val t = " " + normalize(title).replace(NON_WORD, " ") + " "
+        return POLITICAL_WORDS.any { t.contains(it) } ||
+            names.any { n -> n.length > 2 && t.contains(" " + normalize(n).replace(NON_WORD, " ").trim() + " ") }
+    }
+
     /** Refresh is due when the chosen interval has passed since the last attempt. */
     fun refreshDue(lastAttemptMs: Long, intervalMin: Int, nowMs: Long): Boolean =
         lastAttemptMs <= 0 || nowMs - lastAttemptMs >= intervalMin * 60_000L - 1_000L

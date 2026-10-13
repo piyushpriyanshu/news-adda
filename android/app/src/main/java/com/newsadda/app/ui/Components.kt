@@ -75,6 +75,8 @@ class Names(e: Entities, val str: Str) {
     val parties = e.parties.associate { it.id to it.label() }
     val districts = e.districts.associate { it.id to it.label() }
     val seats = e.seats.associate { it.id to it.label() }
+    /** Hindi names of leaders, regional figures and parties (to spot political raw headlines). */
+    val politicalHi: List<String> = (e.leaders + e.figures + e.parties).map { it.nameHi }
 
     fun any(id: String): String = leaders[id] ?: figures[id] ?: districts[id] ?: seats[id] ?: parties[id] ?: id
     fun of(e: Entity) = e.label()

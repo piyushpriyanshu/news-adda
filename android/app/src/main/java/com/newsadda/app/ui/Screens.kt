@@ -101,6 +101,9 @@ fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val scope = rememberCoroutineScope()
     var wireOpen by rememberSaveable { mutableStateOf(false) }
     val list = if (settings.politicsOnlyHome) all.filter(FeedLogic::isPolitical) else all
+    val wire = remember(live, settings.politicsOnlyHome, env.names) {
+        if (settings.politicsOnlyHome) live.filter { FeedLogic.isPoliticalHeadline(it.title, env.names.politicalHi) } else live
+    }
     val breaking = remember(all, env.now) { all.filter { FeedLogic.isBreakingNow(it, env.now) }.take(10) }
     val newCount = list.count { it.id in env.newIds }
 
@@ -127,14 +130,14 @@ fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
                 }
             }
         }
-        if (settings.liveWire && live.isNotEmpty()) {
+        if (settings.liveWire && wire.isNotEmpty()) {
             item(key = "wire-head") {
                 SectionLabel(str.liveWire, trailing = {
                     TextButton(onClick = { wireOpen = !wireOpen }) { Text(if (wireOpen) str.showLess else str.seeAll) }
                 })
             }
             item(key = "wire-box") {
-                LiveWireBox(live.take(if (wireOpen) 30 else 4), env.now)
+                LiveWireBox(wire.take(if (wireOpen) 30 else 4), env.now)
             }
         }
         item(key = "home-filter") {
