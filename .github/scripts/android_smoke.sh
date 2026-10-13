@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Installs the debug APK on the CI emulator, opens every section against the
+# Installs the release APK on the CI emulator, opens every section against the
 # live feed in English, switches the interface to Hindi, saves screenshots and
 # checks logcat for crashes.
 set -u
-PKG=com.newsadda.app.debug
+PKG=com.newsadda.app
 OUT=smoke
 mkdir -p "$OUT"
 shot() { sleep "${2:-3}"; adb exec-out screencap -p > "$OUT/$1.png"; }
 tap() { python3 .github/scripts/ui_tap.py "$@" >> "$OUT/steps.txt" 2>&1 || echo "MISSING: $1" >> "$OUT/steps.txt"; }
 
-adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb install -r android/app/build/outputs/apk/release/app-release.apk
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS || true
 adb shell settings put global window_animation_scale 0
 adb shell settings put global transition_animation_scale 0

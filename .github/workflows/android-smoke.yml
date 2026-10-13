@@ -1,6 +1,6 @@
 name: Android emulator smoke test
 
-# Runs the debug build on an Android emulator against the live feed: opens
+# Runs the release build (minified, signed) on an Android emulator against the live feed: opens
 # every section, a story, search, background/foreground and offline mode,
 # and fails on any crash. Screenshots go to the ci-android-smoke branch.
 
@@ -28,14 +28,14 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@v4
-      - name: Build debug APK
+      - name: Build release APK (what users install)
         working-directory: android
         run: |
           SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKM" --licenses > /dev/null || true
           "$SDKM" "platforms;android-36" "build-tools;35.0.0" > /dev/null
           chmod +x gradlew
-          ./gradlew --no-daemon assembleDebug
+          ./gradlew --no-daemon assembleRelease
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
