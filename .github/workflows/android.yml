@@ -1,0 +1,146 @@
+name: Build Android APK
+
+# Builds debug and release APKs, runs unit tests and, on main, publishes a
+# GitHub Release with the signed APK and update.json (read by the in-app
+# updater at releases/latest/download/update.json). A build report is
+# published to the ci-android branch either way.
+
+on:
+  push:
+    branches: [main]
+    paths: ["android/**", ".github/workflows/android.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Version from commit count
+        run: |
+          CODE=$(git rev-list --count HEAD)
+          echo "VERSION_CODE=$CODE" >> "$GITHUB_ENV"
+          echo "VERSION_NAME=1.0.$CODE" >> "$GITHUB_ENV"
+          echo "Building 1.0.$CODE"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Android SDK parts
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;35.0.0" > /dev/null
+
+      - name: Signing key from secrets (optional)
+        env:
+          KEYSTORE_B64: ${{ secrets.NEWSADDA_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > keystore/ci-release.jks
+            echo "NEWSADDA_KEYSTORE_FILE=ci-release.jks" >> "$GITHUB_ENV"
+            echo "using keystore from repository secrets"
+          else
+            echo "using keystore committed in android/keystore"
+          fi
+
+      - name: Unit tests and build
+        id: build
+        env:
+          NEWSADDA_KEYSTORE_PASSWORD: ${{ secrets.NEWSADDA_KEYSTORE_PASSWORD }}
+          NEWSADDA_KEY_ALIAS: ${{ secrets.NEWSADDA_KEY_ALIAS }}
+          NEWSADDA_KEY_PASSWORD: ${{ secrets.NEWSADDA_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          set +e
+          ./gradlew --no-daemon --stacktrace testDebugUnitTest assembleDebug assembleRelease 2>&1 | tee ../build.log
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify and package
+        if: steps.build.outputs.code == '0'
+        run: |
+          set -e
+          BT="$ANDROID_HOME/build-tools/35.0.0"
+          REL=app/build/outputs/apk/release/app-release.apk
+          DBG=app/build/outputs/apk/debug/app-debug.apk
+          "$BT/apksigner" verify --print-certs "$REL" | head -3
+          "$BT/aapt2" dump badging "$REL" | head -3
+          mkdir -p ../dist
+          cp "$REL" "../dist/NewsAdda-v${VERSION_NAME}.apk"
+          cp "$DBG" "../dist/NewsAdda-v${VERSION_NAME}-debug.apk"
+          cd ../dist
+          SHA=$(sha256sum "NewsAdda-v${VERSION_NAME}.apk" | cut -d' ' -f1)
+          SIZE=$(stat -c%s "NewsAdda-v${VERSION_NAME}.apk")
+          sha256sum *.apk > SHA256SUMS.txt
+          NOTES=$(git log -1 --pretty=%s | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()))')
+          cat > update.json <<EOF
+          {"versionCode": ${VERSION_CODE}, "versionName": "${VERSION_NAME}",
+           "apkUrl": "https://github.com/${GITHUB_REPOSITORY}/releases/download/v${VERSION_NAME}/NewsAdda-v${VERSION_NAME}.apk",
+           "sha256": "${SHA}", "size": ${SIZE}, "notes": ${NOTES},
+           "publishedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          EOF
+          python3 -m json.tool update.json
+          ls -l
+
+      - uses: actions/upload-artifact@v4
+        if: steps.build.outputs.code == '0'
+        with:
+          name: NewsAdda-v${{ env.VERSION_NAME }}
+          path: dist/
+
+      - name: Publish release
+        if: steps.build.outputs.code == '0' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        working-directory: dist
+        run: |
+          {
+            echo "नया: $(git log -1 --pretty=%s)"
+            echo
+            echo "पहली बार इंस्टॉल: फ़ोन पर **NewsAdda-v${VERSION_NAME}.apk** डाउनलोड करके खोलें।"
+            echo "पहले से इंस्टॉल ऐप खुद इस रिलीज़ को ढूंढकर अपडेट की सूचना देगा।"
+            echo
+            echo "\`-debug.apk\` केवल परीक्षण के लिए है (अलग ऐप के रूप में इंस्टॉल होता है)।"
+            echo
+            echo "Commit ${GITHUB_SHA::7}."
+          } > notes.md
+          gh release create "v${VERSION_NAME}" \
+            "NewsAdda-v${VERSION_NAME}.apk" "NewsAdda-v${VERSION_NAME}-debug.apk" update.json SHA256SUMS.txt \
+            --title "न्यूज़ अड्डा ${VERSION_NAME}" --latest --notes-file notes.md --repo "$GITHUB_REPOSITORY"
+
+      - name: Publish build report
+        if: always()
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p report
+          touch build.log
+          grep -E "^e: |error:|What went wrong|FAILED|BUILD (SUCCESSFUL|FAILED)|tests completed|> Task :app:test" build.log | head -200 > report/summary.txt || true
+          tail -n 300 build.log > report/build-tail.txt
+          for f in android/app/build/test-results/testDebugUnitTest/*.xml; do [ -f "$f" ] && cp "$f" report/; done
+          cp dist/update.json report/ 2>/dev/null || true
+          echo "commit=${GITHUB_SHA} version=${VERSION_NAME} build_exit=${{ steps.build.outputs.code }} at=$(date -u +%FT%TZ)" > report/status.txt
+          .github/scripts/publish_branch.sh ci-android report "android report ${GITHUB_SHA::7}"
+
+      - name: Fail if build failed
+        if: steps.build.outputs.code != '0'
+        run: exit 1

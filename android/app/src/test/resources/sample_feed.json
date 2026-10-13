@@ -1,0 +1,979 @@
+{
+ "version": 1,
+ "generated_at": "2026-10-13T08:14:44Z",
+ "cursor": "2026-10-13T08:14:44Z",
+ "incremental": false,
+ "supports_since": false,
+ "window_hours": 36,
+ "story_count": 3,
+ "x_available": false,
+ "ai_summaries": false,
+ "sources": [
+  {
+   "id": "alpha_up",
+   "name": "Alpha Times",
+   "name_hi": "अल्फा टाइम्स",
+   "kind": "rss",
+   "via": null,
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "ok",
+   "status_hi": "काम कर रहा है",
+   "last_ok_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": null,
+   "error_hi": null,
+   "consecutive_failures": 0,
+   "last_item_count": 2,
+   "total_items": 2,
+   "active_url": "https://alpha.test/up.xml"
+  },
+  {
+   "id": "beta_up",
+   "name": "Beta Samachar",
+   "name_hi": "बीटा समाचार",
+   "kind": "rss",
+   "via": null,
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "ok",
+   "status_hi": "काम कर रहा है",
+   "last_ok_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": null,
+   "error_hi": null,
+   "consecutive_failures": 0,
+   "last_item_count": 1,
+   "total_items": 1,
+   "active_url": "https://beta.test/up.xml"
+  },
+  {
+   "id": "gamma_nat",
+   "name": "Gamma National",
+   "name_hi": "गामा नेशनल",
+   "kind": "rss",
+   "via": null,
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "ok",
+   "status_hi": "काम कर रहा है",
+   "last_ok_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": null,
+   "error_hi": null,
+   "consecutive_failures": 0,
+   "last_item_count": 2,
+   "total_items": 1,
+   "active_url": "https://gamma.test/national.xml"
+  },
+  {
+   "id": "delta_down",
+   "name": "Delta",
+   "name_hi": "डेल्टा",
+   "kind": "rss",
+   "via": null,
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "error",
+   "status_hi": "त्रुटि",
+   "last_ok_at": null,
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": "HTTP 503",
+   "error_hi": "HTTP 503",
+   "consecutive_failures": 1,
+   "last_item_count": 0,
+   "total_items": 0,
+   "active_url": null
+  },
+  {
+   "id": "nofeed",
+   "name": "No Feed",
+   "name_hi": "नो फ़ीड",
+   "kind": "rss",
+   "via": null,
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "unavailable",
+   "status_hi": "उपलब्ध नहीं",
+   "last_ok_at": null,
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": "no_public_feed",
+   "error_hi": "इस प्रकाशक की कोई सार्वजनिक फ़ीड अभी नहीं मिली",
+   "consecutive_failures": 1,
+   "last_item_count": 0,
+   "total_items": 0,
+   "active_url": null
+  },
+  {
+   "id": "gn_test",
+   "name": "Google test",
+   "name_hi": "गूगल टेस्ट",
+   "kind": "google_news",
+   "via": "Google News",
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "ok",
+   "status_hi": "काम कर रहा है",
+   "last_ok_at": "2026-10-13T08:14:44Z",
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": null,
+   "error_hi": null,
+   "consecutive_failures": 0,
+   "last_item_count": 1,
+   "total_items": 0,
+   "active_url": "https://news.google.com/rss/search?q=%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi"
+  },
+  {
+   "id": "x_test",
+   "name": "X test",
+   "name_hi": "एक्स टेस्ट",
+   "kind": "x",
+   "via": null,
+   "enabled": true,
+   "min_interval": 240,
+   "note": null,
+   "status": "unavailable",
+   "status_hi": "उपलब्ध नहीं",
+   "last_ok_at": null,
+   "last_attempt_at": "2026-10-13T08:14:44Z",
+   "error": "x_token_missing",
+   "error_hi": "X API कुंजी सेट नहीं है, इसलिए X पोस्ट नहीं आ रहीं",
+   "consecutive_failures": 1,
+   "last_item_count": 0,
+   "total_items": 0,
+   "active_url": null
+  }
+ ],
+ "entities": {
+  "leaders": [
+   {
+    "id": "yogi",
+    "name_hi": "योगी आदित्यनाथ",
+    "name": "Yogi Adityanath",
+    "party": "bjp",
+    "role_hi": "मुख्यमंत्री"
+   },
+   {
+    "id": "akhilesh",
+    "name_hi": "अखिलेश यादव",
+    "name": "Akhilesh Yadav",
+    "party": "sp",
+    "role_hi": "सपा अध्यक्ष"
+   },
+   {
+    "id": "mayawati",
+    "name_hi": "मायावती",
+    "name": "Mayawati",
+    "party": "bsp",
+    "role_hi": "बसपा प्रमुख"
+   },
+   {
+    "id": "op_rajbhar",
+    "name_hi": "ओम प्रकाश राजभर",
+    "name": "Om Prakash Rajbhar",
+    "party": "sbsp",
+    "role_hi": "सुभासपा प्रमुख"
+   },
+   {
+    "id": "keshav_maurya",
+    "name_hi": "केशव प्रसाद मौर्य",
+    "name": "Keshav Prasad Maurya",
+    "party": "bjp",
+    "role_hi": "उपमुख्यमंत्री"
+   },
+   {
+    "id": "brajesh_pathak",
+    "name_hi": "ब्रजेश पाठक",
+    "name": "Brajesh Pathak",
+    "party": "bjp",
+    "role_hi": "उपमुख्यमंत्री"
+   },
+   {
+    "id": "dimple",
+    "name_hi": "डिंपल यादव",
+    "name": "Dimple Yadav",
+    "party": "sp",
+    "role_hi": "सांसद"
+   },
+   {
+    "id": "shivpal",
+    "name_hi": "शिवपाल सिंह यादव",
+    "name": "Shivpal Singh Yadav",
+    "party": "sp",
+    "role_hi": "सपा नेता"
+   },
+   {
+    "id": "jayant",
+    "name_hi": "जयंत चौधरी",
+    "name": "Jayant Chaudhary",
+    "party": "rld",
+    "role_hi": "रालोद प्रमुख"
+   },
+   {
+    "id": "sanjay_nishad",
+    "name_hi": "संजय निषाद",
+    "name": "Sanjay Nishad",
+    "party": "nishad",
+    "role_hi": "निषाद पार्टी प्रमुख"
+   },
+   {
+    "id": "anupriya",
+    "name_hi": "अनुप्रिया पटेल",
+    "name": "Anupriya Patel",
+    "party": "apnadal_s",
+    "role_hi": "अपना दल (एस) प्रमुख"
+   },
+   {
+    "id": "chandrashekhar",
+    "name_hi": "चंद्रशेखर आजाद",
+    "name": "Chandrashekhar Azad",
+    "party": "asp",
+    "role_hi": "आजाद समाज पार्टी प्रमुख"
+   },
+   {
+    "id": "ajay_rai",
+    "name_hi": "अजय राय",
+    "name": "Ajay Rai",
+    "party": "inc",
+    "role_hi": "कांग्रेस नेता"
+   },
+   {
+    "id": "azam_khan",
+    "name_hi": "आजम खान",
+    "name": "Azam Khan",
+    "party": "sp",
+    "role_hi": "सपा नेता"
+   },
+   {
+    "id": "pankaj_chaudhary",
+    "name_hi": "पंकज चौधरी",
+    "name": "Pankaj Chaudhary",
+    "party": "bjp",
+    "role_hi": "भाजपा नेता"
+   },
+   {
+    "id": "akash_anand",
+    "name_hi": "आकाश आनंद",
+    "name": "Akash Anand",
+    "party": "bsp",
+    "role_hi": "बसपा नेता"
+   },
+   {
+    "id": "swami_prasad",
+    "name_hi": "स्वामी प्रसाद मौर्य",
+    "name": "Swami Prasad Maurya",
+    "party": "other",
+    "role_hi": "नेता"
+   },
+   {
+    "id": "avdhesh_prasad",
+    "name_hi": "अवधेश प्रसाद",
+    "name": "Awadhesh Prasad",
+    "party": "sp",
+    "role_hi": "सांसद, फैजाबाद"
+   }
+  ],
+  "figures": [
+   {
+    "id": "raja_bhaiya",
+    "name_hi": "रघुराज प्रताप सिंह 'राजा भैया'",
+    "name": "Raghuraj Pratap Singh (Raja Bhaiya)",
+    "area_hi": "कुंडा, प्रतापगढ़"
+   },
+   {
+    "id": "dhananjay_singh",
+    "name_hi": "धनंजय सिंह",
+    "name": "Dhananjay Singh",
+    "area_hi": "जौनपुर"
+   },
+   {
+    "id": "brijesh_singh",
+    "name_hi": "बृजेश सिंह",
+    "name": "Brijesh Singh",
+    "area_hi": "वाराणसी"
+   },
+   {
+    "id": "brij_bhushan",
+    "name_hi": "बृजभूषण शरण सिंह",
+    "name": "Brij Bhushan Sharan Singh",
+    "area_hi": "कैसरगंज, गोंडा"
+   },
+   {
+    "id": "afzal_ansari",
+    "name_hi": "अफजाल अंसारी",
+    "name": "Afzal Ansari",
+    "area_hi": "गाजीपुर"
+   },
+   {
+    "id": "abbas_ansari",
+    "name_hi": "अब्बास अंसारी",
+    "name": "Abbas Ansari",
+    "area_hi": "मऊ"
+   },
+   {
+    "id": "abhay_singh",
+    "name_hi": "अभय सिंह",
+    "name": "Abhay Singh",
+    "area_hi": "गोसाईगंज, अयोध्या"
+   },
+   {
+    "id": "amarmani",
+    "name_hi": "अमरमणि त्रिपाठी",
+    "name": "Amarmani Tripathi",
+    "area_hi": "महराजगंज"
+   },
+   {
+    "id": "vijay_mishra",
+    "name_hi": "विजय मिश्रा",
+    "name": "Vijay Mishra",
+    "area_hi": "भदोही"
+   }
+  ],
+  "parties": [
+   {
+    "id": "bjp",
+    "name_hi": "भाजपा"
+   },
+   {
+    "id": "sp",
+    "name_hi": "सपा"
+   },
+   {
+    "id": "bsp",
+    "name_hi": "बसपा"
+   },
+   {
+    "id": "inc",
+    "name_hi": "कांग्रेस"
+   },
+   {
+    "id": "rld",
+    "name_hi": "रालोद"
+   },
+   {
+    "id": "sbsp",
+    "name_hi": "सुभासपा"
+   },
+   {
+    "id": "apnadal_s",
+    "name_hi": "अपना दल (एस)"
+   },
+   {
+    "id": "nishad",
+    "name_hi": "निषाद पार्टी"
+   },
+   {
+    "id": "asp",
+    "name_hi": "आजाद समाज पार्टी"
+   },
+   {
+    "id": "aap",
+    "name_hi": "आप"
+   }
+  ],
+  "districts": [
+   {
+    "id": "agra",
+    "name_hi": "आगरा"
+   },
+   {
+    "id": "aligarh",
+    "name_hi": "अलीगढ़"
+   },
+   {
+    "id": "ambedkar_nagar",
+    "name_hi": "अंबेडकर नगर"
+   },
+   {
+    "id": "amethi",
+    "name_hi": "अमेठी",
+    "key": true
+   },
+   {
+    "id": "amroha",
+    "name_hi": "अमरोहा"
+   },
+   {
+    "id": "auraiya",
+    "name_hi": "औरैया"
+   },
+   {
+    "id": "ayodhya",
+    "name_hi": "अयोध्या",
+    "key": true
+   },
+   {
+    "id": "azamgarh",
+    "name_hi": "आजमगढ़",
+    "key": true
+   },
+   {
+    "id": "baghpat",
+    "name_hi": "बागपत",
+    "key": true
+   },
+   {
+    "id": "bahraich",
+    "name_hi": "बहराइच"
+   },
+   {
+    "id": "ballia",
+    "name_hi": "बलिया",
+    "key": true
+   },
+   {
+    "id": "balrampur",
+    "name_hi": "बलरामपुर"
+   },
+   {
+    "id": "banda",
+    "name_hi": "बांदा"
+   },
+   {
+    "id": "barabanki",
+    "name_hi": "बाराबंकी"
+   },
+   {
+    "id": "bareilly",
+    "name_hi": "बरेली"
+   },
+   {
+    "id": "basti",
+    "name_hi": "बस्ती"
+   },
+   {
+    "id": "bhadohi",
+    "name_hi": "भदोही"
+   },
+   {
+    "id": "bijnor",
+    "name_hi": "बिजनौर"
+   },
+   {
+    "id": "budaun",
+    "name_hi": "बदायूं"
+   },
+   {
+    "id": "bulandshahr",
+    "name_hi": "बुलंदशहर"
+   },
+   {
+    "id": "chandauli",
+    "name_hi": "चंदौली"
+   },
+   {
+    "id": "chitrakoot",
+    "name_hi": "चित्रकूट"
+   },
+   {
+    "id": "deoria",
+    "name_hi": "देवरिया"
+   },
+   {
+    "id": "etah",
+    "name_hi": "एटा"
+   },
+   {
+    "id": "etawah",
+    "name_hi": "इटावा"
+   },
+   {
+    "id": "farrukhabad",
+    "name_hi": "फर्रुखाबाद"
+   },
+   {
+    "id": "fatehpur",
+    "name_hi": "फतेहपुर"
+   },
+   {
+    "id": "firozabad",
+    "name_hi": "फिरोजाबाद"
+   },
+   {
+    "id": "gautam_buddh_nagar",
+    "name_hi": "गौतमबुद्ध नगर"
+   },
+   {
+    "id": "ghaziabad",
+    "name_hi": "गाजियाबाद"
+   },
+   {
+    "id": "ghazipur",
+    "name_hi": "गाजीपुर",
+    "key": true
+   },
+   {
+    "id": "gonda",
+    "name_hi": "गोंडा"
+   },
+   {
+    "id": "gorakhpur",
+    "name_hi": "गोरखपुर",
+    "key": true
+   },
+   {
+    "id": "hamirpur",
+    "name_hi": "हमीरपुर"
+   },
+   {
+    "id": "hapur",
+    "name_hi": "हापुड़"
+   },
+   {
+    "id": "hardoi",
+    "name_hi": "हरदोई"
+   },
+   {
+    "id": "hathras",
+    "name_hi": "हाथरस"
+   },
+   {
+    "id": "jalaun",
+    "name_hi": "जालौन"
+   },
+   {
+    "id": "jaunpur",
+    "name_hi": "जौनपुर",
+    "key": true
+   },
+   {
+    "id": "jhansi",
+    "name_hi": "झांसी"
+   },
+   {
+    "id": "kannauj",
+    "name_hi": "कन्नौज",
+    "key": true
+   },
+   {
+    "id": "kanpur_dehat",
+    "name_hi": "कानपुर देहात"
+   },
+   {
+    "id": "kanpur_nagar",
+    "name_hi": "कानपुर"
+   },
+   {
+    "id": "kasganj",
+    "name_hi": "कासगंज"
+   },
+   {
+    "id": "kaushambi",
+    "name_hi": "कौशांबी"
+   },
+   {
+    "id": "kushinagar",
+    "name_hi": "कुशीनगर"
+   },
+   {
+    "id": "lakhimpur_kheri",
+    "name_hi": "लखीमपुर खीरी"
+   },
+   {
+    "id": "lalitpur",
+    "name_hi": "ललितपुर"
+   },
+   {
+    "id": "lucknow",
+    "name_hi": "लखनऊ",
+    "key": true
+   },
+   {
+    "id": "maharajganj",
+    "name_hi": "महराजगंज"
+   },
+   {
+    "id": "mahoba",
+    "name_hi": "महोबा"
+   },
+   {
+    "id": "mainpuri",
+    "name_hi": "मैनपुरी",
+    "key": true
+   },
+   {
+    "id": "mathura",
+    "name_hi": "मथुरा"
+   },
+   {
+    "id": "mau",
+    "name_hi": "मऊ",
+    "key": true
+   },
+   {
+    "id": "meerut",
+    "name_hi": "मेरठ",
+    "key": true
+   },
+   {
+    "id": "mirzapur",
+    "name_hi": "मिर्जापुर"
+   },
+   {
+    "id": "moradabad",
+    "name_hi": "मुरादाबाद",
+    "key": true
+   },
+   {
+    "id": "muzaffarnagar",
+    "name_hi": "मुजफ्फरनगर",
+    "key": true
+   },
+   {
+    "id": "pilibhit",
+    "name_hi": "पीलीभीत"
+   },
+   {
+    "id": "pratapgarh",
+    "name_hi": "प्रतापगढ़",
+    "key": true
+   },
+   {
+    "id": "prayagraj",
+    "name_hi": "प्रयागराज",
+    "key": true
+   },
+   {
+    "id": "rae_bareli",
+    "name_hi": "रायबरेली",
+    "key": true
+   },
+   {
+    "id": "rampur",
+    "name_hi": "रामपुर",
+    "key": true
+   },
+   {
+    "id": "saharanpur",
+    "name_hi": "सहारनपुर",
+    "key": true
+   },
+   {
+    "id": "sambhal",
+    "name_hi": "संभल",
+    "key": true
+   },
+   {
+    "id": "sant_kabir_nagar",
+    "name_hi": "संत कबीर नगर"
+   },
+   {
+    "id": "shahjahanpur",
+    "name_hi": "शाहजहांपुर"
+   },
+   {
+    "id": "shamli",
+    "name_hi": "शामली"
+   },
+   {
+    "id": "shravasti",
+    "name_hi": "श्रावस्ती"
+   },
+   {
+    "id": "siddharthnagar",
+    "name_hi": "सिद्धार्थनगर"
+   },
+   {
+    "id": "sitapur",
+    "name_hi": "सीतापुर"
+   },
+   {
+    "id": "sonbhadra",
+    "name_hi": "सोनभद्र"
+   },
+   {
+    "id": "sultanpur",
+    "name_hi": "सुल्तानपुर"
+   },
+   {
+    "id": "unnao",
+    "name_hi": "उन्नाव"
+   },
+   {
+    "id": "varanasi",
+    "name_hi": "वाराणसी",
+    "key": true
+   }
+  ],
+  "seats": [
+   {
+    "id": "kairana",
+    "name_hi": "कैराना"
+   },
+   {
+    "id": "nagina",
+    "name_hi": "नगीना"
+   },
+   {
+    "id": "kaiserganj",
+    "name_hi": "कैसरगंज"
+   },
+   {
+    "id": "phulpur",
+    "name_hi": "फूलपुर"
+   },
+   {
+    "id": "kunda",
+    "name_hi": "कुंडा"
+   },
+   {
+    "id": "malhani",
+    "name_hi": "मल्हनी"
+   },
+   {
+    "id": "karhal",
+    "name_hi": "करहल"
+   },
+   {
+    "id": "jaswantnagar",
+    "name_hi": "जसवंतनगर"
+   },
+   {
+    "id": "mohanlalganj",
+    "name_hi": "मोहनलालगंज"
+   },
+   {
+    "id": "salempur",
+    "name_hi": "सलेमपुर"
+   },
+   {
+    "id": "robertsganj",
+    "name_hi": "रॉबर्ट्सगंज"
+   },
+   {
+    "id": "domariyaganj",
+    "name_hi": "डुमरियागंज"
+   },
+   {
+    "id": "milkipur",
+    "name_hi": "मिल्कीपुर"
+   },
+   {
+    "id": "kundarki",
+    "name_hi": "कुंदरकी"
+   },
+   {
+    "id": "sisamau",
+    "name_hi": "सीसामऊ"
+   }
+  ]
+ },
+ "categories": {
+  "politics": "राजनीति",
+  "controversy": "राजनीतिक विवाद",
+  "election": "चुनाव",
+  "legal": "कोर्ट-कानून",
+  "administration": "प्रशासन",
+  "protest": "विरोध-प्रदर्शन",
+  "crime": "अपराध",
+  "other": "अन्य"
+ },
+ "stories": [
+  {
+   "id": "09f58821f6f1dbbc",
+   "title": "लखनऊ में बारिश का अलर्ट",
+   "summary": null,
+   "summary_origin": null,
+   "headline_only": true,
+   "kind": "article",
+   "sort_at": "2026-10-13T08:14:44Z",
+   "first_seen_at": "2026-10-13T08:14:44Z",
+   "last_report_at": "2026-10-13T08:14:44Z",
+   "changed_at": "2026-10-13T08:14:44Z",
+   "categories": [
+    "other"
+   ],
+   "category_names": [
+    "अन्य"
+   ],
+   "entities": {
+    "leaders": [],
+    "figures": [],
+    "parties": [],
+    "districts": [
+     "lucknow"
+    ],
+    "seats": []
+   },
+   "breaking": false,
+   "reasons": [],
+   "labels": [],
+   "legal_status": [],
+   "statement": false,
+   "statement_type": null,
+   "corroboration": "single",
+   "publisher_count": 1,
+   "reports": [
+    {
+     "id": "09f58821f6f1dbbc",
+     "source_id": "alpha_up",
+     "source_name": "अल्फा टाइम्स",
+     "publisher": "अल्फा टाइम्स",
+     "via": null,
+     "kind": "article",
+     "url": "https://alpha.test/a2",
+     "title": "लखनऊ में बारिश का अलर्ट",
+     "summary": null,
+     "summary_origin": null,
+     "author": null,
+     "handle": null,
+     "post_context": null,
+     "published_at": null,
+     "published_raw": null,
+     "tz_assumed": false,
+     "published_suspect": false,
+     "updated_at": null,
+     "first_seen_at": "2026-10-13T08:14:44Z"
+    }
+   ]
+  },
+  {
+   "id": "de6164af023940e5",
+   "title": "उत्तर प्रदेश में नई खनन नीति को मंजूरी",
+   "summary": null,
+   "summary_origin": null,
+   "headline_only": true,
+   "kind": "article",
+   "sort_at": "2026-10-13T08:11:43Z",
+   "first_seen_at": "2026-10-13T08:14:44Z",
+   "last_report_at": "2026-10-13T08:14:44Z",
+   "changed_at": "2026-10-13T08:14:44Z",
+   "categories": [
+    "other"
+   ],
+   "category_names": [
+    "अन्य"
+   ],
+   "entities": {
+    "leaders": [],
+    "figures": [],
+    "parties": [],
+    "districts": [],
+    "seats": []
+   },
+   "breaking": false,
+   "reasons": [],
+   "labels": [],
+   "legal_status": [],
+   "statement": false,
+   "statement_type": null,
+   "corroboration": "single",
+   "publisher_count": 1,
+   "reports": [
+    {
+     "id": "de6164af023940e5",
+     "source_id": "gamma_nat",
+     "source_name": "गामा नेशनल",
+     "publisher": "गामा नेशनल",
+     "via": null,
+     "kind": "article",
+     "url": "https://gamma.test/g2",
+     "title": "उत्तर प्रदेश में नई खनन नीति को मंजूरी",
+     "summary": null,
+     "summary_origin": null,
+     "author": null,
+     "handle": null,
+     "post_context": null,
+     "published_at": "2026-10-13T08:11:43Z",
+     "published_raw": "Tue, 13 Oct 2026 08:11:43 GMT",
+     "tz_assumed": false,
+     "published_suspect": false,
+     "updated_at": null,
+     "first_seen_at": "2026-10-13T08:14:44Z"
+    }
+   ]
+  },
+  {
+   "id": "34e85a4432b5bd31",
+   "title": "आजमगढ़ में सपा विधायक ने दिया इस्तीफा",
+   "summary": "आजमगढ़ के सपा विधायक ने पार्टी नेतृत्व को इस्तीफा भेजा। समर्थकों में चर्चा तेज है।",
+   "summary_origin": "publisher",
+   "headline_only": false,
+   "kind": "article",
+   "sort_at": "2026-10-13T07:54:43Z",
+   "first_seen_at": "2026-10-13T08:14:44Z",
+   "last_report_at": "2026-10-13T08:14:44Z",
+   "changed_at": "2026-10-13T08:14:44Z",
+   "categories": [
+    "politics"
+   ],
+   "category_names": [
+    "राजनीति"
+   ],
+   "entities": {
+    "leaders": [],
+    "figures": [],
+    "parties": [
+     "sp"
+    ],
+    "districts": [
+     "azamgarh"
+    ],
+    "seats": []
+   },
+   "breaking": true,
+   "reasons": [
+    "इस्तीफा"
+   ],
+   "labels": [
+    "एकाधिक स्रोतों से रिपोर्ट"
+   ],
+   "legal_status": [],
+   "statement": true,
+   "statement_type": "बयान/राय",
+   "corroboration": "multi",
+   "publisher_count": 2,
+   "reports": [
+    {
+     "id": "34e85a4432b5bd31",
+     "source_id": "alpha_up",
+     "source_name": "अल्फा टाइम्स",
+     "publisher": "अल्फा टाइम्स",
+     "via": null,
+     "kind": "article",
+     "url": "https://alpha.test/a1",
+     "title": "आजमगढ़ में सपा विधायक ने दिया इस्तीफा",
+     "summary": "आजमगढ़ के सपा विधायक ने पार्टी नेतृत्व को इस्तीफा भेजा। समर्थकों में चर्चा तेज है।",
+     "summary_origin": "publisher",
+     "author": null,
+     "handle": null,
+     "post_context": null,
+     "published_at": "2026-10-13T07:54:43Z",
+     "published_raw": "Tue, 13 Oct 2026 07:54:43 GMT",
+     "tz_assumed": false,
+     "published_suspect": false,
+     "updated_at": null,
+     "first_seen_at": "2026-10-13T08:14:44Z"
+    },
+    {
+     "id": "000cf57be38c609f",
+     "source_id": "beta_up",
+     "source_name": "बीटा समाचार",
+     "publisher": "बीटा समाचार",
+     "via": null,
+     "kind": "article",
+     "url": "https://beta.test/b1",
+     "title": "आजमगढ़: सपा विधायक का इस्तीफा, पार्टी को झटका",
+     "summary": null,
+     "summary_origin": null,
+     "author": null,
+     "handle": null,
+     "post_context": null,
+     "published_at": "2026-10-13T08:09:43Z",
+     "published_raw": "Tue, 13 Oct 2026 08:09:43 GMT",
+     "tz_assumed": false,
+     "published_suspect": false,
+     "updated_at": null,
+     "first_seen_at": "2026-10-13T08:14:44Z"
+    }
+   ]
+  }
+ ],
+ "_note": "SYNTHETIC TEST DATA generated by backend tests (tests/test_pipeline.py); not real news."
+}
