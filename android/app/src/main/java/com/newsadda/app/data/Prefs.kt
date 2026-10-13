@@ -16,7 +16,8 @@ data class Settings(
     val updateCheckHours: Int = 3,
     val autoDownloadUpdates: Boolean = true,
     val textScale: Float = 1.0f,
-    val politicsOnlyHome: Boolean = false,
+    /** Home opens on UP politics; "All UP news" is one tap away. */
+    val politicsOnlyHome: Boolean = true,
     /** "en" or "hi": interface language only; news stays in Hindi. */
     val language: String = "en",
     /** Phone also reads the fastest publisher feeds directly on every refresh. */
@@ -57,7 +58,7 @@ object Prefs {
             updateCheckHours = p.getInt("update_hours", 3).takeIf { it in UPDATE_OPTIONS } ?: 3,
             autoDownloadUpdates = p.getBoolean("auto_download", true),
             textScale = p.getFloat("text_scale", 1.0f),
-            politicsOnlyHome = p.getBoolean("politics_only", false),
+            politicsOnlyHome = p.getBoolean("politics_only", true),
             language = if (p.getString("lang", "en") == "hi") "hi" else "en",
             liveWire = p.getBoolean("live_wire", true),
         )

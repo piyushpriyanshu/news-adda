@@ -72,4 +72,16 @@ class LiveWireTest {
         assertFalse(FeedLogic.canUseDelta(withStories, now - 50 * 60_000, now))
         assertFalse(FeedLogic.canUseDelta(Cache(), now - 60_000, now))
     }
+
+    @Test
+    fun liveWireKeepsOnlyHindiAndTrustedGooglePublishers() {
+        val items = LiveWire.parse(googleRss, LiveFeed("g", "Google", "", "news.google.com", "https://news.google.com/rss/search?q=x"), now)
+        assertTrue(LiveWire.credible(items, setOf("exampletimes")).size == 1)
+        assertTrue(LiveWire.credible(items, setOf("othertimes")).isEmpty())
+        assertEquals("uptak", FeedLogic.publisherKey("UP Tak"))
+        assertEquals("uptak", FeedLogic.publisherKey("www.uptak.in"))
+        assertEquals(FeedLogic.publisherKey("अमर उजाला"), FeedLogic.publisherKey("अमर  उजाला"))
+        assertTrue(FeedLogic.hindiShare("अखिलेश यादव का बयान") > 0.9)
+        assertTrue(FeedLogic.hindiShare("Akhilesh Yadav statement") < 0.1)
+    }
 }

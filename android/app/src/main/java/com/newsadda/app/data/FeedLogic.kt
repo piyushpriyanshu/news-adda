@@ -46,11 +46,27 @@ object FeedLogic {
             categories = feed.categories.ifEmpty { cache.categories },
             xAvailable = feed.xAvailable,
             liveWire = feed.liveWire.ifEmpty { cache.liveWire },
+            trustedKeys = feed.trustedKeys.ifEmpty { cache.trustedKeys },
             generatedAt = feed.generatedAt ?: cache.generatedAt,
             cursor = feed.cursor ?: cache.cursor,
             supportsSince = feed.supportsSince,
             localSeen = seen,
         ) to fresh
+    }
+
+    /** Same publisher key as the backend: "UP Tak", "UPTak", "www.uptak.in" -> "uptak". */
+    fun publisherKey(name: String): String {
+        var n = normalize(name.substringBefore('(')).trim()
+        n = n.removePrefix("www.")
+        n = n.replace(Regex("\\.(com|in|co\\.in|net|org)$"), "")
+        return n.filter { it.isLetterOrDigit() || it in '\u0900'..'\u097F' }
+    }
+
+    /** Share of letters that are Devanagari; the app shows Hindi news only. */
+    fun hindiShare(text: String): Double {
+        val letters = text.filter { it.isLetter() || it in '\u0900'..'\u097F' }
+        if (letters.isEmpty()) return 0.0
+        return letters.count { it in '\u0900'..'\u097F' }.toDouble() / letters.length
     }
 
     /** Fold nukta/chandrabindu and case so "आज़ाद" finds "आजाद". */

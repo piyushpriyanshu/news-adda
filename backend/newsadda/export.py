@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from .classify import CATEGORY_NAMES
-from .pipeline import Pipeline, publisher_domain, publisher_key
+from .pipeline import Pipeline, _base_name, _names, publisher_domain, publisher_key
 from .textutil import strip_html
 from .timeutil import from_iso, iso, utcnow
 
@@ -33,6 +33,15 @@ ERROR_TEXT = {
     "x_token_missing": "X API key not set, so X posts are not collected",
     "timeout": "Timed out",
 }
+
+
+def trusted_keys(pipeline: Pipeline) -> set[str]:
+    keys = set(getattr(pipeline, "trusted", set()))
+    for s in pipeline.sources:
+        if s.kind == "rss":
+            keys |= _names(s)
+    keys.discard("")
+    return keys
 
 
 def _report(it: dict, pipeline: Pipeline) -> dict:
@@ -185,6 +194,8 @@ def build_feed(pipeline: Pipeline, since: datetime | None = None, now: datetime 
         "story_count": len(stories),
         "x_available": bool(s.x_bearer_token) and bool(x_src and x_src.enabled),
         "filtered_last_run": getattr(pipeline, "skipped", {}),
+        # Publisher keys the phone accepts for its own Live wire Google News reads.
+        "trusted_keys": sorted(trusted_keys(pipeline)),
         "live_wire": [
             {"id": x.id, "name": x.name, "name_hi": x.name_hi, "domain": x.domain, "url": x.feed_urls[0]}
             for x in pipeline.sources if x.live_wire and x.enabled and x.feed_urls
@@ -224,6 +235,7 @@ def write_feed(pipeline: Pipeline, out_dir: str | Path) -> Path:
     delta = build_delta(feed, now)
     (out / "delta.json").write_bytes(json.dumps(delta, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
     health = {"generated_at": feed["generated_at"], "story_count": feed["story_count"],
-              "filtered_last_run": feed.get("filtered_last_run"), "sources": feed["sources"]}
+              "filtered_last_run": feed.get("filtered_last_run"),
+              "gists_last_run": getattr(pipeline, "gist_stats", {}), "sources": feed["sources"]}
     (out / "health.json").write_text(json.dumps(health, ensure_ascii=False, indent=1), encoding="utf-8")
     return out / "feed.json"

@@ -10,6 +10,7 @@ import logging
 import time
 from dataclasses import dataclass, field
 from datetime import timedelta
+from urllib.parse import urlsplit
 
 import httpx
 
@@ -82,9 +83,17 @@ class Fetcher:
         own = self._client is None
         client = self._client or self._new_client()
         sem = asyncio.Semaphore(self.settings.concurrency)
+        # Politeness: at most a few parallel requests to any one host (many
+        # district feeds share a host; Google News gets the fewest).
+        hosts: dict[str, asyncio.Semaphore] = {}
+
+        def host_sem(src: Source) -> asyncio.Semaphore:
+            urls = src.feed_urls
+            host = urlsplit(urls[0]).netloc if urls else src.id
+            return hosts.setdefault(host, asyncio.Semaphore(2 if host.endswith("news.google.com") else 3))
 
         async def one(src: Source) -> FetchResult:
-            async with sem:
+            async with host_sem(src), sem:
                 try:
                     return await self.fetch_source(client, src, force)
                 except Exception as exc:  # never let one source break the run

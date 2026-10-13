@@ -70,7 +70,7 @@ fun StoryDetailSheet(s: Story, names: Names, saved: Boolean, onSave: () -> Unit,
             Text(s.title, style = MaterialTheme.typography.titleLarge)
             if (s.summary != null) {
                 Text(s.summary, style = MaterialTheme.typography.bodyLarge)
-                Text(if (s.summaryOrigin == "ai") str.summaryAi else str.summaryPublisher,
+                Text(when (s.summaryOrigin) { "ai" -> str.summaryAi; "page" -> str.summaryPage; else -> str.summaryPublisher },
                     style = MaterialTheme.typography.bodySmall, color = c.faint)
             } else {
                 Text(str.headlineOnly, style = MaterialTheme.typography.bodyMedium, color = c.muted)

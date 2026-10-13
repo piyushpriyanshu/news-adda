@@ -149,6 +149,7 @@ data class Str(val hindi: Boolean) {
 
     // ---- story detail
     val summaryPublisher get() = t("Summary: from the publisher's feed", "सारांश: प्रकाशक के फ़ीड विवरण से")
+    val summaryPage get() = t("Summary: the publisher's own description of the article", "सारांश: लेख के बारे में प्रकाशक का अपना विवरण")
     val summaryAi get() = t("Summary: AI condensed the publisher's description into Hindi", "सारांश: प्रकाशक के विवरण से AI द्वारा हिंदी में संक्षेप")
     val headlineOnly get() = t("Headline only — open the original for details.", "केवल शीर्षक उपलब्ध — पूरी जानकारी के लिए मूल खबर खोलें।")
     val singleSource get() = t("Only one source has reported this so far; no independent confirmation yet.",
@@ -179,7 +180,7 @@ data class Str(val hindi: Boolean) {
 
     // ---- lists
     val allUp get() = t("All UP news", "सभी यूपी खबरें")
-    val politicsOnly get() = t("Politics only", "केवल राजनीति")
+    val politicsOnly get() = t("UP politics", "यूपी राजनीति")
     fun newStories(n: Int) = t("$n new " + pl(n, "story", "stories"), "$n नई खबरें आई हैं")
     val markSeen get() = t("Mark seen", "देख लिया")
     val emptyHome get() = t("No news yet", "अभी कोई खबर नहीं")

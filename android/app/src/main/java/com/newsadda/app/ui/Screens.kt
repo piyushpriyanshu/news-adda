@@ -140,7 +140,7 @@ fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
         item(key = "home-filter") {
             SectionLabel(str.latest)
             ChipRow(
-                listOf("all" to str.allUp, "pol" to str.politicsOnly),
+                listOf("pol" to str.politicsOnly, "all" to str.allUp),
                 if (settings.politicsOnlyHome) "pol" else "all",
             ) { id -> vm.updateSettings { it.copy(politicsOnlyHome = id == "pol") } }
         }

@@ -46,7 +46,7 @@ Publisher icons are the sites' own favicons, fetched by the phone from Google's 
 
 - The app refreshes when opened, when you return to it, every 1–30 minutes while open (5 by default), on pull-down and on **Update now**.
 - Each refresh downloads a small **delta** (stories changed in the last 45 minutes) instead of the whole feed, with a cache-buster so GitHub's CDN cannot serve a stale copy. The full feed is fetched only when the phone's copy is older than 40 minutes.
-- **Live wire**: on every refresh the phone also reads the fastest public feeds itself (Amar Ujala UP, News18 UP, TV9 UP, ABP UP and two Google News UP-politics searches; the list comes from `live_wire: true` in `sources.yaml`). New headlines can therefore appear within minutes of publication even before the backend's next run. They are shown as-is, marked "Direct", not yet grouped or labelled. You can turn this off in Settings.
+- **Live wire**: on every refresh the phone also reads the fastest public feeds itself (Amar Ujala UP, News18 UP, TV9 UP, ABP UP, India TV UP and Google News searches for UP politics, leaders and political rows; the list comes from `live_wire: true` in `sources.yaml`; Google results only from trusted publishers). New headlines can therefore appear within minutes of publication even before the backend's next run. They are shown as-is, marked "Direct", not yet grouped or labelled. You can turn this off in Settings.
 - The backend polls the fastest sources on every run.
 
 ### App sections
@@ -69,18 +69,39 @@ Labels are shown in the interface language (English names below, Hindi in bracke
 
 All labels come from transparent keyword rules (`backend/newsadda/classify.py`), not popularity or ideology. They can be wrong; the reasons are always visible.
 
+## What gets in (scope and credibility)
+
+- **Uttar Pradesh only.** A story from a UP-section feed is kept only if it names UP (state, any of the 75 districts, a tracked seat), a tracked UP leader or regional figure, or a UP party (SP, BSP, SBSP, RLD, Apna Dal (S), Nishad Party, ASP) — or is plainly a state-government/assembly story with no other state or country in it. National feeds (Aaj Tak, NDTV India, Bharat Samachar, The Lallantop) pass only stories with a strong UP signal. National news without a UP leader is dropped.
+- **Hindi only.** Headlines must be at least half Devanagari.
+- **Trusted publishers only.** Google News results are kept only when the original publisher is on the `trusted_publishers` list in `sources.yaml` (established Hindi newspapers, TV channels and agencies) or is one of the direct-feed publishers. Unknown blogs, aggregators and portals are dropped. The phone's Live wire applies the same list.
+- **Politics first.** Home shows UP politics by default (switch with the "UP politics" chip); leaders, seats, bahubali/regional figures, controversies, statements and counter-attacks are tagged and prioritised for gists.
+- Everything filtered is counted in `health.json` (`filtered_last_run`).
+
+### Gists (2–3 lines) and direct links
+
+Many items, especially from Google News, arrive as a headline only. Every run, for up to 40 of the most important new items (breaking first, then stories naming leaders, then other politics), the backend:
+
+1. resolves the Google News link to the **publisher's own article URL**, so "Read more" opens the publisher directly, and
+2. reads that page's own preview description (the `og:description` the publisher writes) as the gist, trimmed to about 300 characters and marked "From the publisher's page".
+
+Text is never rewritten or invented. `robots.txt` is honoured, the step is limited to 45 seconds so it never delays the feed, and if Google starts refusing requests the remaining items are retried next run. When no description exists the card shows the headline only. Results are in `health.json` (`gists_last_run`).
+
 ## Source status (live check, 13 Oct 2026, from GitHub Actions)
+
+95 live feeds, polled every 4–15 minutes by importance (the GitHub run itself is every 5 minutes).
 
 | Publisher | How it is collected | Status |
 |---|---|---|
-| Amar Ujala (UP, Lucknow + 7 district editions) | Official RSS | ✅ UP and Lucknow verified; district feeds added (checked daily) |
-| News18 Hindi (UP) | Official RSS | ✅ verified |
-| TV9 Bharatvarsh (UP) | Official RSS | ✅ verified |
-| ABP News (UP/UK) | Official RSS | ✅ verified |
-| Live Hindustan | RSS (UP feed empty / 503) + Google News | ⚠️ direct feed not usable; covered via Google News |
-| Dainik Bhaskar, UP Tak, Dainik Jagran, Navbharat Times, Aaj Tak, Zee News, Jansatta, The Lallantop, Patrika, ETV Bharat | Google News RSS `site:` searches | ✅ via Google News (no reachable public feed: 404/403/none) |
-| Topic searches: UP politics, leaders, regional figures, elections | Google News RSS | ✅ verified |
+| Amar Ujala — UP, Lucknow and 51 district editions (all political hubs: Varanasi, Gorakhpur, Prayagraj, Ayodhya, Azamgarh, Rampur, Mainpuri, Kannauj, Raebareli, Amethi, Ghazipur, Mau…) | Official RSS | ✅ all verified |
+| News18 Hindi — UP + Lucknow, Varanasi, Kanpur, Meerut, Agra, Ayodhya | Official RSS | ✅ verified |
+| Live Hindustan — Lucknow/UP + Gorakhpur, Ayodhya, Agra, Bareilly, Basti | Official RSS | ✅ verified |
+| TV9 Bharatvarsh (UP), ABP News (UP), India TV (UP) | Official RSS | ✅ verified |
+| Aaj Tak, NDTV India, Bharat Samachar (national; strict UP filter) | Official RSS | ✅ verified |
+| Dainik Bhaskar, UP Tak, Dainik Jagran, Navbharat Times, Aaj Tak UP, Zee News, Jansatta, The Lallantop, Patrika, ETV Bharat | Google News RSS `site:` searches (no reachable public feed: 404/403/none) | ✅ via Google News, with direct links resolved |
+| Targeted searches: UP politics, Yogi Adityanath, Akhilesh Yadav/SP, Mayawati/BSP, allies & opposition, regional figures, bahubali/strongmen, political rows (वार-पलटवार), UP cabinet, elections, panchayat/MLC/bypolls, Lucknow section | Google News RSS | ✅ verified |
 | X (Twitter) posts of leaders | Official X API v2 | ⛔ needs `X_BEARER_TOKEN` (paid X API plan); shown as unavailable until set |
+
+Feeds that were tested and failed (Zee, Patrika, UP Tak, Lallantop, PIB, DD News, Jansatta direct) are covered through Google News. The daily source check re-tests 100+ candidates (`backend/newsadda/data/probes.yaml`).
 
 Current per-source status is always in the app (Settings → News sources) and in `health.json` on the `data` branch. The daily **source check** re-tests every URL and autodiscovers feeds; results are on the `ci-backend` branch (`discovery.txt`).
 

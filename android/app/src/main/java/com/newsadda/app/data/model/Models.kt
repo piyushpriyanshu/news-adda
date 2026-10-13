@@ -16,6 +16,7 @@ data class Feed(
     @SerialName("ai_summaries") val aiSummaries: Boolean = false,
     @SerialName("live_wire") val liveWire: List<LiveFeed> = emptyList(),
     @SerialName("delta_since") val deltaSince: String? = null,
+    @SerialName("trusted_keys") val trustedKeys: List<String> = emptyList(),
     val sources: List<SourceStatus> = emptyList(),
     val entities: Entities = Entities(),
     val categories: Map<String, String> = emptyMap(),
@@ -120,6 +121,7 @@ data class LiveItem(
     val publishedAt: String? = null,
     val seenAt: Long,
     val breakingHint: Boolean = false,
+    val viaGoogle: Boolean = false,
 )
 
 @Serializable
@@ -151,6 +153,7 @@ data class Cache(
     val categories: Map<String, String> = emptyMap(),
     val xAvailable: Boolean = false,
     val liveWire: List<LiveFeed> = emptyList(),
+    val trustedKeys: List<String> = emptyList(),
     val generatedAt: String? = null,
     val cursor: String? = null,
     val supportsSince: Boolean = false,

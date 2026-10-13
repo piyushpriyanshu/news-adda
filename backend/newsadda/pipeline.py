@@ -77,6 +77,7 @@ class Pipeline:
         self.blocked = {_base_name(b) for b in load_blocked_publishers(self.settings.sources_path)}
         self.trusted = {_base_name(t) for t in load_trusted_publishers(self.settings.sources_path)}
         self.skipped = {"not_up": 0, "untrusted": 0, "not_hindi": 0}
+        self.gist_stats: dict = {}
         self.entities = EntityIndex(self.settings.entities_path)
         self.classifier = Classifier(self.entities)
 
@@ -284,12 +285,15 @@ class Pipeline:
             headers={"User-Agent": self.settings.user_agent, "Accept-Language": "hi-IN,hi;q=0.9"},
         )
         try:
-            updates, stats = await enrich_items(batch, client, self.settings.user_agent)
+            updates, stats, attempted = await enrich_items(batch, client, self.settings.user_agent)
         finally:
             if own:
                 await client.aclose()
         stamp = iso(now)
+        self.gist_stats = {**stats, "candidates": len(todo), "budget": len(batch)}
         for it in batch:
+            if it["id"] not in attempted:
+                continue
             data = dict(it["data"])
             data["gist_tried"] = True
             upd = updates.get(it["id"], {})

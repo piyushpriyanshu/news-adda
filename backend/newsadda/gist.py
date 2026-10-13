@@ -91,7 +91,7 @@ class Gister:
         self.ua = user_agent
         self.robots: dict[str, RobotFileParser] = {}
         self.google_blocked = False
-        self.stats = {"resolved": 0, "gists": 0, "robots_blocked": 0, "errors": 0}
+        self.stats = {"resolved": 0, "gists": 0, "robots_blocked": 0, "errors": 0, "google_blocked": False}
 
     async def resolve_google(self, url: str) -> str | None:
         if self.google_blocked:
@@ -106,7 +106,7 @@ class Gister:
         try:
             r = await self.client.get(f"https://news.google.com/rss/articles/{aid}")
             if r.status_code == 429:
-                self.google_blocked = True
+                self._block()
                 return None
             sg = re.search(r'data-n-a-sg="([^"]+)"', r.text)
             ts = re.search(r'data-n-a-ts="([^"]+)"', r.text)
@@ -123,7 +123,7 @@ class Gister:
                 headers={"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
             )
             if r2.status_code == 429:
-                self.google_blocked = True
+                self._block()
                 return None
             body = r2.text.split("\n\n", 1)[1] if "\n\n" in r2.text else r2.text
             data = json.loads(body)[:-2]
@@ -133,6 +133,10 @@ class Gister:
             self.stats["errors"] += 1
             log.debug("google resolve failed: %s", exc)
             return None
+
+    def _block(self) -> None:
+        self.google_blocked = True
+        self.stats["google_blocked"] = True
 
     async def _allowed(self, url: str) -> bool:
         parts = urlsplit(url)
@@ -187,17 +191,39 @@ class Gister:
         return out
 
 
-async def enrich_items(items: list[dict], client: httpx.AsyncClient, user_agent: str, concurrency: int = 4) -> tuple[dict, dict]:
-    """Enrich a prioritised list of items. Returns ({item_id: updates}, stats)."""
+async def enrich_items(items: list[dict], client: httpx.AsyncClient, user_agent: str, concurrency: int = 6,
+                       deadline: float = 45.0) -> tuple[dict, dict, set]:
+    """Enrich a prioritised list of items.
+
+    Returns ({item_id: updates}, stats, attempted_ids). Items not attempted —
+    because the time budget ran out (so the feed is never held back for long)
+    or Google started refusing requests — are left for the next run.
+    """
     g = Gister(client, user_agent)
     sem = asyncio.Semaphore(concurrency)
     results: dict[str, dict] = {}
+    attempted: set[str] = set()
+    loop = asyncio.get_running_loop()
+    stop_at = loop.time() + deadline
 
     async def one(it):
         async with sem:
-            upd = await g.enrich(it)
+            if loop.time() > stop_at:
+                return
+            google = urlsplit(it["url"]).netloc.endswith(GN_HOST)
+            if google and g.google_blocked:
+                return
+            try:
+                upd = await asyncio.wait_for(g.enrich(it), timeout=max(1.0, stop_at - loop.time() + 10))
+            except asyncio.TimeoutError:
+                g.stats["errors"] += 1
+                return
+            if google and g.google_blocked and "resolved_url" not in upd:
+                return  # refused, not failed: try again next run
+            attempted.add(it["id"])
             if upd:
                 results[it["id"]] = upd
 
     await asyncio.gather(*(one(it) for it in items))
-    return results, g.stats
+    g.stats["attempted"] = len(attempted)
+    return results, g.stats, attempted

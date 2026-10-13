@@ -130,7 +130,7 @@ object NewsRepository {
                 }
             }
             if (settings.liveWire) {
-                runCatching { LiveWire.refresh(_state.value.cache.liveWire, _state.value.cache.stories, now) }
+                runCatching { LiveWire.refresh(_state.value.cache.liveWire, _state.value.cache.stories, now, _state.value.cache.trustedKeys) }
                     .onFailure { Log.w(TAG, "live wire: $it") }
             }
             if (_state.value.cache.stories.isEmpty()) emptySet() else fresh

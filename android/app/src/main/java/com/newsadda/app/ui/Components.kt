@@ -260,7 +260,7 @@ fun StoryCard(
                 Text(s.title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
                 if (s.summary != null) {
                     Text(s.summary, style = MaterialTheme.typography.bodyMedium, color = c.muted,
-                        maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        maxLines = 3, overflow = TextOverflow.Ellipsis)
                 }
                 val chips = names.people(s)
                 if (chips.isNotEmpty()) {

@@ -23,7 +23,7 @@ class Settings:
         "NewsAddaBot/1.0 (+https://github.com/piyushpriyanshu/news-adda; Hindi UP news headline aggregator)",
     ))
     http_timeout: float = field(default_factory=lambda: float(_env("NEWSADDA_HTTP_TIMEOUT", "20")))
-    concurrency: int = field(default_factory=lambda: int(_env("NEWSADDA_CONCURRENCY", "6")))
+    concurrency: int = field(default_factory=lambda: int(_env("NEWSADDA_CONCURRENCY", "12")))
     feed_hours: int = field(default_factory=lambda: int(_env("NEWSADDA_FEED_HOURS", "36")))
     feed_limit: int = field(default_factory=lambda: int(_env("NEWSADDA_FEED_LIMIT", "1200")))
     keep_days: int = field(default_factory=lambda: int(_env("NEWSADDA_KEEP_DAYS", "7")))

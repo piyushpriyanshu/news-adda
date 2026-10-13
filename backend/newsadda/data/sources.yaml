@@ -108,33 +108,105 @@ sources:
       - https://www.abplive.com/news/states/up-uk/feed
       - https://www.abplive.com/states/up-uk/feed
 
-  # Amar Ujala district editions (key political districts).
-  - {id: amarujala_varanasi, name: Amar Ujala Varanasi, name_hi: अमर उजाला वाराणसी, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/varanasi.xml]}
-  - {id: amarujala_gorakhpur, name: Amar Ujala Gorakhpur, name_hi: अमर उजाला गोरखपुर, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/gorakhpur.xml]}
-  - {id: amarujala_prayagraj, name: Amar Ujala Prayagraj, name_hi: अमर उजाला प्रयागराज, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/prayagraj.xml, https://www.amarujala.com/rss/allahabad.xml]}
-  - {id: amarujala_ayodhya, name: Amar Ujala Ayodhya, name_hi: अमर उजाला अयोध्या, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/ayodhya.xml, https://www.amarujala.com/rss/faizabad.xml]}
-  - {id: amarujala_azamgarh, name: Amar Ujala Azamgarh, name_hi: अमर उजाला आजमगढ़, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/azamgarh.xml]}
-  - {id: amarujala_meerut, name: Amar Ujala Meerut, name_hi: अमर उजाला मेरठ, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/meerut.xml]}
-  - {id: amarujala_kanpur, name: Amar Ujala Kanpur, name_hi: अमर उजाला कानपुर, kind: rss, min_interval: 600,
-     urls: [https://www.amarujala.com/rss/kanpur.xml]}
+  # Amar Ujala district editions (all verified live). Key political districts every 10 min, others every 15.
+  - {id: amarujala_varanasi, name: Amar Ujala Varanasi, name_hi: अमर उजाला वाराणसी, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/varanasi.xml]}
+  - {id: amarujala_gorakhpur, name: Amar Ujala Gorakhpur, name_hi: अमर उजाला गोरखपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/gorakhpur.xml]}
+  - {id: amarujala_prayagraj, name: Amar Ujala Prayagraj, name_hi: अमर उजाला प्रयागराज, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/prayagraj.xml, https://www.amarujala.com/rss/allahabad.xml]}
+  - {id: amarujala_ayodhya, name: Amar Ujala Ayodhya, name_hi: अमर उजाला अयोध्या, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/ayodhya.xml, https://www.amarujala.com/rss/faizabad.xml]}
+  - {id: amarujala_azamgarh, name: Amar Ujala Azamgarh, name_hi: अमर उजाला आजमगढ़, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/azamgarh.xml]}
+  - {id: amarujala_meerut, name: Amar Ujala Meerut, name_hi: अमर उजाला मेरठ, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/meerut.xml]}
+  - {id: amarujala_kanpur, name: Amar Ujala Kanpur, name_hi: अमर उजाला कानपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/kanpur.xml]}
+  - {id: amarujala_raebareli, name: Amar Ujala Raebareli, name_hi: अमर उजाला रायबरेली, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/raebareli.xml]}
+  - {id: amarujala_amethi, name: Amar Ujala Amethi, name_hi: अमर उजाला अमेठी, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/amethi.xml]}
+  - {id: amarujala_mainpuri, name: Amar Ujala Mainpuri, name_hi: अमर उजाला मैनपुरी, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/mainpuri.xml]}
+  - {id: amarujala_kannauj, name: Amar Ujala Kannauj, name_hi: अमर उजाला कन्नौज, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/kannauj.xml]}
+  - {id: amarujala_etawah, name: Amar Ujala Etawah, name_hi: अमर उजाला इटावा, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/etawah.xml]}
+  - {id: amarujala_rampur, name: Amar Ujala Rampur, name_hi: अमर उजाला रामपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/rampur.xml]}
+  - {id: amarujala_moradabad, name: Amar Ujala Moradabad, name_hi: अमर उजाला मुरादाबाद, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/moradabad.xml]}
+  - {id: amarujala_saharanpur, name: Amar Ujala Saharanpur, name_hi: अमर उजाला सहारनपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/saharanpur.xml]}
+  - {id: amarujala_muzaffarnagar, name: Amar Ujala Muzaffarnagar, name_hi: अमर उजाला मुजफ्फरनगर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/muzaffarnagar.xml]}
+  - {id: amarujala_sambhal, name: Amar Ujala Sambhal, name_hi: अमर उजाला संभल, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/sambhal.xml]}
+  - {id: amarujala_jaunpur, name: Amar Ujala Jaunpur, name_hi: अमर उजाला जौनपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/jaunpur.xml]}
+  - {id: amarujala_ghazipur, name: Amar Ujala Ghazipur, name_hi: अमर उजाला गाजीपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/ghazipur.xml]}
+  - {id: amarujala_mau, name: Amar Ujala Mau, name_hi: अमर उजाला मऊ, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/mau.xml]}
+  - {id: amarujala_ballia, name: Amar Ujala Ballia, name_hi: अमर उजाला बलिया, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/ballia.xml]}
+  - {id: amarujala_pratapgarh, name: Amar Ujala Pratapgarh, name_hi: अमर उजाला प्रतापगढ़, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/pratapgarh.xml]}
+  - {id: amarujala_sultanpur, name: Amar Ujala Sultanpur, name_hi: अमर उजाला सुल्तानपुर, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/sultanpur.xml]}
+  - {id: amarujala_bareilly, name: Amar Ujala Bareilly, name_hi: अमर उजाला बरेली, kind: rss, min_interval: 600, urls: [https://www.amarujala.com/rss/bareilly.xml]}
+  - {id: amarujala_baghpat, name: Amar Ujala Baghpat, name_hi: अमर उजाला बागपत, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/baghpat.xml]}
+  - {id: amarujala_agra, name: Amar Ujala Agra, name_hi: अमर उजाला आगरा, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/agra.xml]}
+  - {id: amarujala_aligarh, name: Amar Ujala Aligarh, name_hi: अमर उजाला अलीगढ़, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/aligarh.xml]}
+  - {id: amarujala_jhansi, name: Amar Ujala Jhansi, name_hi: अमर उजाला झांसी, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/jhansi.xml]}
+  - {id: amarujala_gonda, name: Amar Ujala Gonda, name_hi: अमर उजाला गोंडा, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/gonda.xml]}
+  - {id: amarujala_bahraich, name: Amar Ujala Bahraich, name_hi: अमर उजाला बहराइच, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/bahraich.xml]}
+  - {id: amarujala_firozabad, name: Amar Ujala Firozabad, name_hi: अमर उजाला फिरोजाबाद, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/firozabad.xml]}
+  - {id: amarujala_mathura, name: Amar Ujala Mathura, name_hi: अमर उजाला मथुरा, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/mathura.xml]}
+  - {id: amarujala_shahjahanpur, name: Amar Ujala Shahjahanpur, name_hi: अमर उजाला शाहजहांपुर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/shahjahanpur.xml]}
+  - {id: amarujala_sitapur, name: Amar Ujala Sitapur, name_hi: अमर उजाला सीतापुर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/sitapur.xml]}
+  - {id: amarujala_hardoi, name: Amar Ujala Hardoi, name_hi: अमर उजाला हरदोई, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/hardoi.xml]}
+  - {id: amarujala_unnao, name: Amar Ujala Unnao, name_hi: अमर उजाला उन्नाव, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/unnao.xml]}
+  - {id: amarujala_basti, name: Amar Ujala Basti, name_hi: अमर उजाला बस्ती, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/basti.xml]}
+  - {id: amarujala_deoria, name: Amar Ujala Deoria, name_hi: अमर उजाला देवरिया, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/deoria.xml]}
+  - {id: amarujala_kushinagar, name: Amar Ujala Kushinagar, name_hi: अमर उजाला कुशीनगर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/kushinagar.xml]}
+  - {id: amarujala_mirzapur, name: Amar Ujala Mirzapur, name_hi: अमर उजाला मिर्जापुर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/mirzapur.xml]}
+  - {id: amarujala_ghaziabad, name: Amar Ujala Ghaziabad, name_hi: अमर उजाला गाजियाबाद, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/ghaziabad.xml]}
+  - {id: amarujala_noida, name: Amar Ujala Noida, name_hi: अमर उजाला नोएडा, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/noida.xml]}
+  - {id: amarujala_bulandshahr, name: Amar Ujala Bulandshahr, name_hi: अमर उजाला बुलंदशहर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/bulandshahr.xml]}
+  - {id: amarujala_bijnor, name: Amar Ujala Bijnor, name_hi: अमर उजाला बिजनौर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/bijnor.xml]}
+  - {id: amarujala_amroha, name: Amar Ujala Amroha, name_hi: अमर उजाला अमरोहा, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/amroha.xml]}
+  - {id: amarujala_shamli, name: Amar Ujala Shamli, name_hi: अमर उजाला शामली, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/shamli.xml]}
+  - {id: amarujala_budaun, name: Amar Ujala Budaun, name_hi: अमर उजाला बदायूं, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/budaun.xml]}
+  - {id: amarujala_etah, name: Amar Ujala Etah, name_hi: अमर उजाला एटा, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/etah.xml]}
+  - {id: amarujala_farrukhabad, name: Amar Ujala Farrukhabad, name_hi: अमर उजाला फर्रुखाबाद, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/farrukhabad.xml]}
+  - {id: amarujala_barabanki, name: Amar Ujala Barabanki, name_hi: अमर उजाला बाराबंकी, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/barabanki.xml]}
+  - {id: amarujala_ambedkar_nagar, name: Amar Ujala Ambedkar Nagar, name_hi: अमर उजाला अंबेडकर नगर, kind: rss, min_interval: 900, urls: [https://www.amarujala.com/rss/ambedkar-nagar.xml]}
 
   - id: livehindustan_up
     name: Live Hindustan
     name_hi: लाइव हिन्दुस्तान
     aliases: [Hindustan, हिन्दुस्तान, हिंदुस्तान, livehindustan.com]
     kind: rss
-    status_note: UP फ़ीड अभी खाली/अनुपलब्ध; गूगल न्यूज़ से कवरेज
     urls:
-      - https://api.livehindustan.com/feeds/rss/uttar-pradesh/rssfeed.xml
       - https://api.livehindustan.com/feeds/rss/uttar-pradesh/lucknow/rssfeed.xml
-      - https://api.livehindustan.com/feeds/rss/assembly-elections/up-election/rssfeed.xml
+      - https://api.livehindustan.com/feeds/rss/uttar-pradesh/rssfeed.xml
     listing_pages: [https://www.livehindustan.com/rss]
+
+  # Live Hindustan district editions that update daily (verified live).
+  - {id: livehindustan_gorakhpur, name: Hindustan Gorakhpur, name_hi: हिन्दुस्तान गोरखपुर, kind: rss, min_interval: 600,
+     urls: [https://api.livehindustan.com/feeds/rss/uttar-pradesh/gorakhpur/rssfeed.xml]}
+  - {id: livehindustan_ayodhya, name: Hindustan Ayodhya, name_hi: हिन्दुस्तान अयोध्या, kind: rss, min_interval: 600,
+     urls: [https://api.livehindustan.com/feeds/rss/uttar-pradesh/ayodhya/rssfeed.xml]}
+  - {id: livehindustan_agra, name: Hindustan Agra, name_hi: हिन्दुस्तान आगरा, kind: rss, min_interval: 900,
+     urls: [https://api.livehindustan.com/feeds/rss/uttar-pradesh/agra/rssfeed.xml]}
+  - {id: livehindustan_bareilly, name: Hindustan Bareilly, name_hi: हिन्दुस्तान बरेली, kind: rss, min_interval: 900,
+     urls: [https://api.livehindustan.com/feeds/rss/uttar-pradesh/bareily/rssfeed.xml]}
+  - {id: livehindustan_basti, name: Hindustan Basti, name_hi: हिन्दुस्तान बस्ती, kind: rss, min_interval: 900,
+     urls: [https://api.livehindustan.com/feeds/rss/uttar-pradesh/basti/rssfeed.xml]}
+
+  # News18 city feeds (verified live).
+  - {id: news18_lucknow, name: News18 Lucknow, name_hi: न्यूज़18 लखनऊ, kind: rss, min_interval: 300,
+     urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/lucknow.xml]}
+  - {id: news18_varanasi, name: News18 Varanasi, name_hi: न्यूज़18 वाराणसी, kind: rss, min_interval: 600,
+     urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/varanasi.xml]}
+  - {id: news18_kanpur, name: News18 Kanpur, name_hi: न्यूज़18 कानपुर, kind: rss, min_interval: 600,
+     urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/kanpur.xml]}
+  - {id: news18_meerut, name: News18 Meerut, name_hi: न्यूज़18 मेरठ, kind: rss, min_interval: 600,
+     urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/meerut.xml]}
+  - {id: news18_agra, name: News18 Agra, name_hi: न्यूज़18 आगरा, kind: rss, min_interval: 900,
+     urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/agra.xml]}
+  - {id: news18_ayodhya, name: News18 Ayodhya, name_hi: न्यूज़18 अयोध्या, kind: rss, min_interval: 600,
+     urls: [https://hindi.news18.com/rss/khabar/uttar-pradesh/ayodhya.xml]}
+
+  # More national Hindi outlets with direct feeds. National feeds (up_section: false)
+  # keep only stories that pass the strict UP test.
+  - {id: indiatv_up, name: India TV, name_hi: इंडिया टीवी, aliases: [India TV Hindi, indiatv.in], kind: rss, live_wire: true,
+     min_interval: 240, urls: [https://www.indiatv.in/rssnews/topstory-uttar-pradesh.xml]}
+  - {id: aajtak_national, name: Aaj Tak National, name_hi: आज तक, kind: rss, up_section: false, min_interval: 240,
+     site: aajtak.in, urls: ["https://www.aajtak.in/rssfeeds/?id=home"]}
+  - {id: ndtv_india, name: NDTV India, name_hi: एनडीटीवी इंडिया, aliases: [NDTV, ndtv.in], kind: rss, up_section: false,
+     min_interval: 300, urls: [https://feeds.feedburner.com/ndtvkhabar-latest]}
+  - {id: bharatsamachar, name: Bharat Samachar, name_hi: भारत समाचार, aliases: [bharatsamachartv.in], kind: rss,
+     up_section: false, min_interval: 300, urls: [https://www.bharatsamachartv.in/feed/]}
 
   # ---------------- Publishers without a reachable public feed ----------------
   # Kept with listing pages so the daily check notices if a feed appears.
@@ -194,6 +266,28 @@ sources:
      query: "\"राजा भैया\" OR \"धनंजय सिंह\" OR \"बृजेश सिंह\" OR \"बृजभूषण शरण सिंह\" OR \"अफजाल अंसारी\" OR \"अब्बास अंसारी\" when:2d"}
   - {id: gn_up_election, site: news.google.com, name: Google News — UP elections, name_hi: गूगल न्यूज़ — यूपी चुनाव, kind: google_news,
      query: "(यूपी OR \"उत्तर प्रदेश\") (उपचुनाव OR टिकट OR \"चुनाव आयोग\" OR प्रत्याशी) when:1d", min_interval: 900}
+
+  # Targeted political searches (verified live). The fastest tier runs every collection.
+  - {id: gn_q_controversy, site: news.google.com, name: Google News — UP political rows, name_hi: गूगल न्यूज़ — यूपी सियासी वार-पलटवार,
+     kind: google_news, min_interval: 280, live_wire: true,
+     query: "(सपा OR भाजपा OR बसपा OR कांग्रेस) (पलटवार OR निशाना OR आरोप OR तंज) (यूपी OR \"उत्तर प्रदेश\" OR लखनऊ) when:1d"}
+  - {id: gn_q_yogi, site: news.google.com, name: Google News — Yogi Adityanath, name_hi: गूगल न्यूज़ — योगी आदित्यनाथ,
+     kind: google_news, min_interval: 280, query: "\"योगी आदित्यनाथ\" OR \"सीएम योगी\" when:1d"}
+  - {id: gn_q_akhilesh, site: news.google.com, name: Google News — Akhilesh Yadav / SP, name_hi: गूगल न्यूज़ — अखिलेश यादव / सपा,
+     kind: google_news, min_interval: 280, query: "\"अखिलेश यादव\" OR सपा when:1d"}
+  - {id: gn_q_mayawati, site: news.google.com, name: Google News — Mayawati / BSP, name_hi: गूगल न्यूज़ — मायावती / बसपा,
+     kind: google_news, min_interval: 600, query: "मायावती OR बसपा OR \"आकाश आनंद\" when:1d"}
+  - {id: gn_q_cabinet, site: news.google.com, name: Google News — UP government, name_hi: गूगल न्यूज़ — यूपी सरकार,
+     kind: google_news, min_interval: 600, query: "(\"योगी कैबिनेट\" OR \"यूपी कैबिनेट\" OR \"यूपी सरकार\" OR शासनादेश) when:1d"}
+  - {id: gn_q_bahubali, site: news.google.com, name: "Google News — bahubali / strongmen", name_hi: गूगल न्यूज़ — बाहुबली नेता,
+     kind: google_news, min_interval: 900,
+     query: "(बाहुबली OR माफिया OR \"पूर्व सांसद\" OR \"पूर्व विधायक\") (यूपी OR \"उत्तर प्रदेश\") when:2d"}
+  - {id: gn_q_panchayat, site: news.google.com, name: "Google News — panchayat, MLC, bypolls", name_hi: "गूगल न्यूज़ — पंचायत, एमएलसी, उपचुनाव",
+     kind: google_news, min_interval: 900,
+     query: "(\"पंचायत चुनाव\" OR \"विधान परिषद\" OR एमएलसी OR उपचुनाव) (यूपी OR \"उत्तर प्रदेश\") when:2d"}
+  - {id: gn_geo_lucknow, name: Google News — Lucknow section, name_hi: गूगल न्यूज़ — लखनऊ,
+     kind: google_news, min_interval: 600,
+     urls: ["https://news.google.com/rss/headlines/section/geo/Lucknow?hl=hi&gl=IN&ceid=IN:hi"]}
 
   # ---------------- Public statements on X ----------------
   # Needs X_BEARER_TOKEN (official X API v2 recent search; paid X API plan).

@@ -1,6 +1,7 @@
 """Strict UP focus, Hindi-only, trusted publishers and gists. All feed content
 here is synthetic TEST DATA."""
 import asyncio
+from datetime import datetime, timedelta, timezone
 import json
 
 import httpx
@@ -107,3 +108,15 @@ def test_gist_respects_robots(settings, router, tmp_path):
     g = Gister(router.client(), "NewsAddaBot")
     assert asyncio.run(g.page_gist("https://blocked.test/a", "शीर्षक")) == (None, None)
     assert g.stats["robots_blocked"] == 1
+
+
+def test_gist_retries_next_run_when_google_refuses(settings, router, tmp_path):
+    items = [{"title": "अखिलेश यादव का योगी सरकार पर हमला - Trusted Daily", "link": "https://news.google.com/rss/articles/NEWID2",
+              "source": "Trusted Daily", "date": _now_rfc(-1)}]
+    p = _pipeline_with(settings, router, tmp_path, items, "\ntrusted_publishers: [Trusted Daily]\n")
+    settings.gist_enabled = True
+    router.routes["https://news.google.com/rss/articles/NEWID2"] = httpx.Response(429, text="slow down")
+    asyncio.run(p.run_once())
+    assert p.gist_stats["google_blocked"] is True
+    row = next(it for it in p.store.recent_items(datetime.now(timezone.utc) - timedelta(hours=6)) if "अखिलेश" in it["title"])
+    assert not row["data"].get("gist_tried")  # left for the next run, not given up on

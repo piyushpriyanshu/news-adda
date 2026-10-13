@@ -45,12 +45,22 @@ object LiveWire {
         "चुनाव आयोग", "उपचुनाव", "हाईकोर्ट", "हाई कोर्ट", "सुप्रीम कोर्ट", "छापा", "छापेमारी", "निधन",
     ).map { FeedLogic.normalize(it) }
 
-    suspend fun refresh(feeds: List<LiveFeed>, stories: List<Story>, nowMs: Long = System.currentTimeMillis()) {
+    suspend fun refresh(feeds: List<LiveFeed>, stories: List<Story>, nowMs: Long = System.currentTimeMillis(),
+                        trustedKeys: Collection<String> = emptyList()) {
         if (feeds.isEmpty()) return
         val fresh = coroutineScope {
             feeds.map { f -> async(Dispatchers.IO) { runCatching { fetch(f, nowMs) }.getOrElse { cached[f.id].orEmpty() } } }.awaitAll()
         }.flatten()
-        _items.value = combine(fresh, stories, nowMs)
+        _items.value = combine(credible(fresh, trustedKeys.toSet()), stories, nowMs)
+    }
+
+    /**
+     * Same credibility rules as the backend: Hindi headlines only, and Google
+     * News items only from established outlets (publisher keys sent by the backend).
+     */
+    fun credible(items: List<LiveItem>, trusted: Set<String>): List<LiveItem> = items.filter { i ->
+        FeedLogic.hindiShare(i.title) >= 0.5 &&
+            (!i.viaGoogle || trusted.isEmpty() || FeedLogic.publisherKey(i.publisher) in trusted)
     }
 
     private fun fetch(f: LiveFeed, nowMs: Long): List<LiveItem> {
@@ -115,7 +125,7 @@ object LiveWire {
             val seenAt = seenMap.getOrPut(id) { nowMs }
             val norm = FeedLogic.normalize(title)
             out += LiveItem(
-                id = id, title = title, url = link, publisher = publisher, domain = domain,
+                id = id, title = title, url = link, publisher = publisher, domain = domain, viaGoogle = google,
                 publishedAt = parseDate(text(e, "pubDate") ?: text(e, "dc:date")),
                 seenAt = seenAt, breakingHint = BREAKING_HINTS.any { norm.contains(it) },
             )
