@@ -148,3 +148,11 @@ def test_mixed_english_seo_and_hindi_description_keeps_only_hindi():
     assert hindi_only("आज 12 अक्टूबर को डॉ. राम मनोहर लोहिया की पुण्यतिथि है।").startswith("आज 12 अक्टूबर को डॉ. राम")
     assert hindi_only("Greater Noida News: 13 से 17 अक्टूबर तक मेला लगेगा").startswith("13 से 17")
     assert hindi_only("BJP leaders attack Akhilesh Yadav over politics.") is None
+
+
+def test_english_seo_tail_removed_from_hindi_headline():
+    from newsadda.textutil import clean_title
+    t = "आगरा-लखनऊ एक्सप्रेस-वे पर हादसा, एक सिपाही शहीद - constable dies in subrat pathak convoy crash"
+    assert clean_title(t) == "आगरा-लखनऊ एक्सप्रेस-वे पर हादसा, एक सिपाही शहीद"
+    assert clean_title("यूपी में भाजपा - सपा आमने-सामने") == "यूपी में भाजपा - सपा आमने-सामने"
+    assert clean_title("अखिलेश यादव का बयान - BJP") == "अखिलेश यादव का बयान - BJP"

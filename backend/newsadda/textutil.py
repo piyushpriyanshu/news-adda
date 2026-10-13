@@ -158,3 +158,15 @@ def short_summary(description: str | None, title: str | None, limit: int = 240) 
         sp = cut.rfind(" ")
         out = (cut[:sp] if sp > limit * 0.6 else cut).rstrip(" ,;:-") + "…"
     return out
+
+
+_ENGLISH_TAIL = re.compile(r"\s+[-|–—]\s+([^\u0900-\u097F]{12,})$")
+
+
+def clean_title(title: str) -> str:
+    """Drop an English SEO tail some sites append to Hindi headlines
+    ("हिंदी शीर्षक - constable dies in convoy crash")."""
+    m = _ENGLISH_TAIL.search(title or "")
+    if m and devanagari_share(title[: m.start()]) >= 0.6 and re.search(r"[A-Za-z]{3}", m.group(1)):
+        return title[: m.start()].rstrip()
+    return title

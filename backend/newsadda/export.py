@@ -14,7 +14,7 @@ from pathlib import Path
 
 from .classify import CATEGORY_NAMES
 from .pipeline import Pipeline, _base_name, _names, publisher_domain, publisher_key
-from .textutil import strip_html
+from .textutil import clean_title, strip_html
 from .timeutil import from_iso, iso, utcnow
 
 FEED_VERSION = 1
@@ -57,7 +57,7 @@ def _report(it: dict, pipeline: Pipeline) -> dict:
         "kind": it["kind"],
         # Direct publisher link when a Google News link was resolved.
         "url": it["data"].get("resolved_url") or it["url"],
-        "title": it["title"],
+        "title": clean_title(it["title"]),
         "summary": strip_html(it["summary"]) or None,
         "summary_origin": it["summary_origin"],
         "author": it["author"],
@@ -128,7 +128,7 @@ def build_stories(pipeline: Pipeline, items: list[dict]) -> list[dict]:
         sort_at = min(m["sort_at"] for m in members)
         stories.append({
             "id": cid,
-            "title": lead["title"],
+            "title": clean_title(lead["title"]),
             "summary": strip_html(summary_item["summary"]) if summary_item else None,
             "summary_origin": summary_item["summary_origin"] if summary_item else None,
             "headline_only": summary_item is None,
