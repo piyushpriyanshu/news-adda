@@ -84,4 +84,18 @@ class LiveWireTest {
         assertTrue(FeedLogic.hindiShare("अखिलेश यादव का बयान") > 0.9)
         assertTrue(FeedLogic.hindiShare("Akhilesh Yadav statement") < 0.1)
     }
+
+    @Test
+    fun sameNewsFromTwoPublishersIsShownOnceAndEnglishTailIsDropped() {
+        fun item(id: String, title: String, pub: String, at: String) = com.newsadda.app.data.model.LiveItem(
+            id = id, title = title, url = "https://x.test/$id", publisher = pub, publishedAt = at, seenAt = now)
+        val a = item("a", "पूर्व सांसद सुब्रत पाठक की एस्कॉर्ट गाड़ी पलटी, हादसे में सिपाही की मौत, दो घायल", "India TV", "2026-10-13T07:30:00Z")
+        val b = item("b", "BJP के पूर्व सांसद सुब्रत पाठक के काफिले की गाड़ी पलटी, हादसे में सिपाही शहीद", "ABP News", "2026-10-13T07:10:00Z")
+        val c = item("c", "लखनऊ में सपा का प्रदर्शन, कार्यकर्ताओं ने घेरा कार्यालय", "TV9", "2026-10-13T07:40:00Z")
+        val out = LiveWire.combine(listOf(a, b, c), emptyList(), now)
+        assertEquals(listOf("c", "b"), out.map { it.id })  // the first to report is kept
+        assertEquals("मुख्यमंत्री योगी 15 अक्टूबर को प्रयागराज आएंगे",
+            FeedLogic.cleanTitle("मुख्यमंत्री योगी 15 अक्टूबर को प्रयागराज आएंगे - cm yogi adityanath to lay foundation"))
+        assertEquals("यूपी में भाजपा - सपा आमने-सामने", FeedLogic.cleanTitle("यूपी में भाजपा - सपा आमने-सामने"))
+    }
 }

@@ -129,6 +129,7 @@ data class Str(val hindi: Boolean) {
     val read get() = t("Read", "पढ़ें")
     val open get() = t("Open", "खोलें")
     val coverage get() = t("Coverage", "कवरेज")
+    fun alsoReportedBy(n: Int) = t("Also reported by ($n)", "इन्होंने भी रिपोर्ट किया ($n)")
     val breakingAlert get() = t("BREAKING", "ब्रेकिंग")
     val dismiss get() = t("Dismiss", "हटाएं")
     val direct get() = t("Direct", "सीधे")

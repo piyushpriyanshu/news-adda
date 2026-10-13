@@ -78,8 +78,8 @@ def description_from_page(page: str, title: str) -> tuple[str | None, str | None
     canonical = tags.get("og:url")
     for key in ("og:description", "description", "twitter:description"):
         text = hindi_only(strip_html(tags.get(key)))
-        if not text or len(text) < 40:
-            continue  # too short, or not Hindi (some sites write English SEO descriptions)
+        if not text or len(text) < 40 or len(content_terms(text)) < 6:
+            continue  # too short or empty of facts, or not Hindi (some sites write English SEO descriptions)
         nt, nd = normalize(title).strip(), normalize(text).strip()
         if nd == nt or nd.startswith(nt) and len(nd) - len(nt) < 25:
             continue

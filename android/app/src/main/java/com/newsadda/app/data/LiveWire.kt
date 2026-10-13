@@ -81,17 +81,27 @@ object LiveWire {
         }
     }
 
-    /** Newest first, last 3 hours, one entry per headline, minus stories the backend already has. */
+    /**
+     * Newest first, last 3 hours, minus stories the backend already has. The same
+     * news from several publishers is shown once (the first to report it).
+     */
     fun combine(items: List<LiveItem>, stories: List<Story>, nowMs: Long): List<LiveItem> {
         val known = HashSet<String>()
-        stories.forEach { s -> s.reports.forEach { known += key(it.title) } }
-        val out = LinkedHashMap<String, LiveItem>()
-        items.sortedByDescending { it.publishedAt ?: "" }.forEach { i ->
-            val k = key(i.title)
+        val knownTerms = ArrayList<Set<String>>()
+        stories.forEach { s -> s.reports.forEach { known += key(it.title); knownTerms += FeedLogic.terms(it.title) } }
+        val fresh = items.filter { i ->
             val t = FeedLogic.instant(i.publishedAt)?.toEpochMilli() ?: i.seenAt
-            if (k !in known && k !in out && nowMs - t < KEEP_MS) out[k] = i
+            nowMs - t < KEEP_MS && key(i.title) !in known
         }
-        return out.values.take(60)
+        // Earliest first, so the first publisher to report something is the one kept.
+        val kept = ArrayList<Pair<LiveItem, Set<String>>>()
+        fresh.sortedBy { it.publishedAt ?: "9" }.forEach { i ->
+            val tt = FeedLogic.terms(i.title)
+            val dup = kept.any { key(it.first.title) == key(i.title) || FeedLogic.sameNews(it.second, tt) } ||
+                knownTerms.any { FeedLogic.sameNews(it, tt) }
+            if (!dup) kept += i to tt
+        }
+        return kept.map { it.first }.sortedByDescending { it.publishedAt ?: "" }.take(60)
     }
 
     private fun key(title: String) = FeedLogic.normalize(title).filter { it.isLetterOrDigit() }
@@ -121,6 +131,7 @@ object LiveWire {
                 }
                 src?.getAttribute("url")?.takeIf { it.isNotBlank() }?.let { domain = siteDomain(it) }
             }
+            title = FeedLogic.cleanTitle(title)
             val id = sha(link)
             val seenAt = seenMap.getOrPut(id) { nowMs }
             val norm = FeedLogic.normalize(title)

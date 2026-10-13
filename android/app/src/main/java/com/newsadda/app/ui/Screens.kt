@@ -102,11 +102,13 @@ fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
     var wireOpen by rememberSaveable { mutableStateOf(false) }
-    val list = if (settings.politicsOnlyHome) all.filter(FeedLogic::isPolitical) else all
+    val breaking = remember(all, env.now) { all.filter { FeedLogic.isBreakingNow(it, env.now) }.take(10) }
+    // Stories already in the Breaking-now carousel are not repeated in the list below it.
+    val inCarousel = remember(breaking) { breaking.map { it.id }.toSet() }
+    val list = (if (settings.politicsOnlyHome) all.filter(FeedLogic::isPolitical) else all).filter { it.id !in inCarousel }
     val wire = remember(live, settings.politicsOnlyHome, env.names) {
         if (settings.politicsOnlyHome) live.filter { FeedLogic.isPoliticalHeadline(it.title, env.names.politicalHi) } else live
     }
-    val breaking = remember(all, env.now) { all.filter { FeedLogic.isBreakingNow(it, env.now) }.take(10) }
     val newCount = list.count { it.id in env.newIds }
     var jumping by remember { mutableStateOf(false) }
 

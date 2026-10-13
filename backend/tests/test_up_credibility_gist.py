@@ -156,3 +156,8 @@ def test_english_seo_tail_removed_from_hindi_headline():
     assert clean_title(t) == "आगरा-लखनऊ एक्सप्रेस-वे पर हादसा, एक सिपाही शहीद"
     assert clean_title("यूपी में भाजपा - सपा आमने-सामने") == "यूपी में भाजपा - सपा आमने-सामने"
     assert clean_title("अखिलेश यादव का बयान - BJP") == "अखिलेश यादव का बयान - BJP"
+
+
+def test_gists_without_facts_are_not_used():
+    page = '<html><head><meta property="og:description" content="आज की सबसे बड़ी खबर को लेकर है। वहीं, दूसरी बड़ी खबर से जुड़ी है।"></head></html>'
+    assert description_from_page(page, "यूपी दिनभर, 15 बड़ी खबरें: योगी बोले")[0] is None

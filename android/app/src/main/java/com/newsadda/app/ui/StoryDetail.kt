@@ -115,24 +115,51 @@ fun StoryDetailSheet(s: Story, names: Names, saved: Boolean, onSave: () -> Unit,
                 Text(s.reasons.joinToString(" · ") { str.reason(it, names::any) }, style = MaterialTheme.typography.bodyMedium)
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Label(str.coverage)
-                if (s.publishers().size > 1) StackedSources(s, max = 6, size = 20.dp)
-                Text(str.sourcesHeader(s.reports.size, s.publisherCount), style = MaterialTheme.typography.bodySmall, color = c.muted)
-            }
-            Surface(color = MaterialTheme.colorScheme.surfaceContainer, shape = RoundedCornerShape(14.dp)) {
-                Column {
-                    s.reports.forEachIndexed { i, r ->
-                        if (i > 0) HorizontalDivider(color = c.divider)
-                        ReportRow(r)
+            // The story above is the lead report; only the *other* reports are listed here,
+            // and the same headline from one publisher (e.g. two of its feeds) is shown once.
+            val others = otherReports(s, lead)
+            if (others.isNotEmpty()) {
+                Label(str.alsoReportedBy(others.size))
+                Surface(color = MaterialTheme.colorScheme.surfaceContainer, shape = RoundedCornerShape(14.dp)) {
+                    Column {
+                        others.forEachIndexed { i, r ->
+                            if (i > 0) HorizontalDivider(color = c.divider)
+                            ReportRow(r)
+                        }
                     }
                 }
             }
-            Text(str.firstSeen(TimeFmt.full(FeedLogic.instant(s.firstSeenAt), str)),
-                style = MaterialTheme.typography.bodySmall, color = c.faint)
+            // Times of the lead report (its row is not repeated below the story).
+            if (lead != null) {
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    if (lead.via != null) Text(str.via(lead.via).removePrefix(" — "), style = MaterialTheme.typography.bodySmall, color = c.faint)
+                    reportTimes(lead, str).forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = c.faint) }
+                }
+            }
             Spacer(Modifier.height(16.dp))
         }
     }
+}
+
+/** Reports other than the lead, one per publisher-and-headline. */
+private fun otherReports(s: Story, lead: Report?): List<Report> {
+    val seen = HashSet<String>()
+    lead?.let { seen += FeedLogic.publisherKey(it.publisherName()) + "|" + FeedLogic.normalize(it.title).trim() }
+    return s.reports.filter { r ->
+        r !== lead && seen.add(FeedLogic.publisherKey(r.publisherName()) + "|" + FeedLogic.normalize(r.title).trim())
+    }
+}
+
+private fun reportTimes(r: Report, str: Str): List<String> = buildList {
+    val pub = FeedLogic.instant(r.publishedAt)
+    when {
+        pub == null -> add(str.pubNotGiven)
+        r.publishedSuspect -> add(str.pubSuspect(TimeFmt.full(pub, str)))
+        r.tzAssumed -> add(str.pubAssumed(TimeFmt.full(pub, str)))
+        else -> add(str.published(TimeFmt.full(pub, str)))
+    }
+    FeedLogic.instant(r.updatedAt)?.let { add(str.updated(TimeFmt.full(it, str))) }
+    add(str.seenByApp(TimeFmt.full(FeedLogic.instant(r.firstSeenAt), str)))
 }
 
 @Composable
@@ -164,17 +191,6 @@ private fun ReportRow(r: Report) {
             "quote" -> Text(str.quotePost, style = MaterialTheme.typography.bodySmall, color = c.muted)
             "reply" -> Text(str.replyPost, style = MaterialTheme.typography.bodySmall, color = c.muted)
         }
-        val pub = FeedLogic.instant(r.publishedAt)
-        val times = buildList {
-            when {
-                pub == null -> add(str.pubNotGiven)
-                r.publishedSuspect -> add(str.pubSuspect(TimeFmt.full(pub, str)))
-                r.tzAssumed -> add(str.pubAssumed(TimeFmt.full(pub, str)))
-                else -> add(str.published(TimeFmt.full(pub, str)))
-            }
-            FeedLogic.instant(r.updatedAt)?.let { add(str.updated(TimeFmt.full(it, str))) }
-            add(str.seenByApp(TimeFmt.full(FeedLogic.instant(r.firstSeenAt), str)))
-        }
-        times.forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = c.muted) }
+        reportTimes(r, str).forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = c.muted) }
     }
 }

@@ -146,6 +146,30 @@ object FeedLogic {
             names.any { n -> n.length > 2 && t.contains(" " + normalize(n).replace(NON_WORD, " ").trim() + " ") }
     }
 
+    private val STOP = setOf(
+        "का", "की", "के", "को", "में", "से", "पर", "ने", "और", "है", "हैं", "था", "थी", "थे", "भी", "तो", "ही",
+        "एक", "दो", "यह", "वह", "इस", "उस", "लिए", "साथ", "बाद", "अब", "कर", "करें", "किया", "गया", "गई", "हुआ",
+        "हुई", "रहा", "रही", "रहे", "बोले", "कहा", "news", "up", "the", "a", "of", "to", "in", "and",
+    )
+
+    /** Content words of a headline (for spotting the same news told twice). */
+    fun terms(title: String): Set<String> =
+        normalize(title).replace(NON_WORD, " ").split(' ').filter { it.length > 1 && it !in STOP }.toSet()
+
+    /** True when two headlines report the same news (most content words shared). */
+    fun sameNews(a: Set<String>, b: Set<String>): Boolean {
+        if (a.size < 3 || b.size < 3) return false
+        val inter = a.count { it in b }
+        return inter.toDouble() / (a.size + b.size - inter) >= 0.5
+    }
+
+    /** Hindi headline without an English SEO tail ("… - cm yogi to lay foundation"). */
+    fun cleanTitle(title: String): String {
+        val m = Regex("\\s+[-|–—]\\s+([^\\u0900-\\u097F]{12,})$").find(title) ?: return title
+        val head = title.substring(0, m.range.first)
+        return if (hindiShare(head) >= 0.6 && Regex("[A-Za-z]{3}").containsMatchIn(m.groupValues[1])) head.trimEnd() else title
+    }
+
     /** Refresh is due when the chosen interval has passed since the last attempt. */
     fun refreshDue(lastAttemptMs: Long, intervalMin: Int, nowMs: Long): Boolean =
         lastAttemptMs <= 0 || nowMs - lastAttemptMs >= intervalMin * 60_000L - 1_000L
