@@ -49,6 +49,13 @@ def main(argv: list[str] | None = None) -> int:
         report = run(args.out, args.ids or None)
         for sid, url in report["summary"].items():
             print(f"{sid:22} {'OK  ' + url if url else 'NONE'}")
+        print("\n# probes")
+        for pr in report.get("probes", []):
+            print(f"{pr['id']:24} {'OK ' if pr.get('ok') else 'NO '} items={pr.get('items')} newest={pr.get('newest')} "
+                  f"{pr.get('error') or ''}")
+        print("\n# gist check")
+        for g in report.get("gist_check", []):
+            print(json.dumps(g, ensure_ascii=False)[:300])
         return 0
 
     from .export import source_status, write_feed

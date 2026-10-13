@@ -50,6 +50,14 @@ _SUFFIXES = sorted(
 )
 
 
+def devanagari_share(text: str | None) -> float:
+    """Share of letters that are Devanagari (0..1). Used to keep the feed Hindi."""
+    letters = [ch for ch in (text or "") if ch.isalpha() or "\u0900" <= ch <= "\u097F"]
+    if not letters:
+        return 0.0
+    return sum(1 for ch in letters if "\u0900" <= ch <= "\u097F") / len(letters)
+
+
 def strip_html(text: str | None) -> str:
     if not text:
         return ""

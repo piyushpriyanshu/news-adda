@@ -34,6 +34,31 @@ defaults:
   up_section: true
   enabled: true
 
+# Credibility: items that reach us through Google News are kept only when the
+# original publisher is an established outlet or news agency. Outlets we follow
+# directly (above/below) are trusted automatically. Names are matched loosely
+# (case, spaces and punctuation ignored). Anything else is dropped.
+trusted_publishers: [
+  # Hindi dailies and portals
+  Amar Ujala, Dainik Bhaskar, Dainik Jagran, Jagran, Hindustan, Live Hindustan, Navbharat Times, Jansatta,
+  Patrika, Rajasthan Patrika, Prabhat Khabar, Punjab Kesari, Nai Dunia, Naidunia, Haribhoomi, Dainik Tribune,
+  Amar Ujala Lucknow, inextlive, Inext Live, Swatantra Bharat,
+  # TV news (Hindi)
+  Aaj Tak, AajTak, ABP News, ABP Live, ABP Ganga, News18 Hindi, News18, News18 UP Uttarakhand, TV9 Hindi,
+  TV9 Bharatvarsh, Zee News, Zee News Hindi, Zee Uttar Pradesh Uttarakhand, India TV, India TV Hindi,
+  NDTV India, NDTV, Times Now Navbharat, Republic Bharat, News24, News 24, News Nation, Bharat Samachar,
+  DD News, DD News Hindi, Sansad TV,
+  # Digital and UP-focused
+  UP Tak, UPTak, The Lallantop, Lallantop, ETV Bharat, ETV Bharat Uttar Pradesh, The Print Hindi, ThePrint Hindi,
+  BBC Hindi, BBC News Hindi, Satya Hindi, The Wire Hindi, Navjivan, Asianet News Hindi, Oneindia Hindi,
+  Webdunia, Prabhasakshi, Hindustan Times Hindi, Jagran Josh,
+  # Agencies
+  PTI, PTI Bhasha, IANS, IANS Hindi, ANI, UNI, Univarta, Hindusthan Samachar, हिन्दुस्थान समाचार, Hindustan Samachar,
+  # Hindi names as Google News shows them
+  अमर उजाला, दैनिक भास्कर, दैनिक जागरण, हिन्दुस्तान, नवभारत टाइम्स, आज तक, न्यूज़18 हिंदी, एबीपी न्यूज़,
+  ज़ी न्यूज़, इंडिया टीवी, जनसत्ता, पत्रिका, टीवी9 भारतवर्ष, एनडीटीवी इंडिया, यूपी तक, बीबीसी हिंदी, पंजाब केसरी,
+]
+
 # Google News sometimes returns social posts or re-aggregators; skip them.
 blocked_publishers: [Facebook, YouTube, Instagram, X, Twitter, Head Topics, Dailyhunt]
 

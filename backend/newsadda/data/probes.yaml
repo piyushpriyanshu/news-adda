@@ -1,0 +1,108 @@
+# Candidate feeds tested by `python -m newsadda discover` (not polled).
+# Working ones are copied into sources.yaml after the live check.
+probes:
+  - {id: au_raebareli, url: "https://www.amarujala.com/rss/raebareli.xml"}
+  - {id: au_rae_bareli, url: "https://www.amarujala.com/rss/rae-bareli.xml"}
+  - {id: au_amethi, url: "https://www.amarujala.com/rss/amethi.xml"}
+  - {id: au_mainpuri, url: "https://www.amarujala.com/rss/mainpuri.xml"}
+  - {id: au_kannauj, url: "https://www.amarujala.com/rss/kannauj.xml"}
+  - {id: au_etawah, url: "https://www.amarujala.com/rss/etawah.xml"}
+  - {id: au_rampur, url: "https://www.amarujala.com/rss/rampur.xml"}
+  - {id: au_moradabad, url: "https://www.amarujala.com/rss/moradabad.xml"}
+  - {id: au_saharanpur, url: "https://www.amarujala.com/rss/saharanpur.xml"}
+  - {id: au_muzaffarnagar, url: "https://www.amarujala.com/rss/muzaffarnagar.xml"}
+  - {id: au_sambhal, url: "https://www.amarujala.com/rss/sambhal.xml"}
+  - {id: au_jaunpur, url: "https://www.amarujala.com/rss/jaunpur.xml"}
+  - {id: au_ghazipur, url: "https://www.amarujala.com/rss/ghazipur.xml"}
+  - {id: au_mau, url: "https://www.amarujala.com/rss/mau.xml"}
+  - {id: au_ballia, url: "https://www.amarujala.com/rss/ballia.xml"}
+  - {id: au_pratapgarh, url: "https://www.amarujala.com/rss/pratapgarh.xml"}
+  - {id: au_baghpat, url: "https://www.amarujala.com/rss/baghpat.xml"}
+  - {id: au_bareilly, url: "https://www.amarujala.com/rss/bareilly.xml"}
+  - {id: au_agra, url: "https://www.amarujala.com/rss/agra.xml"}
+  - {id: au_aligarh, url: "https://www.amarujala.com/rss/aligarh.xml"}
+  - {id: au_jhansi, url: "https://www.amarujala.com/rss/jhansi.xml"}
+  - {id: au_sultanpur, url: "https://www.amarujala.com/rss/sultanpur.xml"}
+  - {id: au_gonda, url: "https://www.amarujala.com/rss/gonda.xml"}
+  - {id: au_bahraich, url: "https://www.amarujala.com/rss/bahraich.xml"}
+  - {id: au_firozabad, url: "https://www.amarujala.com/rss/firozabad.xml"}
+  - {id: au_mathura, url: "https://www.amarujala.com/rss/mathura.xml"}
+  - {id: au_shahjahanpur, url: "https://www.amarujala.com/rss/shahjahanpur.xml"}
+  - {id: au_sitapur, url: "https://www.amarujala.com/rss/sitapur.xml"}
+  - {id: au_hardoi, url: "https://www.amarujala.com/rss/hardoi.xml"}
+  - {id: au_unnao, url: "https://www.amarujala.com/rss/unnao.xml"}
+  - {id: au_basti, url: "https://www.amarujala.com/rss/basti.xml"}
+  - {id: au_deoria, url: "https://www.amarujala.com/rss/deoria.xml"}
+  - {id: au_kushinagar, url: "https://www.amarujala.com/rss/kushinagar.xml"}
+  - {id: au_mirzapur, url: "https://www.amarujala.com/rss/mirzapur.xml"}
+  - {id: au_ghaziabad, url: "https://www.amarujala.com/rss/ghaziabad.xml"}
+  - {id: au_noida, url: "https://www.amarujala.com/rss/noida.xml"}
+  - {id: au_bulandshahr, url: "https://www.amarujala.com/rss/bulandshahr.xml"}
+  - {id: au_bijnor, url: "https://www.amarujala.com/rss/bijnor.xml"}
+  - {id: au_amroha, url: "https://www.amarujala.com/rss/amroha.xml"}
+  - {id: au_shamli, url: "https://www.amarujala.com/rss/shamli.xml"}
+  - {id: au_budaun, url: "https://www.amarujala.com/rss/budaun.xml"}
+  - {id: au_etah, url: "https://www.amarujala.com/rss/etah.xml"}
+  - {id: au_farrukhabad, url: "https://www.amarujala.com/rss/farrukhabad.xml"}
+  - {id: au_barabanki, url: "https://www.amarujala.com/rss/barabanki.xml"}
+  - {id: au_ambedkar_nagar, url: "https://www.amarujala.com/rss/ambedkar-nagar.xml"}
+  - {id: au_breaking, url: "https://www.amarujala.com/rss/breaking-news.xml"}
+  - {id: lh_lucknow, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/lucknow/rssfeed.xml"}
+  - {id: lh_varanasi, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/varanasi/rssfeed.xml"}
+  - {id: lh_gorakhpur, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/gorakhpur/rssfeed.xml"}
+  - {id: lh_prayagraj, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/prayagraj/rssfeed.xml"}
+  - {id: lh_ayodhya, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/ayodhya/rssfeed.xml"}
+  - {id: lh_kanpur, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/kanpur/rssfeed.xml"}
+  - {id: lh_meerut, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/meerut/rssfeed.xml"}
+  - {id: lh_agra, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/agra/rssfeed.xml"}
+  - {id: lh_bareily, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/bareily/rssfeed.xml"}
+  - {id: lh_moradabad, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/moradabad/rssfeed.xml"}
+  - {id: lh_azamgarh, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/azamgarh/rssfeed.xml"}
+  - {id: lh_ghazipur, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/ghazipur/rssfeed.xml"}
+  - {id: lh_aligarh, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/aligarh/rssfeed.xml"}
+  - {id: lh_basti, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/basti/rssfeed.xml"}
+  - {id: lh_balia, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/balia/rssfeed.xml"}
+  - {id: lh_mirzapur, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/mirzapur/rssfeed.xml"}
+  - {id: lh_deoria, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/deoria/rssfeed.xml"}
+  - {id: lh_kushinagar, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/kushinagar/rssfeed.xml"}
+  - {id: lh_barabanki, url: "https://api.livehindustan.com/feeds/rss/uttar-pradesh/barabanki/rssfeed.xml"}
+  - {id: n18_lucknow, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/lucknow.xml"}
+  - {id: n18_varanasi, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/varanasi.xml"}
+  - {id: n18_gorakhpur, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/gorakhpur.xml"}
+  - {id: n18_prayagraj, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/prayagraj.xml"}
+  - {id: n18_kanpur, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/kanpur.xml"}
+  - {id: n18_meerut, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/meerut.xml"}
+  - {id: n18_agra, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/agra.xml"}
+  - {id: n18_ayodhya, url: "https://hindi.news18.com/rss/khabar/uttar-pradesh/ayodhya.xml"}
+  - {id: tv9_lucknow, url: "https://www.tv9hindi.com/state/uttar-pradesh/lucknow/feed"}
+  - {id: zee_upuk_feed, url: "https://zeenews.india.com/hindi/india/up-uttarakhand/feed"}
+  - {id: zee_up_rss, url: "https://zeenews.india.com/hindi/rss/india/up-uttarakhand.xml"}
+  - {id: zee_upnews, url: "https://zeenews.india.com/hindi/zee-hindustan/uttar-pradesh.xml"}
+  - {id: ndtv_khabar_up, url: "https://ndtv.in/rss/uttar-pradesh"}
+  - {id: ndtv_khabar_latest, url: "https://feeds.feedburner.com/ndtvkhabar-latest"}
+  - {id: indiatv_up, url: "https://www.indiatv.in/rssnews/topstory-uttar-pradesh.xml"}
+  - {id: indiatv_top, url: "https://www.indiatv.in/rssnews/topstory.xml"}
+  - {id: patrika_lucknow, url: "https://www.patrika.com/rss/lucknow-news"}
+  - {id: patrika_up, url: "https://www.patrika.com/rss/uttar-pradesh-news"}
+  - {id: lallantop_rss, url: "https://www.thelallantop.com/rss"}
+  - {id: uptak_rss, url: "https://www.uptak.in/rss"}
+  - {id: uptak_rssfeeds, url: "https://www.uptak.in/rssfeeds"}
+  - {id: aajtak_home, url: "https://www.aajtak.in/rssfeeds/?id=home"}
+  - {id: ddnews_hi, url: "https://ddnews.gov.in/hi/feed/"}
+  - {id: pib_hi, url: "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=2&Regid=3"}
+  - {id: abp_ganga, url: "https://www.abplive.com/states/up-uk/feed"}
+  - {id: bharat_samachar, url: "https://www.bharatsamachartv.in/feed/"}
+  - {id: jansatta_up, url: "https://www.jansatta.com/rajya/uttar-pradesh/feed/"}
+  - {id: gn_geo_up, url: "https://news.google.com/rss/headlines/section/geo/Uttar%20Pradesh?hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_geo_lucknow, url: "https://news.google.com/rss/headlines/section/geo/Lucknow?hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_controversy, url: "https://news.google.com/rss/search?q=%28%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%E0%A4%AD%E0%A4%BE%E0%A4%9C%E0%A4%AA%E0%A4%BE+OR+%E0%A4%AC%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%E0%A4%95%E0%A4%BE%E0%A4%82%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%B8%29+%28%E0%A4%AA%E0%A4%B2%E0%A4%9F%E0%A4%B5%E0%A4%BE%E0%A4%B0+OR+%E0%A4%A8%E0%A4%BF%E0%A4%B6%E0%A4%BE%E0%A4%A8%E0%A4%BE+OR+%E0%A4%86%E0%A4%B0%E0%A5%8B%E0%A4%AA+OR+%E0%A4%A4%E0%A4%82%E0%A4%9C%29+%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22+OR+%E0%A4%B2%E0%A4%96%E0%A4%A8%E0%A4%8A%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_mayawati, url: "https://news.google.com/rss/search?q=%E0%A4%AE%E0%A4%BE%E0%A4%AF%E0%A4%BE%E0%A4%B5%E0%A4%A4%E0%A5%80+OR+%E0%A4%AC%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%22%E0%A4%86%E0%A4%95%E0%A4%BE%E0%A4%B6+%E0%A4%86%E0%A4%A8%E0%A4%82%E0%A4%A6%22+when%3A1d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_akhilesh, url: "https://news.google.com/rss/search?q=%22%E0%A4%85%E0%A4%96%E0%A4%BF%E0%A4%B2%E0%A5%87%E0%A4%B6+%E0%A4%AF%E0%A4%BE%E0%A4%A6%E0%A4%B5%22+OR+%E0%A4%B8%E0%A4%AA%E0%A4%BE+when%3A1d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_yogi, url: "https://news.google.com/rss/search?q=%22%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80+%E0%A4%86%E0%A4%A6%E0%A4%BF%E0%A4%A4%E0%A5%8D%E0%A4%AF%E0%A4%A8%E0%A4%BE%E0%A4%A5%22+OR+%22%E0%A4%B8%E0%A5%80%E0%A4%8F%E0%A4%AE+%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80%22+when%3A1d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_bahubali, url: "https://news.google.com/rss/search?q=%28%E0%A4%AC%E0%A4%BE%E0%A4%B9%E0%A5%81%E0%A4%AC%E0%A4%B2%E0%A5%80+OR+%E0%A4%AE%E0%A4%BE%E0%A4%AB%E0%A4%BF%E0%A4%AF%E0%A4%BE+OR+%22%E0%A4%AA%E0%A5%82%E0%A4%B0%E0%A5%8D%E0%A4%B5+%E0%A4%B8%E0%A4%BE%E0%A4%82%E0%A4%B8%E0%A4%A6%22+OR+%22%E0%A4%AA%E0%A5%82%E0%A4%B0%E0%A5%8D%E0%A4%B5+%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%AF%E0%A4%95%22%29+%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22%29+when%3A2d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_panchayat, url: "https://news.google.com/rss/search?q=%28%22%E0%A4%AA%E0%A4%82%E0%A4%9A%E0%A4%BE%E0%A4%AF%E0%A4%A4+%E0%A4%9A%E0%A5%81%E0%A4%A8%E0%A4%BE%E0%A4%B5%22+OR+%22%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%A8+%E0%A4%AA%E0%A4%B0%E0%A4%BF%E0%A4%B7%E0%A4%A6%22+OR+%E0%A4%8F%E0%A4%AE%E0%A4%8F%E0%A4%B2%E0%A4%B8%E0%A5%80+OR+%E0%A4%89%E0%A4%AA%E0%A4%9A%E0%A5%81%E0%A4%A8%E0%A4%BE%E0%A4%B5%29+%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22%29+when%3A2d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_cabinet, url: "https://news.google.com/rss/search?q=%28%22%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80+%E0%A4%95%E0%A5%88%E0%A4%AC%E0%A4%BF%E0%A4%A8%E0%A5%87%E0%A4%9F%22+OR+%22%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+%E0%A4%95%E0%A5%88%E0%A4%AC%E0%A4%BF%E0%A4%A8%E0%A5%87%E0%A4%9F%22+OR+%22%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+%E0%A4%B8%E0%A4%B0%E0%A4%95%E0%A4%BE%E0%A4%B0%22+OR+%E0%A4%B6%E0%A4%BE%E0%A4%B8%E0%A4%A8%E0%A4%BE%E0%A4%A6%E0%A5%87%E0%A4%B6%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: gn_q_en_up_politics, url: "https://news.google.com/rss/search?q=%22Uttar+Pradesh%22+%28BJP+OR+%22Samajwadi+Party%22+OR+BSP+OR+Congress%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi", google: true}
+  - {id: bing_up_politics, url: "https://www.bing.com/news/search?q=%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%A8%E0%A5%80%E0%A4%A4%E0%A4%BF&format=rss&setlang=hi&cc=IN"}
+  - {id: bing_akhilesh, url: "https://www.bing.com/news/search?q=%E0%A4%85%E0%A4%96%E0%A4%BF%E0%A4%B2%E0%A5%87%E0%A4%B6+%E0%A4%AF%E0%A4%BE%E0%A4%A6%E0%A4%B5&format=rss&setlang=hi&cc=IN"}
+  - {id: bing_yogi, url: "https://www.bing.com/news/search?q=%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80+%E0%A4%86%E0%A4%A6%E0%A4%BF%E0%A4%A4%E0%A5%8D%E0%A4%AF%E0%A4%A8%E0%A4%BE%E0%A4%A5&format=rss&setlang=hi&cc=IN"}

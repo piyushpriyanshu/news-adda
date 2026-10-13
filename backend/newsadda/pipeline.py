@@ -4,6 +4,8 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
+
+import httpx
 from datetime import datetime, timedelta
 
 from .classify import RULES_VERSION, Classifier
@@ -12,9 +14,9 @@ from .dedup import WINDOW, Clusterer
 from .entities import EntityIndex
 from .fetcher import Fetcher, FetchResult
 from .parser import RawItem, item_id
-from .registry import Source, load_blocked_publishers, load_sources
+from .registry import Source, load_blocked_publishers, load_sources, load_trusted_publishers
 from .store import Store
-from .textutil import normalize, short_summary
+from .textutil import devanagari_share, normalize, short_summary
 from .timeutil import from_iso, iso, utcnow
 
 log = logging.getLogger("newsadda.pipeline")
@@ -73,8 +75,25 @@ class Pipeline:
         """Re-read sources and entities (they are plain files, editable live)."""
         self.sources: list[Source] = load_sources(self.settings.sources_path)
         self.blocked = {_base_name(b) for b in load_blocked_publishers(self.settings.sources_path)}
+        self.trusted = {_base_name(t) for t in load_trusted_publishers(self.settings.sources_path)}
+        self.skipped = {"not_up": 0, "untrusted": 0, "not_hindi": 0}
         self.entities = EntityIndex(self.settings.entities_path)
         self.classifier = Classifier(self.entities)
+
+    def credible(self, src: Source, publisher: str | None) -> bool:
+        """Direct publisher feeds are trusted. Items that arrive through an
+        aggregator (Google News) are kept only from established outlets: those
+        we also follow directly, or those on the trusted_publishers list."""
+        if src.kind != "google_news":
+            return True
+        if not self.trusted:
+            return True  # no list configured: accept everything (tests, custom setups)
+        key = _base_name(publisher or "")
+        if not key:
+            return False
+        if key in self.trusted:
+            return True
+        return any(s.kind == "rss" and key in _names(s) for s in self.sources)
 
     @property
     def sources_by_id(self) -> dict[str, Source]:
@@ -116,6 +135,12 @@ class Pipeline:
                 continue  # social posts / aggregators surfaced by Google News
             if PROMO.search(raw.title):
                 continue
+            if devanagari_share(raw.title) < self.settings.min_hindi_share:
+                self.skipped["not_hindi"] += 1
+                continue  # the feed is Hindi-only
+            if not self.credible(src, raw.publisher):
+                self.skipped["untrusted"] += 1
+                continue
             title_norm = " ".join(normalize(raw.title).split())
             pub_key = self.publisher_key(src, raw.publisher)
             same = self.store.find_same_title(title_norm, now - WINDOW)
@@ -132,6 +157,7 @@ class Pipeline:
                 kind="post" if src.kind == "x" else "article", official_source=src.official,
             )
             if not c.is_up:
+                self.skipped["not_up"] += 1
                 continue
 
             suspect = bool(raw.published_at and raw.published_at > now + FUTURE_TOLERANCE)
@@ -200,7 +226,7 @@ class Pipeline:
         sig = f"{RULES_VERSION}:{ent_hash}"
         if self.store.meta("rules") == sig:
             return 0
-        n = 0
+        n = removed = 0
         src_by = self.sources_by_id
         for it in self.store.all_items():
             src = src_by.get(it["source_id"])
@@ -208,6 +234,12 @@ class Pipeline:
                 it["title"], it["summary"], up_section=src.up_section if src else True,
                 kind=it["kind"], official_source=bool(src and src.official),
             )
+            # Stories that no longer pass the UP, Hindi or credibility rules leave the feed.
+            if (not c.is_up or devanagari_share(it["title"]) < self.settings.min_hindi_share
+                    or (src is not None and not self.credible(src, it["publisher"]))):
+                self.store.db.execute("DELETE FROM items WHERE id=?", (it["id"],))
+                removed += 1
+                continue
             data = dict(it["data"])
             data.update(categories=c.categories, entities=c.entities, breaking=c.breaking,
                         breaking_score=c.breaking_score, reasons=c.reasons, labels=c.labels,
@@ -217,8 +249,65 @@ class Pipeline:
             self.store.update_item(it["id"], data=data)
             n += 1
         self.store.set_meta("rules", sig)
-        log.info("re-labelled %d stored items for rules %s", n, sig)
+        log.info("re-labelled %d stored items, removed %d, rules %s", n, removed, sig)
         return n
+
+    async def add_gists(self, now: datetime) -> dict:
+        """Direct links and 2–3 line gists for the most important recent items
+        that lack them, within the per-run budget (see gist.py)."""
+        from .gist import enrich_items
+
+        recent = self.store.recent_items(now - timedelta(hours=6))
+        todo = [
+            it for it in recent
+            if not it["data"].get("gist_tried")
+            and (not it["summary"] or "news.google.com" in it["url"])
+            and it["kind"] == "article"
+        ]
+
+        def priority(it: dict):
+            d = it["data"]
+            ents = d.get("entities", {})
+            political = bool(ents.get("leaders") or ents.get("figures") or ents.get("parties")) or bool(
+                {"politics", "election", "controversy"} & set(d.get("categories", [])))
+            # Breaking first, then political with named leaders, then other political.
+            return (not d.get("breaking"), not political, not (ents.get("leaders") or ents.get("figures")))
+
+        todo.sort(key=lambda it: it["first_seen_at"], reverse=True)  # newest first within each group
+        todo.sort(key=priority)  # stable sort keeps the newest-first order inside groups
+        batch = todo[: self.settings.gist_budget]
+        if not batch:
+            return {}
+        own = self.client is None
+        client = self.client or httpx.AsyncClient(
+            timeout=15, follow_redirects=True,
+            headers={"User-Agent": self.settings.user_agent, "Accept-Language": "hi-IN,hi;q=0.9"},
+        )
+        try:
+            updates, stats = await enrich_items(batch, client, self.settings.user_agent)
+        finally:
+            if own:
+                await client.aclose()
+        stamp = iso(now)
+        for it in batch:
+            data = dict(it["data"])
+            data["gist_tried"] = True
+            upd = updates.get(it["id"], {})
+            fields: dict = {"data": data}
+            if "resolved_url" in upd:
+                data["resolved_url"] = upd["resolved_url"]
+                from .parser import site_domain
+
+                data["domain"] = site_domain(upd["resolved_url"]) or data.get("domain")
+            if upd.get("summary"):
+                fields["summary"] = upd["summary"]
+                fields["summary_origin"] = "page"
+            if len(fields) > 1 or "resolved_url" in upd:
+                fields["changed_at"] = stamp
+                self.store.db.execute("UPDATE items SET changed_at=? WHERE cluster_id=?", (stamp, it["cluster_id"]))
+            self.store.update_item(it["id"], **fields)
+        log.info("gists: tried %d, %s", len(batch), stats)
+        return stats
 
     async def run_once(self, force: bool = False, only: list[str] | None = None) -> list[FetchResult]:
         self.reload()
@@ -242,6 +331,12 @@ class Pipeline:
             if not res.skipped:
                 log.info("%-20s ok=%s status=%s items=%d new=%d err=%s", res.source.id, res.ok,
                          res.http_status, len(res.items), new, res.error)
+        if self.settings.gist_enabled:
+            try:
+                await self.add_gists(now)
+            except Exception:
+                log.exception("gists failed; continuing without them")
+        log.info("skipped this run: %s", self.skipped)
         if self.settings.ai_enabled and self.settings.ai_api_key:
             from .ai import summarize_pending
 

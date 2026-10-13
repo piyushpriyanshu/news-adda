@@ -79,7 +79,7 @@ BREAKING_SIGNALS: list[tuple[list[str], int, str]] = [
 ]
 BREAKING_THRESHOLD = 3
 # Bump when rules change: stored items are then re-labelled on the next run.
-RULES_VERSION = "3"
+RULES_VERSION = "4"
 _LIVE = re.compile(r"\blive\b|लाइव", re.I)
 
 ALLEGATION = _kw("आरोप", "आरोपों", "आरोपित", "आरोप लगाया", "accused", "alleges", "alleged")
@@ -123,9 +123,46 @@ class Classification:
     legal_status: list[str] = field(default_factory=list)
 
 
+# Parties whose politics is centred on UP: naming one is a UP signal by itself.
+UP_PARTIES = {"sp", "bsp", "sbsp", "rld", "apnadal_s", "nishad", "asp"}
+# Local-governance words that mean UP only inside a UP-section feed.
+UP_SECTION_HINTS = _kw(
+    "प्रदेश", "विधानसभा", "विधायक", "मुख्यमंत्री", "उपमुख्यमंत्री", "डिप्टी सीएम", "राज्यमंत्री", "मंत्री",
+    "शासन", "शासनादेश", "जिलाधिकारी", "डीएम", "एसएसपी", "पुलिस", "नगर निगम", "पंचायत", "थाना", "थाने",
+    "जिला", "जिले", "सांसद", "प्रशासन",
+)
+# Other states, their capitals and foreign countries: a story about one of these
+# with no UP signal is not UP news.
+OTHER_PLACES = _kw(
+    "बिहार", "पटना", "दिल्ली", "महाराष्ट्र", "मुंबई", "राजस्थान", "जयपुर", "मध्य प्रदेश", "मध्यप्रदेश", "भोपाल",
+    "इंदौर", "गुजरात", "अहमदाबाद", "पंजाब", "चंडीगढ़", "हरियाणा", "उत्तराखंड", "देहरादून", "झारखंड", "रांची",
+    "पश्चिम बंगाल", "बंगाल", "कोलकाता", "तमिलनाडु", "चेन्नई", "केरल", "कर्नाटक", "बेंगलुरु", "तेलंगाना",
+    "हैदराबाद", "आंध्र प्रदेश", "ओडिशा", "असम", "जम्मू", "कश्मीर", "हिमाचल", "छत्तीसगढ़", "रायपुर", "गोवा",
+    "पाकिस्तान", "अमेरिका", "चीन", "बांग्लादेश", "नेपाल", "रूस", "यूक्रेन", "इजरायल", "ईरान",
+    "Bihar", "Delhi", "Maharashtra", "Rajasthan", "Gujarat", "Punjab", "Haryana", "Uttarakhand", "Bengal",
+)
+
+
 class Classifier:
     def __init__(self, entities: EntityIndex):
         self.entities = entities
+
+    @staticmethod
+    def is_up(body: str, bp: str, ents: dict, up_section: bool) -> bool:
+        """Strict UP test. A story is UP news when it names UP itself, a UP
+        district or seat, a UP leader or regional figure, or a UP-centred party.
+        Inside a UP-section feed, local-governance words also count unless the
+        story is clearly about another state or country."""
+        strong = bool(
+            _hits(UP_MARKERS, bp) or _UP_LATIN.search(body)
+            or ents["districts"] or ents["seats"] or ents["leaders"] or ents["figures"]
+            or UP_PARTIES & set(ents["parties"])
+        )
+        if strong:
+            return True
+        if up_section and _hits(UP_SECTION_HINTS, bp) and not _hits(OTHER_PLACES, bp):
+            return True
+        return False
 
     def classify(self, title: str, summary: str | None, *, up_section: bool, kind: str = "article",
                  official_source: bool = False) -> Classification:
@@ -135,10 +172,7 @@ class Classifier:
         has_person = bool(ents["leaders"] or ents["figures"])
         political_entity = has_person or bool(ents["parties"])
 
-        up_hit = bool(_hits(UP_MARKERS, bp) or _UP_LATIN.search(body))
-        is_up = up_section or up_hit or bool(
-            ents["districts"] or ents["seats"] or ents["leaders"] or ents["figures"]
-        )
+        is_up = self.is_up(body, bp, ents, up_section)
 
         cats = [cid for cid, (_, kws) in CATEGORIES.items() if _hits(kws, bp)]
         if political_entity and "politics" not in cats:

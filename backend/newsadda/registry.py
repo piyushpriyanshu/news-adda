@@ -70,6 +70,7 @@ def load_sources(path: str | Path) -> list[Source]:
     raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     defaults = raw.get("defaults", {})
     raw.pop("blocked_publishers", None)
+    raw.pop("trusted_publishers", None)
     out, seen = [], set()
     for entry in raw.get("sources", []):
         merged = {**defaults, **entry}
@@ -85,6 +86,11 @@ def load_sources(path: str | Path) -> list[Source]:
         seen.add(src.id)
         out.append(src)
     return out
+
+
+def load_trusted_publishers(path: str | Path) -> set[str]:
+    raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    return set(raw.get("trusted_publishers", []) or [])
 
 
 def load_blocked_publishers(path: str | Path) -> set[str]:

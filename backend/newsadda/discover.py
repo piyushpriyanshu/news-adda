@@ -13,6 +13,8 @@ from urllib.parse import urlsplit
 from urllib.robotparser import RobotFileParser
 
 import httpx
+import yaml
+from pathlib import Path
 
 from .config import Settings
 from .parser import FeedError, discover_feed_links, parse_feed
@@ -108,6 +110,20 @@ async def discover(settings: Settings | None = None, only: list[str] | None = No
                 return entry
 
         report["sources"] = await asyncio.gather(*(per_source(s) for s in sources))
+        # Candidate feeds from probes.yaml (not polled; tested here so working ones can be added).
+        probes_path = Path(settings.sources_path).with_name("probes.yaml")
+        probes = (yaml.safe_load(probes_path.read_text(encoding="utf-8")) or {}).get("probes", []) if probes_path.exists() else []
+
+        async def per_probe(pr):
+            async with sem:
+                res = await test_feed(client, pr["url"], bool(pr.get("google")))
+                res["id"] = pr["id"]
+                return res
+
+        report["probes"] = await asyncio.gather(*(per_probe(pr) for pr in probes))
+
+        # Live check of gists: resolve a few Google News links and read publisher descriptions.
+        report["gist_check"] = await gist_check(client, settings)
     report["summary"] = {
         s["id"]: (s["working"][0] if s.get("working") else None) for s in report["sources"] if s["kind"] != "x"
     }
@@ -121,3 +137,28 @@ def run(out_path: str | None = None, only: list[str] | None = None) -> dict:
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(text)
     return report
+
+
+async def gist_check(client: httpx.AsyncClient, settings, n: int = 6) -> list[dict]:
+    from .gist import Gister
+    from .registry import GOOGLE_NEWS
+    from urllib.parse import quote_plus
+
+    url = GOOGLE_NEWS.format(q=quote_plus("(यूपी OR \"उत्तर प्रदेश\") (भाजपा OR सपा OR बसपा) when:1d"))
+    out = []
+    try:
+        r = await client.get(url)
+        items = parse_feed(r.content, google_news=True)[:n]
+    except Exception as exc:
+        return [{"error": f"feed: {exc!s:.100}"}]
+    g = Gister(client, settings.user_agent)
+    for it in items:
+        rec = {"title": it.title, "publisher": it.publisher}
+        real = await g.resolve_google(it.url)
+        rec["resolved"] = real
+        if real:
+            gist, _ = await g.page_gist(real, it.title)
+            rec["gist"] = gist
+        out.append(rec)
+    out.append({"stats": g.stats, "google_blocked": g.google_blocked})
+    return out

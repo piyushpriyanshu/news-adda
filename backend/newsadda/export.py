@@ -46,7 +46,8 @@ def _report(it: dict, pipeline: Pipeline) -> dict:
         "domain": it["data"].get("domain") or publisher_domain(pipeline.sources, it["publisher"])
         or (src.domain if src else None),
         "kind": it["kind"],
-        "url": it["url"],
+        # Direct publisher link when a Google News link was resolved.
+        "url": it["data"].get("resolved_url") or it["url"],
         "title": it["title"],
         "summary": strip_html(it["summary"]) or None,
         "summary_origin": it["summary_origin"],
@@ -183,6 +184,7 @@ def build_feed(pipeline: Pipeline, since: datetime | None = None, now: datetime 
         "window_hours": s.feed_hours,
         "story_count": len(stories),
         "x_available": bool(s.x_bearer_token) and bool(x_src and x_src.enabled),
+        "filtered_last_run": getattr(pipeline, "skipped", {}),
         "live_wire": [
             {"id": x.id, "name": x.name, "name_hi": x.name_hi, "domain": x.domain, "url": x.feed_urls[0]}
             for x in pipeline.sources if x.live_wire and x.enabled and x.feed_urls
@@ -221,6 +223,7 @@ def write_feed(pipeline: Pipeline, out_dir: str | Path) -> Path:
     (out / "feed.json.gz").write_bytes(gzip.compress(body, 6))
     delta = build_delta(feed, now)
     (out / "delta.json").write_bytes(json.dumps(delta, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
-    health = {"generated_at": feed["generated_at"], "story_count": feed["story_count"], "sources": feed["sources"]}
+    health = {"generated_at": feed["generated_at"], "story_count": feed["story_count"],
+              "filtered_last_run": feed.get("filtered_last_run"), "sources": feed["sources"]}
     (out / "health.json").write_text(json.dumps(health, ensure_ascii=False, indent=1), encoding="utf-8")
     return out / "feed.json"
