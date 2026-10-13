@@ -20,7 +20,16 @@ def _hits(kws: list[str], text_padded: str) -> list[str]:
     return [k.strip() for k in kws if k in text_padded]
 
 
-UP_MARKERS = _kw("उत्तर प्रदेश", "यूपी", "Uttar Pradesh", "प्रदेश सरकार", "योगी सरकार")
+UP_MARKERS = _kw(
+    "उत्तर प्रदेश", "यूपी", "Uttar Pradesh", "प्रदेश सरकार", "योगी सरकार", "योगी", "गोरखनाथ मंदिर", "गोरक्षपीठ",
+    "लोकभवन", "लोक भवन", "पूर्वांचल", "बुंदेलखंड", "रुहेलखंड", "पश्चिमी यूपी",
+)
+# For leader / party searches: words that tie a headline to state politics.
+POLITICAL_HINTS = _kw(
+    "प्रदेश", "विधानसभा", "विधायक", "मुख्यमंत्री", "सीएम", "CM", "उपमुख्यमंत्री", "डिप्टी सीएम", "मंत्री", "राज्यमंत्री",
+    "सांसद", "शासन", "शासनादेश", "भाजपा", "बीजेपी", "BJP", "कांग्रेस", "सपा", "बसपा", "जिलाध्यक्ष", "प्रदेश अध्यक्ष",
+    "विधान परिषद", "एमएलसी", "चुनाव", "उपचुनाव",
+)
 _UP_LATIN = re.compile(r"\bUP\b")
 
 CATEGORIES: dict[str, tuple[str, list[str]]] = {
@@ -79,7 +88,7 @@ BREAKING_SIGNALS: list[tuple[list[str], int, str]] = [
 ]
 BREAKING_THRESHOLD = 3
 # Bump when rules change: stored items are then re-labelled on the next run.
-RULES_VERSION = "5"
+RULES_VERSION = "7"
 _LIVE = re.compile(r"\blive\b|लाइव", re.I)
 
 ALLEGATION = _kw("आरोप", "आरोपों", "आरोपित", "आरोप लगाया", "accused", "alleges", "alleged")
@@ -148,11 +157,16 @@ class Classifier:
         self.entities = entities
 
     @staticmethod
-    def is_up(body: str, bp: str, ents: dict, up_section: bool) -> bool:
+    def is_up(body: str, bp: str, ents: dict, up_section: bool | str) -> bool:
         """Strict UP test. A story is UP news when it names UP itself, a UP
         district or seat, a UP leader or regional figure, or a UP-centred party.
-        Inside a UP-section feed, local-governance words also count unless the
-        story is clearly about another state or country."""
+
+        Otherwise it depends on where the item came from (``up_section``):
+        "local" (a UP district/city edition) — kept unless it is clearly about
+        another state or country; True (a UP state section) — kept when it uses
+        local-governance words; "politics" (a search for UP leaders/parties) —
+        kept when it uses state-politics words; False (national feeds and broad
+        searches) — strong signals only."""
         strong = bool(
             _hits(UP_MARKERS, bp) or _UP_LATIN.search(body)
             or ents["districts"] or ents["seats"] or ents["leaders"] or ents["figures"]
@@ -160,11 +174,17 @@ class Classifier:
         )
         if strong:
             return True
-        if up_section and _hits(UP_SECTION_HINTS, bp) and not _hits(OTHER_PLACES, bp):
+        if _hits(OTHER_PLACES, bp):
+            return False
+        if up_section == "local":
             return True
+        if up_section == "politics":
+            return bool(_hits(POLITICAL_HINTS, bp))
+        if up_section is True:
+            return bool(_hits(UP_SECTION_HINTS, bp))
         return False
 
-    def classify(self, title: str, summary: str | None, *, up_section: bool, kind: str = "article",
+    def classify(self, title: str, summary: str | None, *, up_section: bool | str, kind: str = "article",
                  official_source: bool = False) -> Classification:
         body = f"{title} {summary or ''}"
         tp, bp = padded(title), padded(body)

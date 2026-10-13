@@ -20,7 +20,9 @@ class Source:
     listing_pages: list[str] = field(default_factory=list)
     query: str | None = None
     handles: list[str] = field(default_factory=list)
-    up_section: bool = True
+    # True: a UP state section; "local": a UP district/city edition; "politics":
+    # a search for UP leaders/parties; False: national feed or broad search.
+    up_section: bool | str = True
     min_interval: int = 240
     enabled: bool = True
     official: bool = False
@@ -81,6 +83,8 @@ def load_sources(path: str | Path) -> list[Source]:
         src = Source(**merged)
         if src.id in seen:
             raise ValueError(f"duplicate source id {src.id}")
+        if src.up_section not in (True, False, "local", "politics"):
+            raise ValueError(f"source {src.id}: up_section must be true, false, local or politics")
         if src.kind not in ("rss", "google_news", "x"):
             raise ValueError(f"source {src.id}: unknown kind {src.kind}")
         seen.add(src.id)

@@ -78,8 +78,13 @@ class Pipeline:
         self.trusted = {_base_name(t) for t in load_trusted_publishers(self.settings.sources_path)}
         self.skipped = {"not_up": 0, "untrusted": 0, "not_hindi": 0}
         self.gist_stats: dict = {}
+        self.relabel_stats: dict = getattr(self, "relabel_stats", {})
         self.entities = EntityIndex(self.settings.entities_path)
         self.classifier = Classifier(self.entities)
+
+    @property
+    def ai_active(self) -> bool:
+        return bool(self.settings.ai_enabled and self.settings.ai_api_key)
 
     def credible(self, src: Source, publisher: str | None) -> bool:
         """Direct publisher feeds are trusted. Items that arrive through an
@@ -163,7 +168,7 @@ class Pipeline:
             # Gists are Hindi like the headlines; English descriptions are kept only
             # when the optional AI step will turn them into Hindi.
             shown_summary = summary if summary and (
-                devanagari_share(summary) >= self.settings.min_hindi_share or self.settings.ai_enabled) else None
+                devanagari_share(summary) >= self.settings.min_hindi_share or self.ai_active) else None
 
             suspect = bool(raw.published_at and raw.published_at > now + FUTURE_TOLERANCE)
             sort_at = raw.published_at if raw.published_at and not suspect else now
@@ -231,7 +236,7 @@ class Pipeline:
         sig = f"{RULES_VERSION}:{ent_hash}"
         if self.store.meta("rules") == sig:
             return 0
-        n = removed = 0
+        n = removed = cleared = 0
         src_by = self.sources_by_id
         for it in self.store.all_items():
             src = src_by.get(it["source_id"])
@@ -247,10 +252,11 @@ class Pipeline:
                 continue
             data = dict(it["data"])
             extra: dict = {}
-            if (it["summary"] and it["summary_origin"] in ("publisher", "page") and not self.settings.ai_enabled
-                    and devanagari_share(it["summary"]) < self.settings.min_hindi_share):
+            english = bool(it["summary"]) and devanagari_share(it["summary"]) < self.settings.min_hindi_share
+            if english and (it["summary_origin"] == "page" or it["summary_origin"] == "publisher" and not self.ai_active):
                 # English gist: drop it (and re-send the story) and try the page again.
                 extra = {"summary": None, "summary_origin": None, "changed_at": iso(utcnow())}
+                cleared += 1
                 data.pop("gist_tried", None)
             data.update(categories=c.categories, entities=c.entities, breaking=c.breaking,
                         breaking_score=c.breaking_score, reasons=c.reasons, labels=c.labels,
@@ -260,7 +266,8 @@ class Pipeline:
             self.store.update_item(it["id"], data=data, **extra)
             n += 1
         self.store.set_meta("rules", sig)
-        log.info("re-labelled %d stored items, removed %d, rules %s", n, removed, sig)
+        self.relabel_stats = {"rules": sig, "relabelled": n, "removed": removed, "english_gists_cleared": cleared}
+        log.info("re-labelled %d stored items, removed %d, cleared %d English gists, rules %s", n, removed, cleared, sig)
         return n
 
     async def add_gists(self, now: datetime) -> dict:

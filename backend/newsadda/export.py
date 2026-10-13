@@ -236,6 +236,7 @@ def write_feed(pipeline: Pipeline, out_dir: str | Path) -> Path:
     (out / "delta.json").write_bytes(json.dumps(delta, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
     health = {"generated_at": feed["generated_at"], "story_count": feed["story_count"],
               "filtered_last_run": feed.get("filtered_last_run"),
-              "gists_last_run": getattr(pipeline, "gist_stats", {}), "sources": feed["sources"]}
+              "gists_last_run": getattr(pipeline, "gist_stats", {}),
+              "relabel_last_run": getattr(pipeline, "relabel_stats", {}), "sources": feed["sources"]}
     (out / "health.json").write_text(json.dumps(health, ensure_ascii=False, indent=1), encoding="utf-8")
     return out / "feed.json"

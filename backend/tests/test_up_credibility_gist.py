@@ -31,6 +31,11 @@ def clf():
     ("दिल्ली में अखिलेश यादव ने चुनाव आयोग पर उठाए सवाल", False, True),       # UP leader, outside UP
     ("विधानसभा में हंगामा, विधायक धरने पर बैठे", True, True),                 # local-governance words in a UP feed
     ("विधानसभा में हंगामा, विधायक धरने पर बैठे", False, False),               # same words in a national feed
+    ("सेक्टर 70 की गलियां हुई जगमग, प्राधिकरण ने सही कराईं लाइटें", "local", True),  # district edition
+    ("पटना में मिठाई दुकान का कारीगर लापता", "local", False),               # other state in a district edition
+    ("मढ़ौरा में कारीगर लापता, पुलिस तलाश में जुटी", "politics", False),     # crime with no politics, leader search
+    ("शिक्षकों को समर्पित दिखा भाजपा का मंच: CM बोले", "politics", True),    # state politics in a leader search
+    ("गोरखनाथ मंदिर के शक्तिपीठ में कलश स्थापना", False, True),               # UP landmark
 ])
 def test_strict_up_rule(clf, title, up_section, expected):
     assert clf.classify(title, None, up_section=up_section).is_up is expected
