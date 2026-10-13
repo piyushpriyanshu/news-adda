@@ -74,6 +74,9 @@ fun StoryList(
 ) {
     PullToRefreshBox(isRefreshing = env.refreshing, onRefresh = env.onRefresh, modifier = Modifier.fillMaxSize()) {
         LazyColumn(state = state, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
+            // Stable first item: sections that appear later (breaking carousel, live wire)
+            // are inserted below it, so they stay in view instead of above the scroll position.
+            item(key = "top") { Spacer(Modifier.height(4.dp)) }
             header()
             if (stories.isEmpty()) {
                 item { EmptyState(emptyTitle, emptyBody) }

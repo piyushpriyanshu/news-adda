@@ -6,7 +6,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -111,11 +112,18 @@ fun NewsAddaApp(vm: MainViewModel) {
                     StatusRow(vm, now)
                     if (repo.refreshing) LinearProgressIndicator(Modifier.fillMaxWidth())
                     if (!subPage) {
-                        Row(
-                            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
+                        val navState = rememberLazyListState()
+                        // Keep the selected section's pill in view.
+                        LaunchedEffect(section) {
+                            val i = NAV.indexOf(section)
+                            if (i >= 0) navState.animateScrollToItem((i - 1).coerceAtLeast(0))
+                        }
+                        LazyRow(
+                            state = navState,
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
-                            NAV.forEach { sec ->
+                            items(NAV) { sec ->
                                 PillChip(sec.title(str), sec == section, if (sec == Section.BREAKING) breakingCount else 0) {
                                     vm.section.value = sec
                                 }

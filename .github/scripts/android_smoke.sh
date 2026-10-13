@@ -40,6 +40,7 @@ tap "Original" --above 220; shot 11_story_detail 3
 adb shell input keyevent 4; sleep 1
 tap "Search"; sleep 2; tap "Leader, party, district"; sleep 1; adb shell input text "yogi"; shot 12_search_english_query 3
 adb shell input keyevent 4; sleep 1; adb shell input keyevent 4; sleep 1   # hide keyboard, close search
+adb shell am start -n $PKG/com.newsadda.app.MainActivity; sleep 2          # in case back left the app
 
 # Dark theme.
 adb shell cmd uimode night yes; sleep 3; shot 12b_home_dark 3

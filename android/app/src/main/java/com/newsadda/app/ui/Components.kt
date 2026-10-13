@@ -192,7 +192,9 @@ fun StoryTags(s: Story, now: Instant, showStatementType: Boolean = false) {
         if (FeedLogic.isBreakingNow(s, now)) add { Pill(str.tagBreaking.uppercase(), c.onBreaking, c.breaking) }
         if (s.kind == "post") add { Pill(str.tagXPost, c.muted, c.divider) }
         val st = s.statementType
-        if (showStatementType && st != null) add { Pill(str.statementType(st), c.muted, c.divider) }
+        // Skip the statement type when it would only repeat the Allegation/Counter-attack label.
+        val repeats = (st == "allegation" && "allegation" in s.labels) || (st == "response" && "counter" in s.labels)
+        if (showStatementType && st != null && !repeats) add { Pill(str.statementType(st), c.muted, c.divider) }
         for (l in s.labels) when (l) {
             "allegation", "counter" -> add { Pill(str.label(l), c.allegation, c.allegationBg) }
             "awaiting_confirmation" -> add { Pill(str.label(l), c.caution, c.cautionBg) }
@@ -220,7 +222,6 @@ fun SourceLine(lead: Report?, now: Instant, isNew: Boolean, recent: Boolean) {
             color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
-        if (lead?.via != null) Text("· G", style = MaterialTheme.typography.labelSmall, color = c.faint)
         val t = lead?.displayTime()
         Text("· " + TimeFmt.ago(t, now, str), style = MaterialTheme.typography.bodySmall,
             color = if (recent) c.newDot else c.muted, maxLines = 1)
