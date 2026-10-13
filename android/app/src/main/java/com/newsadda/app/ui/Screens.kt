@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +46,7 @@ import com.newsadda.app.data.LiveWire
 import com.newsadda.app.data.TimeFmt
 import com.newsadda.app.data.model.LiveItem
 import com.newsadda.app.data.model.Story
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.Instant
@@ -106,14 +108,27 @@ fun HomeScreen(vm: MainViewModel, all: List<Story>, env: ListEnv) {
     }
     val breaking = remember(all, env.now) { all.filter { FeedLogic.isBreakingNow(it, env.now) }.take(10) }
     val newCount = list.count { it.id in env.newIds }
+    var jumping by remember { mutableStateOf(false) }
 
     StoryList(list, env, str.emptyHome, str.emptyHomeBody, state = state) {
-        if (newCount > 0) {
+        if (newCount > 0 && !jumping) {
             item(key = "new-banner") {
-                Notice(str.newStories(newCount), c.newDot, str.markSeen to {
-                    scope.launch { state.animateScrollToItem(0) }
-                    vm.acknowledgeNew()
-                })
+                NewStoriesBar(str.newStories(newCount), str.showNew) {
+                    val first = list.indexOfFirst { it.id in env.newIds }
+                    jumping = true
+                    scope.launch {
+                        if (first >= 0) {
+                            withFrameNanos { }  // let the bar disappear first so item positions are final
+                            // Stories are the last items of the list, after the header sections.
+                            val headerItems = state.layoutInfo.totalItemsCount - list.size
+                            state.animateScrollToItem((headerItems + first).coerceAtLeast(0))
+                        }
+                        // The new-story dots stay visible a moment so you can see which ones are new.
+                        delay(6_000)
+                        vm.acknowledgeNew()
+                        jumping = false
+                    }
+                }
             }
         }
         if (breaking.isNotEmpty()) {

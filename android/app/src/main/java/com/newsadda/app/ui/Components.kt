@@ -30,6 +30,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
@@ -380,6 +381,28 @@ fun Notice(text: String, color: Color = LocalNewsColors.current.muted, action: P
                 Spacer(Modifier.width(8.dp))
                 TextButton(onClick = action.second) { Text(action.first) }
             }
+        }
+    }
+}
+
+/**
+ * "N new stories" bar. The whole bar is one tap target: it jumps to the new
+ * stories and then goes away by itself (no separate "Mark seen" button).
+ */
+@Composable
+fun NewStoriesBar(text: String, action: String, onClick: () -> Unit) {
+    val c = LocalNewsColors.current
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.fillMaxWidth().clickable(onClickLabel = action, onClick = onClick),
+    ) {
+        Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(8.dp).background(c.newDot, CircleShape))
+            Spacer(Modifier.width(10.dp))
+            Text(text, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = c.newDot,
+                modifier = Modifier.weight(1f))
+            Text(action, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = c.newDot)
+            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = c.newDot, modifier = Modifier.size(20.dp))
         }
     }
 }

@@ -183,6 +183,7 @@ data class Str(val hindi: Boolean) {
     val politicsOnly get() = t("UP politics", "यूपी राजनीति")
     fun newStories(n: Int) = t("$n new " + pl(n, "story", "stories"), "$n नई खबरें आई हैं")
     val markSeen get() = t("Mark seen", "देख लिया")
+    val showNew get() = t("Show", "देखें")
     val emptyHome get() = t("No news yet", "अभी कोई खबर नहीं")
     val emptyHomeBody get() = t("Tap “Update now” or pull down.", "ऊपर “अभी अपडेट करें” दबाएं या नीचे खींचें।")
     val breakingEmpty get() = t("No breaking news in the last 24 hours", "पिछले 24 घंटों में कोई ब्रेकिंग खबर नहीं")
