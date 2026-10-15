@@ -1,4 +1,6 @@
-# न्यूज़ अड्डा (News Adda)
+# Mehak’s Portal
+
+*(formerly News Adda; the code and package id keep the old name `newsadda`)*
 
 A fast, text-only Hindi news aggregator for **Uttar Pradesh politics**, built to spot political developments early so they can be researched and turned into news videos.
 
@@ -15,9 +17,9 @@ After that the app updates itself:
 
 - It checks for a new version **every time it starts** and **in the background every 1, 3, 6 or 12 hours** (Settings → App updates).
 - A new version is downloaded automatically (can be turned off), verified (SHA-256, package name and version) and you get a notification. Tap **Install**; Android always asks you to confirm an install — no ordinary app can install silently.
-- The first time, Android asks you to allow News Adda to install apps; allow it once.
+- The first time, Android asks you to allow Mehak’s Portal to install apps; allow it once.
 
-`-debug.apk` files in each release are a separate test app ("News Adda (debug)"); they install alongside the normal app and never self-update.
+`-debug.apk` files in each release are a separate test app ("Mehak’s Portal (debug)"); they install alongside the normal app and never self-update.
 
 ## How it works
 
@@ -34,7 +36,7 @@ After that the app updates itself:
           pull-down / "अभी अपडेट करें"; cached for offline reading
 ```
 
-The phone never scrapes publishers; it only reads the backend's feed. Each story keeps **every publisher's link**, publication time, update time and the time News Adda first saw it, all shown in IST.
+The phone never scrapes publishers; it only reads the backend's feed. Each story keeps **every publisher's link**, publication time, update time and the time Mehak’s Portal first saw it, all shown in IST.
 
 ### What the app looks like
 

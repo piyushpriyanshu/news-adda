@@ -55,7 +55,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
             buildConfigField("Boolean", "UPDATES_ENABLED", "true")
-            resValue("string", "app_name", "News Adda")
+            resValue("string", "app_name", "Mehak’s Portal")
         }
         debug {
             // Installs next to the release app; never self-updates.
@@ -63,7 +63,7 @@ android {
             versionNameSuffix = "-debug"
             signingConfig = signingConfigs.getByName("release")
             buildConfigField("Boolean", "UPDATES_ENABLED", "false")
-            resValue("string", "app_name", "News Adda (debug)")
+            resValue("string", "app_name", "Mehak’s Portal (debug)")
         }
     }
 

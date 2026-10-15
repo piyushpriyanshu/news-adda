@@ -205,7 +205,7 @@ private fun TopRow(vm: MainViewModel, subPage: Boolean, searchOpen: Boolean, sec
 private fun BrandMark() {
     val c = LocalNewsColors.current
     Box(Modifier.size(32.dp).background(c.breaking, RoundedCornerShape(9.dp)), contentAlignment = Alignment.Center) {
-        Text("N", color = Color.White, fontWeight = FontWeight.Black, fontSize = 19.sp)
+        Text("M", color = Color.White, fontWeight = FontWeight.Black, fontSize = 19.sp)
     }
 }
 

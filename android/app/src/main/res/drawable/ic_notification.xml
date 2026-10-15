@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon: the "M" mark (white, Android tints it). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
     android:viewportWidth="24" android:viewportHeight="24">
-    <path android:fillColor="#FFFFFFFF" android:pathData="M4,5h16v3h-16zM4,10h16v2h-16zM4,14h16v2h-16zM4,18h10v2h-10z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3,20V4H7.5L12,11.5L16.5,4H21V20H17V10.5L12,18.5L7,10.5V20Z" />
 </vector>

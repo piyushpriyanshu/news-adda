@@ -18,7 +18,7 @@ data class Str(val hindi: Boolean) {
     }
 
     // ---- app & sections
-    val appName get() = t("News Adda", "न्यूज़ अड्डा")
+    val appName get() = t("Mehak’s Portal", "Mehak’s Portal")
     val tagline get() = t("Uttar Pradesh politics", "उत्तर प्रदेश राजनीति")
     val home get() = t("Home", "होम")
     val breaking get() = t("Breaking", "ब्रेकिंग न्यूज़")
@@ -175,7 +175,7 @@ data class Str(val hindi: Boolean) {
     fun pubAssumed(s: String) = t("Published: $s (IST assumed)", "प्रकाशित: $s (समय-क्षेत्र IST माना गया)")
     fun published(s: String) = t("Published: $s", "प्रकाशित: $s")
     fun updated(s: String) = t("Updated: $s", "अपडेट: $s")
-    fun seenByApp(s: String) = t("Seen by News Adda: $s", "न्यूज़ अड्डा ने देखा: $s")
+    fun seenByApp(s: String) = t("Seen by Mehak’s Portal: $s", "Mehak’s Portal ने देखा: $s")
     val openPost get() = t("Open post", "पोस्ट खोलें")
     val openReport get() = t("Open this report", "यह रिपोर्ट खोलें")
 
@@ -309,7 +309,7 @@ data class Str(val hindi: Boolean) {
     val data get() = t("Data", "डेटा")
     val clearCache get() = t("Clear saved cache", "सहेजा गया कैश साफ़ करें")
     val clearCacheNote get() = t("Saved (bookmarked) stories are kept.", "सहेजी गई खबरें (बुकमार्क) नहीं हटेंगी।")
-    val about get() = t("About News Adda", "न्यूज़ अड्डा के बारे में")
+    val about get() = t("About Mehak’s Portal", "Mehak’s Portal के बारे में")
     val aboutText get() = t(
         "Only headlines, short summaries and the original publisher's link are shown; read the full story on the publisher's site. Nothing is invented — if a source does not give a time or detail, it shows as \"not available\". Labels such as \"Breaking\" and \"Allegation\" come from keyword rules, show their reasons, and can be wrong.",
         "केवल शीर्षक, संक्षिप्त सारांश और मूल प्रकाशक का लिंक दिखाया जाता है; पूरी खबर प्रकाशक की साइट पर पढ़ें। कोई खबर, समय या बयान गढ़ा नहीं जाता — जो स्रोत नहीं देता, वह \"उपलब्ध नहीं\" दिखता है। \"ब्रेकिंग\", \"आरोप\" आदि निशान शब्द-आधारित नियमों से लगते हैं, उनके कारण दिखते हैं; ये गलत भी हो सकते हैं।")
@@ -333,17 +333,17 @@ data class Str(val hindi: Boolean) {
     val chBreaking get() = t("Breaking news", "ब्रेकिंग न्यूज़")
     val chBreakingDesc get() = t("Breaking news for followed leaders and districts", "अनुसरित नेताओं और जिलों की ब्रेकिंग खबरें")
     val chUpdates get() = t("App updates", "ऐप अपडेट")
-    val chUpdatesDesc get() = t("When a new version of News Adda is available", "न्यूज़ अड्डा का नया संस्करण उपलब्ध होने पर")
+    val chUpdatesDesc get() = t("When a new version of Mehak’s Portal is available", "Mehak’s Portal का नया संस्करण उपलब्ध होने पर")
     val nBreaking get() = t("Breaking", "ब्रेकिंग")
     val nNew get() = t("New story", "नई खबर")
     fun nSummary(n: Int) = t("$n new breaking " + pl(n, "story", "stories"), "$n नई ब्रेकिंग खबरें")
-    val nOpenApp get() = t("Open News Adda to read them", "न्यूज़ अड्डा खोलकर देखें")
-    val nStaleTitle get() = t("News Adda: no new updates", "न्यूज़ अड्डा: नया अपडेट नहीं आ रहा")
+    val nOpenApp get() = t("Open Mehak’s Portal to read them", "Mehak’s Portal खोलकर देखें")
+    val nStaleTitle get() = t("Mehak’s Portal: no new updates", "Mehak’s Portal: नया अपडेट नहीं आ रहा")
     fun nStaleText(since: String) = t(
         "The news feed has not updated since $since. Collection may have stopped — check the cron-job.org job or GitHub Actions.",
         "न्यूज़ फ़ीड $since के बाद अपडेट नहीं हुई है। संग्रह रुक गया हो सकता है — cron-job.org या GitHub Actions देखें।")
     val notifyPolitics get() = t("Every new UP politics story (not only breaking)", "यूपी राजनीति की हर नई खबर (केवल ब्रेकिंग नहीं)")
-    fun nUpdateTitle(v: String) = t("News Adda $v is available", "न्यूज़ अड्डा $v उपलब्ध")
+    fun nUpdateTitle(v: String) = t("Mehak’s Portal $v is available", "Mehak’s Portal $v उपलब्ध")
     val nUpdateReady get() = t("Downloaded — tap to install", "डाउनलोड हो चुका है — इंस्टॉल करने के लिए टैप करें")
     val nUpdateTap get() = t("Tap to update", "अपडेट करने के लिए टैप करें")
 }

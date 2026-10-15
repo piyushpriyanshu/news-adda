@@ -124,7 +124,7 @@ jobs:
           } > notes.md
           gh release create "v${VERSION_NAME}" \
             "NewsAdda-v${VERSION_NAME}.apk" "NewsAdda-v${VERSION_NAME}-debug.apk" update.json SHA256SUMS.txt \
-            --title "न्यूज़ अड्डा ${VERSION_NAME}" --latest --notes-file notes.md --repo "$GITHUB_REPOSITORY"
+            --title "Mehak’s Portal ${VERSION_NAME}" --latest --notes-file notes.md --repo "$GITHUB_REPOSITORY"
 
       - name: Publish build report
         if: always()
