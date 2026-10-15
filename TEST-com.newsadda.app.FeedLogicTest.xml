@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.newsadda.app.FeedLogicTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-15T06:22:08.097Z" hostname="runnervm8k3b6" time="0.15">
+  <properties/>
+  <testcase name="breakingLabelExpiresAndRecentWindow" classname="com.newsadda.app.FeedLogicTest" time="0.042"/>
+  <testcase name="hiddenSourcesHideOnlyFullyHiddenStories" classname="com.newsadda.app.FeedLogicTest" time="0.043"/>
+  <testcase name="mergeDropsStoriesOlderThanRetention" classname="com.newsadda.app.FeedLogicTest" time="0.005"/>
+  <testcase name="timesRenderInIstInBothLanguages" classname="com.newsadda.app.FeedLogicTest" time="0.022"/>
+  <testcase name="parsesBackendFeedFormat" classname="com.newsadda.app.FeedLogicTest" time="0.005"/>
+  <testcase name="labelsAndReasonsLocalise" classname="com.newsadda.app.FeedLogicTest" time="0.006"/>
+  <testcase name="liveWireKeepsOnlyUpHeadlines" classname="com.newsadda.app.FeedLogicTest" time="0.001"/>
+  <testcase name="searchFoldsNuktaAndCase" classname="com.newsadda.app.FeedLogicTest" time="0.01"/>
+  <testcase name="refreshIntervalDecision" classname="com.newsadda.app.FeedLogicTest" time="0.0"/>
+  <testcase name="englishSearchFindsHindiStoryThroughEntityNames" classname="com.newsadda.app.FeedLogicTest" time="0.0"/>
+  <testcase name="mergeUpsertsAndFlagsOnlyUnseenStories" classname="com.newsadda.app.FeedLogicTest" time="0.003"/>
+  <testcase name="mergeKeepsCachedSourcesWhenFeedOmitsThem" classname="com.newsadda.app.FeedLogicTest" time="0.005"/>
+  <testcase name="liveWireHeadlinesArePoliticalOnlyWhenTheyNameParties" classname="com.newsadda.app.FeedLogicTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

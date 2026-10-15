@@ -1,0 +1,2 @@
+> Task :app:testDebugUnitTest
+BUILD SUCCESSFUL in 1m 51s

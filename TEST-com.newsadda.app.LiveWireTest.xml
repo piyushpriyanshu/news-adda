@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.newsadda.app.LiveWireTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-15T06:22:08.253Z" hostname="runnervm8k3b6" time="0.045">
+  <properties/>
+  <testcase name="feedUrlUsesDeltaAndCacheBusterOnGithub" classname="com.newsadda.app.LiveWireTest" time="0.005"/>
+  <testcase name="sameNewsFromTwoPublishersIsShownOnceAndEnglishTailIsDropped" classname="com.newsadda.app.LiveWireTest" time="0.007"/>
+  <testcase name="googleNewsKeepsOriginalPublisherAndDomain" classname="com.newsadda.app.LiveWireTest" time="0.022"/>
+  <testcase name="combineDropsKnownAndOldHeadlines" classname="com.newsadda.app.LiveWireTest" time="0.004"/>
+  <testcase name="parsesPublisherFeedWithIstTimeAndBreakingHint" classname="com.newsadda.app.LiveWireTest" time="0.004"/>
+  <testcase name="liveWireKeepsOnlyHindiAndTrustedGooglePublishers" classname="com.newsadda.app.LiveWireTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
