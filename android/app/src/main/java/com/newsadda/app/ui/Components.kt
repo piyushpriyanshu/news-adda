@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -432,9 +433,32 @@ fun SectionLabel(text: String, trailing: (@Composable () -> Unit)? = null) {
         Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 14.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
-            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+        Box(Modifier.weight(1f)) { SectionTag(text) }
         trailing?.invoke()
+    }
+}
+
+/** Slanted (rhombus-sided) shape for section tags, like a TV news strap. */
+private val SlantShape = GenericShape { size, _ ->
+    val slant = size.height * 0.32f
+    moveTo(slant, 0f)
+    lineTo(size.width, 0f)
+    lineTo(size.width - slant, size.height)
+    lineTo(0f, size.height)
+    close()
+}
+
+/** A section title in white on the app's red, in a slanted tag exactly as wide as the text. */
+@Composable
+fun SectionTag(text: String) {
+    val c = LocalNewsColors.current
+    Box(
+        Modifier
+            .background(c.breaking, SlantShape)
+            .padding(horizontal = 16.dp, vertical = 5.dp),
+    ) {
+        Text(text, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 0.3.sp),
+            color = c.onBreaking, maxLines = 1)
     }
 }
 
