@@ -13,6 +13,8 @@ data class Settings(
     val hiddenSources: Set<String> = emptySet(),
     val newsNotifications: Boolean = true,
     val notifyAllBreaking: Boolean = false,
+    /** Alert for every new UP politics story, not only breaking ones. */
+    val notifyAllPolitics: Boolean = false,
     val updateCheckHours: Int = 3,
     val autoDownloadUpdates: Boolean = true,
     val textScale: Float = 1.0f,
@@ -55,6 +57,7 @@ object Prefs {
             hiddenSources = p.getStringSet("hidden_sources", emptySet())!!.toSet(),
             newsNotifications = p.getBoolean("news_notif", true),
             notifyAllBreaking = p.getBoolean("notify_all_breaking", false),
+            notifyAllPolitics = p.getBoolean("notify_all_politics", false),
             updateCheckHours = p.getInt("update_hours", 3).takeIf { it in UPDATE_OPTIONS } ?: 3,
             autoDownloadUpdates = p.getBoolean("auto_download", true),
             textScale = p.getFloat("text_scale", 1.0f),
@@ -77,6 +80,7 @@ object Prefs {
             .putStringSet("hidden_sources", s.hiddenSources)
             .putBoolean("news_notif", s.newsNotifications)
             .putBoolean("notify_all_breaking", s.notifyAllBreaking)
+            .putBoolean("notify_all_politics", s.notifyAllPolitics)
             .putInt("update_hours", s.updateCheckHours)
             .putBoolean("auto_download", s.autoDownloadUpdates)
             .putFloat("text_scale", s.textScale)

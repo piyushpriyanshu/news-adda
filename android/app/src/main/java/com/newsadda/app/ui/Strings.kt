@@ -338,6 +338,11 @@ data class Str(val hindi: Boolean) {
     val nNew get() = t("New story", "नई खबर")
     fun nSummary(n: Int) = t("$n new breaking " + pl(n, "story", "stories"), "$n नई ब्रेकिंग खबरें")
     val nOpenApp get() = t("Open News Adda to read them", "न्यूज़ अड्डा खोलकर देखें")
+    val nStaleTitle get() = t("News Adda: no new updates", "न्यूज़ अड्डा: नया अपडेट नहीं आ रहा")
+    fun nStaleText(since: String) = t(
+        "The news feed has not updated since $since. Collection may have stopped — check the cron-job.org job or GitHub Actions.",
+        "न्यूज़ फ़ीड $since के बाद अपडेट नहीं हुई है। संग्रह रुक गया हो सकता है — cron-job.org या GitHub Actions देखें।")
+    val notifyPolitics get() = t("Every new UP politics story (not only breaking)", "यूपी राजनीति की हर नई खबर (केवल ब्रेकिंग नहीं)")
     fun nUpdateTitle(v: String) = t("News Adda $v is available", "न्यूज़ अड्डा $v उपलब्ध")
     val nUpdateReady get() = t("Downloaded — tap to install", "डाउनलोड हो चुका है — इंस्टॉल करने के लिए टैप करें")
     val nUpdateTap get() = t("Tap to update", "अपडेट करने के लिए टैप करें")

@@ -219,38 +219,79 @@ sources:
   - {id: bharatsamachar, name: Bharat Samachar, name_hi: भारत समाचार, aliases: [bharatsamachartv.in], kind: rss,
      up_section: false, min_interval: 100, urls: [https://www.bharatsamachartv.in/feed/]}
 
-  # ---------------- Publishers without a reachable public feed ----------------
-  # Kept with listing pages so the daily check notices if a feed appears.
-  - {id: jagran_up, site: jagran.com, name: Dainik Jagran, name_hi: दैनिक जागरण, aliases: [Jagran, jagran.com], kind: rss, urls: [],
-     listing_pages: [https://www.jagran.com/uttar-pradesh/lucknow-city]}
-  - {id: nbt_up, site: navbharattimes.indiatimes.com, name: Navbharat Times, name_hi: नवभारत टाइम्स, aliases: [NBT, navbharattimes.indiatimes.com], kind: rss, urls: []}
-  - {id: aajtak_up, site: aajtak.in, name: Aaj Tak, name_hi: आज तक, aliases: [AajTak, aajtak.in], kind: rss, urls: [],
-     listing_pages: [https://www.aajtak.in/rss]}
-  - {id: zee_up, site: zeenews.india.com, name: Zee News Hindi, name_hi: ज़ी न्यूज़ हिंदी, aliases: [Zee News, ज़ी न्यूज़, zeenews.india.com], kind: rss, urls: []}
+  # ---------------- Google News sitemaps (verified live, 15 Oct 2026) ----------------
+  # Portals list each article here the moment it is published (for Google News),
+  # including portals with no RSS feed. Whole-portal sitemaps: articles from the
+  # portal's UP section (up_paths) get the UP-section test, everything else must
+  # name UP, a UP district/seat/leader or a UP party. Headline-only: the 2–3 line
+  # gist is read from the article page in the same run.
+  - {id: jagran_up, site: jagran.com, name: Dainik Jagran, name_hi: दैनिक जागरण, aliases: [Jagran, jagran.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.jagran.com/news-sitemap.xml]}
+  - {id: bhaskar_up, site: bhaskar.com, name: Dainik Bhaskar, name_hi: दैनिक भास्कर, aliases: [Bhaskar, bhaskar.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.bhaskar.com/sitemaps-v1--sitemap-google-news-1.xml, https://www.bhaskar.com/sitemaps-v1--sitemap-google-news-index.xml]}
+  - {id: aajtak_up, site: aajtak.in, name: Aaj Tak, name_hi: आज तक, aliases: [AajTak, aajtak.in],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.aajtak.in/rssfeeds/news-sitemap.xml]}
+  - {id: nbt_up, site: navbharattimes.indiatimes.com, name: Navbharat Times, name_hi: नवभारत टाइम्स, aliases: [NBT, navbharattimes.indiatimes.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://navbharattimes.indiatimes.com/staticsitemap/nbt/news/sitemap-48hours.xml]}
+  - {id: zee_up, site: zeenews.india.com, name: Zee News Hindi, name_hi: ज़ी न्यूज़ हिंदी, aliases: [Zee News, ज़ी न्यूज़, zeenews.india.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://zeenews.india.com/hindi/sitemaps/news-sitemap.xml]}
+  - {id: uptak, site: uptak.in, name: UP Tak, name_hi: यूपी तक, aliases: [uptak.in],
+     kind: sitemap, up_section: local, min_interval: 100, max_age_hours: 6,
+     urls: [https://www.uptak.in/news-sitemap.xml, https://www.uptak.in/rssfeeds/news-sitemap.xml]}
+  - {id: amarujala_sitemap, site: amarujala.com, name: Amar Ujala, name_hi: अमर उजाला, aliases: [amarujala.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/|amarujala\\.com/(lucknow|kanpur|varanasi|agra|meerut|gorakhpur|prayagraj|allahabad|bareilly|ayodhya|aligarh|jhansi|moradabad|noida|ghaziabad|azamgarh|ballia|mau|gonda|basti|bahraich|sitapur|lakhimpur|rampur|saharanpur|muzaffarnagar|mathura|firozabad|etawah|mainpuri|kannauj|unnao|raebareli|amethi|sultanpur|pratapgarh|jaunpur|ghazipur|mirzapur|deoria|kushinagar|maharajganj|siddharthnagar|shahjahanpur|hardoi|bulandshahr|bijnor|amroha|sambhal|budaun|banda|chitrakoot|hamirpur|lalitpur|mahoba|jalaun|auraiya|farrukhabad|etah|kasganj|hathras|baghpat|shamli|hapur|chandauli|sonbhadra|bhadohi|kaushambi|fatehpur|barabanki|ambedkar-nagar|shravasti|balrampur|sant-kabir-nagar|pilibhit)/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.amarujala.com/sitemap-news.xml]}
+  - {id: livehindustan_sitemap, site: livehindustan.com, name: Live Hindustan, name_hi: लाइव हिन्दुस्तान, aliases: [Hindustan, livehindustan.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.livehindustan.com/news-sitemap.xml]}
+  - {id: news18_sitemap, site: hindi.news18.com, name: News18 Hindi, name_hi: न्यूज़18 हिंदी, aliases: [News18, hindi.news18.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://hindi.news18.com/commonfeeds/v1/hin/sitemap/google-news/today.xml, https://hindi.news18.com/allstory-sitemap-data.xml]}
+  - {id: abp_sitemap, site: abplive.com, name: ABP News, name_hi: एबीपी न्यूज़, aliases: [ABP Live, abplive.com],
+     kind: sitemap, up_section: false, up_paths: "/states/up-uk/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.abplive.com/google-news-sitemap.xml]}
+  - {id: tv9_sitemap, site: tv9hindi.com, name: TV9 Bharatvarsh, name_hi: टीवी9 भारतवर्ष, aliases: [TV9 Hindi, tv9hindi.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.tv9hindi.com/news-sitemap.xml]}
+  - {id: indiatv_sitemap, site: indiatv.in, name: India TV, name_hi: इंडिया टीवी, aliases: [India TV Hindi, indiatv.in],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 100, max_age_hours: 6,
+     urls: [https://www.indiatv.in/news-sitemap.xml]}
+  - {id: patrika_up, site: patrika.com, name: Patrika, name_hi: पत्रिका, aliases: [Patrika News, patrika.com],
+     kind: sitemap, up_section: false, up_paths: "/(lucknow|kanpur|varanasi|agra|meerut|gorakhpur|prayagraj|allahabad|bareilly|ayodhya|aligarh|jhansi|moradabad|noida|ghaziabad|azamgarh|ballia|mau|gonda|basti|bahraich|sitapur|lakhimpur|rampur|saharanpur|muzaffarnagar|mathura|firozabad|etawah|mainpuri|kannauj|unnao|raebareli|amethi|sultanpur|pratapgarh|jaunpur|ghazipur|mirzapur|deoria|kushinagar|maharajganj|siddharthnagar|shahjahanpur|hardoi|bulandshahr|bijnor|amroha|sambhal|budaun|banda|chitrakoot|hamirpur|lalitpur|mahoba|jalaun|auraiya|farrukhabad|etah|kasganj|hathras|baghpat|shamli|hapur|chandauli|sonbhadra|bhadohi|kaushambi|fatehpur|barabanki|ambedkar-nagar|shravasti|balrampur|sant-kabir-nagar|pilibhit|uttar-pradesh)-news/", min_interval: 180, max_age_hours: 6,
+     urls: [https://www.patrika.com/google-news-sitemap-v1.xml]}
+  - {id: republicbharat_up, site: republicbharat.com, name: Republic Bharat, name_hi: रिपब्लिक भारत, aliases: [republicbharat.com],
+     kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/", min_interval: 180, max_age_hours: 6,
+     urls: [https://www.republicbharat.com/sitemap/sitemap-news.xml]}
+  - {id: prabhatkhabar_up, site: prabhatkhabar.com, name: Prabhat Khabar, name_hi: प्रभात खबर, aliases: [prabhatkhabar.com],
+     kind: sitemap, up_section: false, up_paths: "/state/uttar-pradesh/", min_interval: 300, max_age_hours: 6,
+     urls: [https://www.prabhatkhabar.com/news-sitemap.xml]}
+  - {id: lallantop, site: thelallantop.com, name: The Lallantop, name_hi: द लल्लनटॉप, aliases: [Lallantop, thelallantop.com],
+     kind: sitemap, up_section: false, min_interval: 300, max_age_hours: 6,
+     urls: [https://www.thelallantop.com/sitemaps/news-sitemap.xml]}
+
+  # ---------------- Publishers without a reachable feed or sitemap ----------------
   - {id: jansatta_up, site: jansatta.com, name: Jansatta, name_hi: जनसत्ता, aliases: [jansatta.com], kind: rss, urls: [],
      status_note: सीधी फ़ीड 403 लौटाती है; गूगल न्यूज़ से कवरेज}
-  - {id: bhaskar_up, site: bhaskar.com, name: Dainik Bhaskar, name_hi: दैनिक भास्कर, aliases: [Bhaskar, bhaskar.com], kind: rss, urls: [],
-     listing_pages: [https://www.bhaskar.com/rss]}
-  - {id: uptak, site: uptak.in, name: UP Tak, name_hi: यूपी तक, aliases: [uptak.in], kind: rss, urls: []}
-  - {id: lallantop, site: thelallantop.com, name: The Lallantop, name_hi: द लल्लनटॉप, aliases: [Lallantop, thelallantop.com], kind: rss, urls: [],
-     up_section: false}
-  - {id: patrika_up, site: patrika.com, name: Patrika, name_hi: पत्रिका, aliases: [Patrika News, patrika.com], kind: rss, urls: [],
-     listing_pages: [https://www.patrika.com/rss]}
   - {id: etv_up, site: etvbharat.com, name: ETV Bharat, name_hi: ईटीवी भारत, aliases: [etvbharat.com], kind: rss, urls: []}
 
   # ---------------- Google News RSS searches ----------------
   # Links open via news.google.com, which forwards to the publisher. The app
   # shows the original publisher's name and marks these "via Google News".
   - {id: gn_bhaskar, site: bhaskar.com, name: Dainik Bhaskar (via Google News), name_hi: दैनिक भास्कर (गूगल न्यूज़ से), kind: google_news,
-     query: "site:bhaskar.com उत्तर प्रदेश when:1d", min_interval: 280, up_section: false}
+     query: "site:bhaskar.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_uptak, site: uptak.in, name: UP Tak (via Google News), name_hi: यूपी तक (गूगल न्यूज़ से), kind: google_news,
-     query: "site:uptak.in when:1d", min_interval: 280}
+     query: "site:uptak.in when:1d", min_interval: 900}
   - {id: gn_jagran, site: jagran.com, name: Dainik Jagran (via Google News), name_hi: दैनिक जागरण (गूगल न्यूज़ से), kind: google_news,
-     query: "site:jagran.com उत्तर प्रदेश when:1d", min_interval: 280, up_section: false}
+     query: "site:jagran.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_nbt, site: navbharattimes.indiatimes.com, name: Navbharat Times (via Google News), name_hi: नवभारत टाइम्स (गूगल न्यूज़ से), kind: google_news,
      query: "site:navbharattimes.indiatimes.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_aajtak, site: aajtak.in, name: Aaj Tak (via Google News), name_hi: आज तक (गूगल न्यूज़ से), kind: google_news,
-     query: "site:aajtak.in उत्तर प्रदेश when:1d", min_interval: 280, up_section: false}
+     query: "site:aajtak.in उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_zee, site: zeenews.india.com, name: Zee News (via Google News), name_hi: ज़ी न्यूज़ (गूगल न्यूज़ से), kind: google_news,
      query: "site:zeenews.india.com उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
   - {id: gn_hindustan, site: livehindustan.com, name: Live Hindustan (via Google News), name_hi: लाइव हिन्दुस्तान (गूगल न्यूज़ से), kind: google_news,
@@ -260,7 +301,7 @@ sources:
   - {id: gn_lallantop, site: thelallantop.com, name: The Lallantop (via Google News), name_hi: द लल्लनटॉप (गूगल न्यूज़ से), kind: google_news,
      query: "site:thelallantop.com उत्तर प्रदेश OR यूपी when:2d", up_section: false, min_interval: 1200}
   - {id: gn_regional, site: patrika.com, name: Patrika / ETV Bharat (via Google News), name_hi: पत्रिका / ईटीवी भारत (गूगल न्यूज़ से),
-     kind: google_news, query: "(site:patrika.com OR site:etvbharat.com) उत्तर प्रदेश when:1d", min_interval: 1200, up_section: false}
+     kind: google_news, query: "(site:patrika.com OR site:etvbharat.com) उत्तर प्रदेश when:1d", min_interval: 900, up_section: false}
 
   # Topic searches across all publishers: the early-detection net.
   - {id: gn_up_politics, site: news.google.com, name: Google News — UP politics, name_hi: गूगल न्यूज़ — यूपी राजनीति, kind: google_news,

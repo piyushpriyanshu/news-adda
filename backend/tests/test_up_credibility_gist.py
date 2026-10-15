@@ -161,3 +161,40 @@ def test_english_seo_tail_removed_from_hindi_headline():
 def test_gists_without_facts_are_not_used():
     page = '<html><head><meta property="og:description" content="आज की सबसे बड़ी खबर को लेकर है। वहीं, दूसरी बड़ी खबर से जुड़ी है।"></head></html>'
     assert description_from_page(page, "यूपी दिनभर, 15 बड़ी खबरें: योगी बोले")[0] is None
+
+
+def test_sitemap_source_keeps_up_section_and_strong_up_items_only(settings, router, tmp_path):
+    from datetime import datetime, timedelta, timezone
+
+    def ts(mins):
+        return (datetime.now(timezone.utc) + timedelta(minutes=mins)).isoformat()
+
+    sm = f"""<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+     <url><loc>https://portal.test/uttar-pradesh/lucknow/vidhayak-dharna-1</loc><news:news>
+       <news:publication_date>{ts(-3)}</news:publication_date><news:title>विधानसभा के बाहर विधायक धरने पर बैठे</news:title></news:news></url>
+     <url><loc>https://portal.test/national/vidhayak-dharna-2</loc><news:news>
+       <news:publication_date>{ts(-3)}</news:publication_date><news:title>विधानसभा में हंगामा, विधायक धरने पर</news:title></news:news></url>
+     <url><loc>https://portal.test/national/akhilesh-3</loc><news:news>
+       <news:publication_date>{ts(-4)}</news:publication_date><news:title>दिल्ली में अखिलेश यादव ने चुनाव आयोग पर उठाए सवाल</news:title></news:news></url>
+     <url><loc>https://portal.test/uttar-pradesh/old-4</loc><news:news>
+       <news:publication_date>{ts(-60 * 10)}</news:publication_date><news:title>मेरठ में पुरानी खबर का शीर्षक यहां</news:title></news:news></url>
+    </urlset>""".encode()
+    yaml_text = """
+defaults: {min_interval: 240, up_section: true, enabled: true}
+sources:
+  - {id: portal_up, name: Portal Hindi, name_hi: पोर्टल, kind: sitemap, up_section: false, up_paths: "/uttar-pradesh/",
+     max_age_hours: 6, urls: ["https://portal.test/news-sitemap.xml"]}
+"""
+    p = tmp_path / "s.yaml"
+    p.write_text(yaml_text, encoding="utf-8")
+    settings.sources_path = str(p)
+    settings.gist_enabled = False
+    router.routes["https://portal.test/news-sitemap.xml"] = httpx.Response(200, content=sm)
+    pl = Pipeline(settings, client=router.client())
+    asyncio.run(pl.run_once())
+    titles = {s["title"] for s in build_feed(pl)["stories"]}
+    assert "विधानसभा के बाहर विधायक धरने पर बैठे" in titles          # UP section of the portal
+    assert "विधानसभा में हंगामा, विधायक धरने पर" not in titles       # national page, no UP signal
+    assert "दिल्ली में अखिलेश यादव ने चुनाव आयोग पर उठाए सवाल" in titles  # UP leader
+    assert not any("पुरानी" in t for t in titles)                     # older than max age

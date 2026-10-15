@@ -38,7 +38,7 @@ ERROR_TEXT = {
 def trusted_keys(pipeline: Pipeline) -> set[str]:
     keys = set(getattr(pipeline, "trusted", set()))
     for s in pipeline.sources:
-        if s.kind == "rss":
+        if s.kind in ("rss", "sitemap"):
             keys |= _names(s)
     keys.discard("")
     return keys

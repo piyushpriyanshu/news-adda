@@ -21,6 +21,8 @@ import androidx.work.WorkerParameters
 import com.newsadda.app.MainActivity
 import com.newsadda.app.R
 import com.newsadda.app.data.NewsRepository
+import com.newsadda.app.data.TimeFmt
+import com.newsadda.app.data.FeedLogic
 import com.newsadda.app.data.Prefs
 import com.newsadda.app.data.model.Story
 import com.newsadda.app.ui.Str
@@ -34,6 +36,8 @@ object Notifier {
     const val EXTRA_INSTALL = "install_update"
 
     /** (Re)creates channels; names follow the interface language. */
+    const val GROUP_NEWS = "news"
+
     fun createChannels(ctx: Context) {
         val str = Str.of(ctx)
         val nm = ctx.getSystemService(NotificationManager::class.java)
@@ -68,7 +72,14 @@ object Notifier {
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(if (s.breaking) Str.of(ctx).nBreaking else Str.of(ctx).nNew)
             .setContentText(s.title)
-            .setStyle(NotificationCompat.BigTextStyle().bigText("${s.title}\n— $src"))
+            // Headline, then the 2–3 line gist (so a clickbait headline still tells you what happened).
+            .setStyle(NotificationCompat.BigTextStyle().bigText(
+                buildString {
+                    append(s.title)
+                    s.summary?.takeIf { it.isNotBlank() }?.let { append("\n\n").append(it) }
+                    append("\n— ").append(src)
+                }))
+            .setGroup(GROUP_NEWS)
             .setAutoCancel(true)
             .setContentIntent(openApp(ctx, s.id.hashCode()) { putExtra(EXTRA_STORY, s.id) })
             .build()
@@ -82,10 +93,27 @@ object Notifier {
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(Str.of(ctx).nSummary(count))
             .setContentText(Str.of(ctx).nOpenApp)
+            .setGroup(GROUP_NEWS)
+            .setGroupSummary(true)
             .setAutoCancel(true)
             .setContentIntent(openApp(ctx, 1) {})
             .build()
         NotificationManagerCompat.from(ctx).notify(1, n)
+    }
+
+    /** Warns when the news backend has stopped updating, so silence never means "no news". */
+    @Suppress("MissingPermission")
+    fun stale(ctx: Context, since: String) {
+        if (!allowed(ctx)) return
+        val n = NotificationCompat.Builder(ctx, CH_UPDATES)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(Str.of(ctx).nStaleTitle)
+            .setContentText(Str.of(ctx).nStaleText(since))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(Str.of(ctx).nStaleText(since)))
+            .setAutoCancel(true)
+            .setContentIntent(openApp(ctx, 3) {})
+            .build()
+        NotificationManagerCompat.from(ctx).notify(3, n)
     }
 
     @Suppress("MissingPermission")
@@ -109,20 +137,39 @@ class NewsWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         val s = Prefs.get(ctx)
         if (!s.newsNotifications) return Result.success()
         val fresh = NewsRepository.refresh(ctx, "background")
+        checkStale(ctx)
         if (fresh.isEmpty()) return Result.success()
         val notified = Prefs.getSet(ctx, "notified")
         val follows = s.followedLeaders.isNotEmpty() || s.preferredDistricts.isNotEmpty()
         val hits = NewsRepository.state.value.cache.stories.filter { st ->
-            st.id in fresh && st.id !in notified && st.breaking &&
-                (s.notifyAllBreaking || !follows ||
+            st.id in fresh && st.id !in notified && (
+                (st.breaking && (s.notifyAllBreaking || !follows ||
                     st.entities.leaders.any { it in s.followedLeaders } ||
                     st.entities.figures.any { it in s.followedLeaders } ||
-                    st.entities.districts.any { it in s.preferredDistricts })
-        }
-        if (hits.size > 3) Notifier.summary(ctx, hits.size) else hits.forEach { Notifier.story(ctx, it) }
+                    st.entities.districts.any { it in s.preferredDistricts })) ||
+                    (s.notifyAllPolitics && FeedLogic.isPolitical(st)))
+        }.sortedByDescending { it.sortAt }
+        // Each story is its own alert (headline + gist), grouped; at most 8 at once.
+        hits.take(MAX_ALERTS).forEach { Notifier.story(ctx, it) }
+        if (hits.size > 1) Notifier.summary(ctx, hits.size)
         Prefs.putSet(ctx, "notified", (notified + hits.map { it.id }).toList().takeLast(500).toSet())
         return Result.success()
     }
+}
+
+private const val MAX_ALERTS = 8
+private const val STALE_MS = 20 * 60_000L
+
+/** One warning (at most every 2 hours) when the feed itself has stopped updating. */
+private fun checkStale(ctx: Context) {
+    val st = NewsRepository.state.value
+    if (st.error != null) return  // the phone is offline or the request failed: not a backend stall
+    val gen = FeedLogic.instant(st.cache.generatedAt)?.toEpochMilli() ?: return
+    val now = System.currentTimeMillis()
+    if (now - gen < STALE_MS) return
+    if (now - Prefs.getLong(ctx, "stale_warned") < 2 * 60 * 60_000L) return
+    Prefs.putLong(ctx, "stale_warned", now)
+    Notifier.stale(ctx, TimeFmt.full(java.time.Instant.ofEpochMilli(gen), Str.of(ctx)))
 }
 
 /** Background app-update check at the interval chosen in Settings. */

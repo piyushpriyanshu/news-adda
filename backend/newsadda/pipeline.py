@@ -45,7 +45,7 @@ def publisher_key(sources: list[Source], src: Source, publisher: str | None) -> 
     else:
         names = {_base_name(publisher or "")}
     for s in sources:
-        if s.kind == "rss" and names & _names(s):
+        if s.kind in ("rss", "sitemap") and names & _names(s):
             return s.id.split("_")[0]
     return next(iter(names), "") or src.id
 
@@ -56,7 +56,7 @@ def publisher_domain(sources: list[Source], publisher: str | None) -> str | None
         return None
     key = _base_name(publisher)
     for s in sources:
-        if s.kind == "rss" and key in _names(s):
+        if s.kind in ("rss", "sitemap") and key in _names(s):
             return s.domain
     return None
 
@@ -107,7 +107,7 @@ class Pipeline:
             return False
         if key in self.trusted:
             return True
-        return any(s.kind == "rss" and key in _names(s) for s in self.sources)
+        return any(s.kind in ("rss", "sitemap") and key in _names(s) for s in self.sources)
 
     @property
     def sources_by_id(self) -> dict[str, Source]:

@@ -88,7 +88,7 @@ Text is never rewritten or invented. `robots.txt` is honoured, the step is limit
 
 ## Source status (live check, 13 Oct 2026, from GitHub Actions)
 
-95 live feeds. The fastest UP desks (Amar Ujala UP/Lucknow, News18 UP/Lucknow, TV9, ABP, India TV, Live Hindustan, Bharat Samachar) are read on **every** collection run; the main Google News political searches every ~4 minutes; district editions and other searches every 10–15 minutes.
+95 live RSS feeds plus 16 Google News sitemaps (Jagran, Bhaskar, Aaj Tak, NBT, Zee, UP Tak, Amar Ujala, Live Hindustan, News18, ABP, TV9, India TV, Patrika, Republic Bharat, Prabhat Khabar, The Lallantop): portals list each article in their news sitemap the moment it is published, so even portals without RSS are read directly within minutes; the 2–3 line gist is read from the article page in the same run. The fastest UP desks (Amar Ujala UP/Lucknow, News18 UP/Lucknow, TV9, ABP, India TV, Live Hindustan, Bharat Samachar) are read on **every** collection run; the main Google News political searches every ~4 minutes; district editions and other searches every 10–15 minutes.
 
 | Publisher | How it is collected | Status |
 |---|---|---|

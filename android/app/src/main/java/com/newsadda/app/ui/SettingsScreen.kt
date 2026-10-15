@@ -88,6 +88,7 @@ fun SettingsScreen(vm: MainViewModel, names: Names) {
         Header(str.notifications)
         ToggleRow(str.notificationsOn, s.newsNotifications) { v -> vm.updateSettings { it.copy(newsNotifications = v) } }
         ToggleRow(str.notifyAll, s.notifyAllBreaking) { v -> vm.updateSettings { it.copy(notifyAllBreaking = v) } }
+        ToggleRow(str.notifyPolitics, s.notifyAllPolitics) { v -> vm.updateSettings { it.copy(notifyAllPolitics = v) } }
         if (!notifGranted && Build.VERSION.SDK_INT >= 33) {
             OutlinedButton(onClick = { permLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) },
                 modifier = Modifier.padding(horizontal = 16.dp)) { Text(str.allowNotifications) }
