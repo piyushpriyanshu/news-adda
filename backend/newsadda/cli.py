@@ -53,6 +53,15 @@ def main(argv: list[str] | None = None) -> int:
         for pr in report.get("probes", []):
             print(f"{pr['id']:24} {'OK ' if pr.get('ok') else 'NO '} items={pr.get('items')} newest={pr.get('newest')} "
                   f"{pr.get('error') or ''}")
+        print("\n# sitemaps")
+        for sm in report.get("sitemaps", []):
+            print(f"{sm['site']:32} working={sm.get('working')}")
+            for t in sm["tested"]:
+                if t.get("ok") or t.get("http_status") == 200:
+                    print(f"   {t['url']} items={t.get('items')} up={t.get('up_items')} newest={t.get('newest')} "
+                          f"err={t.get('error')} followed={t.get('followed')}")
+                    for u, ti in t.get("sample_up") or t.get("sample") or []:
+                        print(f"      {u[:110]} | {ti}")
         print("\n# gist check")
         for g in report.get("gist_check", []):
             print(json.dumps(g, ensure_ascii=False)[:300])

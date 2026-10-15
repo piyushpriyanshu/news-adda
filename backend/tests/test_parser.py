@@ -48,3 +48,21 @@ def test_discover_feed_links():
     assert "https://site.test/rss/up.xml" in links
     assert "https://site.test/rss/uttar-pradesh.xml" in links
     assert all("sports" not in l for l in links)
+
+
+def test_google_news_sitemap_parsed_and_index_followed():
+    from newsadda.parser import parse_sitemap
+    xml = b"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+ <url><loc>https://portal.test/uttar-pradesh/lucknow/sp-protest-123</loc>
+  <news:news><news:publication><news:name>Portal</news:name><news:language>hi</news:language></news:publication>
+  <news:publication_date>2026-10-15T09:40:00+05:30</news:publication_date>
+  <news:title>&#2354;&#2326;&#2344;&#2314; &#2350;&#2375;&#2306; &#2360;&#2346;&#2366; &#2325;&#2366; &#2346;&#2381;&#2352;&#2342;&#2352;&#2381;&#2358;&#2344;</news:title></news:news></url>
+ <url><loc>https://portal.test/no-news-tag</loc><lastmod>2026-10-15T09:00:00+05:30</lastmod></url>
+</urlset>"""
+    items, kids = parse_sitemap(xml)
+    assert kids == [] and len(items) == 1
+    assert items[0].title == "लखनऊ में सपा का प्रदर्शन"
+    assert items[0].published_at.isoformat() == "2026-10-15T04:10:00+00:00"
+    idx = b"""<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://portal.test/news-1.xml</loc></sitemap></sitemapindex>"""
+    assert parse_sitemap(idx) == ([], ["https://portal.test/news-1.xml"])

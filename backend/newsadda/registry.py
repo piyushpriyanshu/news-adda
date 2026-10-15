@@ -33,6 +33,11 @@ class Source:
     site: str | None = None
     # The phone may also poll this feed directly for the fastest headlines ("Live wire").
     live_wire: bool = False
+    # Sitemaps of national portals: article URLs matching this regex are from the
+    # portal's UP section and get the UP-section test; others the strict one.
+    up_paths: str | None = None
+    # Sitemaps: ignore articles older than this many hours (sitemaps cover ~2 days).
+    max_age_hours: int = 12
 
     @property
     def domain(self) -> str | None:
@@ -85,7 +90,7 @@ def load_sources(path: str | Path) -> list[Source]:
             raise ValueError(f"duplicate source id {src.id}")
         if src.up_section not in (True, False, "local", "politics"):
             raise ValueError(f"source {src.id}: up_section must be true, false, local or politics")
-        if src.kind not in ("rss", "google_news", "x"):
+        if src.kind not in ("rss", "google_news", "x", "sitemap"):
             raise ValueError(f"source {src.id}: unknown kind {src.kind}")
         seen.add(src.id)
         out.append(src)

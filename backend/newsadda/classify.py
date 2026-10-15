@@ -88,7 +88,7 @@ BREAKING_SIGNALS: list[tuple[list[str], int, str]] = [
 ]
 BREAKING_THRESHOLD = 3
 # Bump when rules change: stored items are then re-labelled on the next run.
-RULES_VERSION = "8"
+RULES_VERSION = "9"
 _LIVE = re.compile(r"\blive\b|लाइव", re.I)
 
 ALLEGATION = _kw("आरोप", "आरोपों", "आरोपित", "आरोप लगाया", "accused", "alleges", "alleged")
@@ -149,6 +149,10 @@ OTHER_PLACES = _kw(
     "हैदराबाद", "आंध्र प्रदेश", "ओडिशा", "असम", "जम्मू", "कश्मीर", "हिमाचल", "छत्तीसगढ़", "रायपुर", "गोवा",
     "पाकिस्तान", "अमेरिका", "चीन", "बांग्लादेश", "नेपाल", "रूस", "यूक्रेन", "इजरायल", "ईरान",
     "Bihar", "Delhi", "Maharashtra", "Rajasthan", "Gujarat", "Punjab", "Haryana", "Uttarakhand", "Bengal",
+    # Bihar and Uttarakhand districts that Hindi feeds often carry next to UP news.
+    "सीवान", "सिवान", "गोपालगंज", "छपरा", "सारण", "मढ़ौरा", "मुजफ्फरपुर", "दरभंगा", "भागलपुर", "बक्सर",
+    "बेगूसराय", "पूर्णिया", "कटिहार", "सासाराम", "मोतिहारी", "बेतिया", "सीतामढ़ी", "नालंदा", "हरिद्वार",
+    "ऋषिकेश", "नैनीताल", "हल्द्वानी", "रुद्रपुर", "अल्मोड़ा",
 )
 
 

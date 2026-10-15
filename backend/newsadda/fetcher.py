@@ -14,7 +14,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .parser import FeedError, RawItem, parse_feed
+from .parser import FeedError, RawItem, parse_feed, parse_sitemap
 from .registry import Source
 from .store import Store
 from .timeutil import from_iso, iso, parse_feed_time, utcnow
@@ -106,6 +106,20 @@ class Fetcher:
             if own:
                 await client.aclose()
 
+    async def _sitemap_items(self, client: httpx.AsyncClient, src: Source, content: bytes, now) -> list[RawItem]:
+        """Articles from a Google News sitemap (following an index to its newest
+        news sitemaps), newer than the source's max age."""
+        items, children = parse_sitemap(content)
+        if children:
+            prefer = [c for c in children if any(k in c.lower() for k in ("news", "today", "latest"))] or children
+            for child in prefer[:2]:
+                r = await client.get(child)
+                if r.status_code == 200 and len(r.content) <= MAX_BYTES:
+                    got, _ = parse_sitemap(r.content)
+                    items += got
+        cutoff = now - timedelta(hours=src.max_age_hours)
+        return [i for i in items if i.published_at is None or i.published_at >= cutoff]
+
     async def fetch_source(self, client: httpx.AsyncClient, src: Source, force: bool) -> FetchResult:
         now = utcnow()
         state = self.store.source_state(src.id)
@@ -155,6 +169,12 @@ class Fetcher:
                     res.error = "response too large"
                     last = res
                     continue
+                if src.kind == "sitemap":
+                    res.items = await self._sitemap_items(client, src, resp.content, now)
+                    res.ok = True
+                    res.extra_state = {"active_url": url, "etag": resp.headers.get("etag"),
+                                       "last_modified": resp.headers.get("last-modified")}
+                    return res
                 try:
                     res.items = parse_feed(resp.content, google_news=src.kind == "google_news")
                 except FeedError:

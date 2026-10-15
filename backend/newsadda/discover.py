@@ -17,7 +17,7 @@ import yaml
 from pathlib import Path
 
 from .config import Settings
-from .parser import FeedError, discover_feed_links, parse_feed
+from .parser import FeedError, discover_feed_links, parse_feed, parse_sitemap
 from .registry import load_sources
 from .timeutil import iso, utcnow
 
@@ -122,6 +122,9 @@ async def discover(settings: Settings | None = None, only: list[str] | None = No
 
         report["probes"] = await asyncio.gather(*(per_probe(pr) for pr in probes))
 
+        # News sitemaps: read each portal's robots.txt and test its news sitemaps.
+        report["sitemaps"] = await sitemap_hunt(client)
+
         # Live check of gists: resolve a few Google News links and read publisher descriptions.
         report["gist_check"] = await gist_check(client, settings)
     report["summary"] = {
@@ -162,3 +165,74 @@ async def gist_check(client: httpx.AsyncClient, settings, n: int = 6) -> list[di
         out.append(rec)
     out.append({"stats": g.stats, "google_blocked": g.google_blocked})
     return out
+
+
+SITEMAP_SITES = [
+    "www.jagran.com", "www.bhaskar.com", "www.aajtak.in", "navbharattimes.indiatimes.com", "zeenews.india.com",
+    "www.amarujala.com", "www.livehindustan.com", "www.patrika.com", "www.uptak.in", "www.abplive.com",
+    "hindi.news18.com", "www.tv9hindi.com", "www.jansatta.com", "www.thelallantop.com", "www.etvbharat.com",
+    "www.indiatv.in", "ndtv.in", "www.bharatsamachartv.in", "www.prabhatkhabar.com", "www.newstrack.com",
+    "www.punjabkesari.in", "www.republicbharat.com", "www.news24online.com", "www.oneindia.com",
+]
+SITEMAP_GUESSES = ["/news-sitemap.xml", "/sitemap-news.xml", "/sitemap/news.xml", "/google-news-sitemap.xml",
+                   "/sitemaps/news.xml", "/hindi/news-sitemap.xml"]
+UP_PATH_HINT = ("uttar-pradesh", "/up/", "up-news", "lucknow", "up-uk", "uttarpradesh")
+
+
+async def _test_sitemap(client: httpx.AsyncClient, url: str) -> dict:
+    out: dict = {"url": url}
+    try:
+        r = await client.get(url)
+        out["http_status"] = r.status_code
+        if r.status_code != 200:
+            return out
+        items, children = parse_sitemap(r.content)
+        out["children"] = children[:5]
+        if children and not items:
+            prefer = [c for c in children if any(k in c.lower() for k in ("news", "today", "latest"))] or children
+            r2 = await client.get(prefer[0])
+            items, _ = parse_sitemap(r2.content)
+            out["followed"] = prefer[0]
+        out["items"] = len(items)
+        dated = sorted((i for i in items if i.published_at), key=lambda i: i.published_at, reverse=True)
+        out["newest"] = iso(dated[0].published_at) if dated else None
+        up = [i for i in items if any(h in i.url.lower() for h in UP_PATH_HINT)]
+        out["up_items"] = len(up)
+        out["sample_up"] = [(i.url, i.title[:70]) for i in up[:3]]
+        out["sample"] = [(i.url, i.title[:70]) for i in items[:2]]
+        out["ok"] = bool(items)
+    except FeedError as exc:
+        out["error"] = f"{exc!s:.100}"
+    except httpx.HTTPError as exc:
+        out["error"] = f"{type(exc).__name__}"
+    return out
+
+
+async def sitemap_hunt(client: httpx.AsyncClient) -> list[dict]:
+    """Find working Google News sitemaps of big Hindi portals (from robots.txt plus common paths)."""
+    sem = asyncio.Semaphore(6)
+
+    async def per_site(host: str) -> dict:
+        async with sem:
+            rec: dict = {"site": host, "tested": []}
+            cands: list[str] = []
+            try:
+                r = await client.get(f"https://{host}/robots.txt")
+                for line in r.text.splitlines():
+                    if line.lower().startswith("sitemap:"):
+                        u = line.split(":", 1)[1].strip()
+                        if "news" in u.lower() and u not in cands:
+                            cands.append(u)
+            except httpx.HTTPError:
+                rec["robots"] = "unreachable"
+            for g in SITEMAP_GUESSES:
+                u = f"https://{host}{g}"
+                if u not in cands:
+                    cands.append(u)
+            for u in cands[:8]:
+                t = await _test_sitemap(client, u)
+                rec["tested"].append(t)
+            rec["working"] = [t["url"] for t in rec["tested"] if t.get("ok")]
+            return rec
+
+    return await asyncio.gather(*(per_site(h) for h in SITEMAP_SITES))

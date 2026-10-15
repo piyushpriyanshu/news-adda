@@ -83,6 +83,13 @@ class Pipeline:
         self.entities = EntityIndex(self.settings.entities_path)
         self.classifier = Classifier(self.entities)
 
+    @staticmethod
+    def up_mode(src: Source, url: str):
+        """UP-section test for items from a portal's UP pages, else the source's own."""
+        if src.up_paths and re.search(src.up_paths, url or "", re.I):
+            return True
+        return src.up_section
+
     @property
     def ai_active(self) -> bool:
         return bool(self.settings.ai_enabled and self.settings.ai_api_key)
@@ -160,7 +167,7 @@ class Pipeline:
 
             summary = short_summary(raw.description, raw.title)
             c = self.classifier.classify(
-                raw.title, summary, up_section=src.up_section,
+                raw.title, summary, up_section=self.up_mode(src, raw.url),
                 kind="post" if src.kind == "x" else "article", official_source=src.official,
             )
             if not c.is_up:
@@ -241,7 +248,7 @@ class Pipeline:
         for it in self.store.all_items():
             src = src_by.get(it["source_id"])
             c = self.classifier.classify(
-                it["title"], it["summary"], up_section=src.up_section if src else True,
+                it["title"], it["summary"], up_section=self.up_mode(src, it["url"]) if src else True,
                 kind=it["kind"], official_source=bool(src and src.official),
             )
             # Stories that no longer pass the UP, Hindi or credibility rules leave the feed.

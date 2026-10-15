@@ -151,3 +151,51 @@ def discover_feed_links(html: str, base_url: str, keywords: tuple[str, ...] = ()
             seen.add(u)
             out.append(u)
     return out
+
+
+# ---------------------------------------------------------------------------
+# Google News sitemaps. Big portals list each new article here the moment it is
+# published (for Google News), including portals that offer no RSS feed.
+
+def _local(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1].lower()
+
+
+def parse_sitemap(content: bytes) -> tuple[list[RawItem], list[str]]:
+    """Return (articles, child_sitemaps). A sitemap index yields only children.
+
+    Uses <news:title> and <news:publication_date>; entries without a title are
+    skipped (there is nothing to show)."""
+    import xml.etree.ElementTree as ET
+
+    head = content[:400].lstrip().lower()
+    if head.startswith(b"<!doctype html") or head.startswith(b"<html"):
+        raise FeedError("received an HTML page, not a sitemap")
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError as exc:
+        raise FeedError(f"not a sitemap: {exc!s:.100}") from None
+    kind = _local(root.tag)
+    if kind == "sitemapindex":
+        kids = [(el.findtext("{*}loc") or "").strip() for el in root if _local(el.tag) == "sitemap"]
+        return [], [k for k in kids if k.startswith("http")]
+    if kind != "urlset":
+        raise FeedError(f"not a sitemap: root <{kind}>")
+    items: list[RawItem] = []
+    for url_el in root:
+        if _local(url_el.tag) != "url":
+            continue
+        loc = (url_el.findtext("{*}loc") or "").strip()
+        news = next((c for c in url_el if _local(c.tag) == "news"), None)
+        if not loc.startswith(("http://", "https://")) or news is None:
+            continue
+        title = strip_html(news.findtext("{*}title"))
+        if not title:
+            continue
+        pub_raw = news.findtext("{*}publication_date") or url_el.findtext("{*}lastmod")
+        published, assumed = parse_feed_time(pub_raw)
+        items.append(RawItem(
+            url=loc, title=title, description=None, published_at=published, published_raw=pub_raw,
+            updated_at=None, tz_assumed=assumed, publisher=None, publisher_domain=None,
+        ))
+    return items, []

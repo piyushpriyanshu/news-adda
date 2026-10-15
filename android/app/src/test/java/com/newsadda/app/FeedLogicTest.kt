@@ -158,4 +158,15 @@ class FeedLogicTest {
         assertFalse(FeedLogic.isPoliticalHeadline("चेहरा तो चमक रहा मगर गर्दन पर जम गए हैं मैल? एक्सपर्ट ने दिया घरेलू उपाय"))
         assertFalse(FeedLogic.isPoliticalHeadline("सहयोगी कंपनी ने खोला नया शोरूम"))  // whole words only
     }
+
+    @Test
+    fun liveWireKeepsOnlyUpHeadlines() {
+        val up = listOf("रामपुर", "आजमगढ़")
+        assertFalse(FeedLogic.isUpHeadline("सीवान: 13 ग्राम स्मैक संग राजू राजभर गिरफ्तार", up, strict = true))
+        assertFalse(FeedLogic.isUpHeadline("सीवान: 13 ग्राम स्मैक संग राजू राजभर गिरफ्तार", up, strict = false))
+        assertTrue(FeedLogic.isUpHeadline("रामपुर में सपा का प्रदर्शन", up, strict = true))
+        assertTrue(FeedLogic.isUpHeadline("दिल्ली में अखिलेश यादव का बयान", up, strict = true))
+        assertTrue(FeedLogic.isUpHeadline("नगर निगम ने शुरू किया अभियान", up, strict = false))   // UP desk, no other state
+        assertFalse(FeedLogic.isUpHeadline("नगर निगम ने शुरू किया अभियान", up, strict = true))   // search result: must name UP
+    }
 }

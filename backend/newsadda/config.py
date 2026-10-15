@@ -35,7 +35,7 @@ class Settings:
     ai_max_per_run: int = field(default_factory=lambda: int(_env("NEWSADDA_AI_MAX_PER_RUN", "20")))
     # Short gists from publisher pages and direct links for Google News items.
     gist_enabled: bool = field(default_factory=lambda: _env("NEWSADDA_GIST", "1") == "1")
-    gist_budget: int = field(default_factory=lambda: int(_env("NEWSADDA_GIST_BUDGET", "40")))
+    gist_budget: int = field(default_factory=lambda: int(_env("NEWSADDA_GIST_BUDGET", "80")))
     # Minimum share of Devanagari letters in a headline (the feed is Hindi-only).
     min_hindi_share: float = field(default_factory=lambda: float(_env("NEWSADDA_MIN_HINDI", "0.5")))
     admin_token: str | None = field(default_factory=lambda: _env("NEWSADDA_ADMIN_TOKEN"))

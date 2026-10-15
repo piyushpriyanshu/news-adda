@@ -163,6 +163,34 @@ object FeedLogic {
         return inter.toDouble() / (a.size + b.size - inter) >= 0.5
     }
 
+    private val UP_WORDS = listOf(
+        "यूपी", "उत्तर प्रदेश", "UP", "योगी", "लखनऊ", "प्रदेश सरकार", "योगी सरकार", "पूर्वांचल", "बुंदेलखंड",
+        "रुहेलखंड", "अखिलेश", "मायावती", "सपा", "बसपा", "सुभासपा", "रालोद", "अपना दल", "निषाद पार्टी",
+    ).map { " " + normalize(it) + " " }
+    private val OTHER_PLACES = listOf(
+        "बिहार", "पटना", "दिल्ली", "महाराष्ट्र", "मुंबई", "राजस्थान", "जयपुर", "मध्य प्रदेश", "मध्यप्रदेश", "भोपाल",
+        "इंदौर", "गुजरात", "अहमदाबाद", "पंजाब", "चंडीगढ़", "हरियाणा", "उत्तराखंड", "देहरादून", "झारखंड", "रांची",
+        "पश्चिम बंगाल", "बंगाल", "कोलकाता", "तमिलनाडु", "चेन्नई", "केरल", "कर्नाटक", "बेंगलुरु", "तेलंगाना",
+        "हैदराबाद", "ओडिशा", "असम", "जम्मू", "कश्मीर", "हिमाचल", "छत्तीसगढ़", "रायपुर", "गोवा", "पाकिस्तान",
+        "अमेरिका", "चीन", "बांग्लादेश", "नेपाल", "सीवान", "सिवान", "गोपालगंज", "छपरा", "सारण", "मढ़ौरा",
+        "मुजफ्फरपुर", "दरभंगा", "भागलपुर", "बक्सर", "बेगूसराय", "पूर्णिया", "कटिहार", "सासाराम", "मोतिहारी",
+        "बेतिया", "सीतामढ़ी", "नालंदा", "हरिद्वार", "ऋषिकेश", "नैनीताल", "हल्द्वानी", "रुद्रपुर", "अल्मोड़ा",
+    ).map { " " + normalize(it) + " " }
+
+    /**
+     * UP test for raw Live Wire headlines. [upNames] are UP districts, seats,
+     * leaders and figures. Search results ([strict]) must name UP; items from UP
+     * desks are kept unless they name another state and nothing in UP.
+     */
+    fun isUpHeadline(title: String, upNames: Collection<String>, strict: Boolean): Boolean {
+        val t = " " + normalize(title).replace(NON_WORD, " ") + " "
+        val up = UP_WORDS.any { t.contains(it) } ||
+            upNames.any { n -> n.length > 2 && t.contains(" " + normalize(n).replace(NON_WORD, " ").trim() + " ") }
+        if (up) return true
+        if (strict) return false
+        return OTHER_PLACES.none { t.contains(it) }
+    }
+
     /** Hindi headline without an English SEO tail ("… - cm yogi to lay foundation"). */
     fun cleanTitle(title: String): String {
         val m = Regex("\\s+[-|–—]\\s+([^\\u0900-\\u097F]{12,})$").find(title) ?: return title

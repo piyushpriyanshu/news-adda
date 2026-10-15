@@ -212,7 +212,7 @@ class Gister:
         return out
 
 
-async def enrich_items(items: list[dict], client: httpx.AsyncClient, user_agent: str, concurrency: int = 6,
+async def enrich_items(items: list[dict], client: httpx.AsyncClient, user_agent: str, concurrency: int = 10,
                        deadline: float = 45.0) -> tuple[dict, dict, set]:
     """Enrich a prioritised list of items.
 
