@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Mehak's Portal mark: a bold white "M" on the red launcher background. -->
+<!-- Simple "lines of text" mark: the app is text-only. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="@color/icon_fg"
-        android:pathData="M32,74V34H43L54,52L65,34H76V74H66V50L54,69L42,50V74Z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M34,36h40v7h-40z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M34,50h40v4h-40z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M34,59h40v4h-40z" />
+    <path android:fillColor="@color/icon_fg" android:pathData="M34,68h26v4h-26z" />
 </vector>
