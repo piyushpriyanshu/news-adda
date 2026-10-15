@@ -1,0 +1,40 @@
+10-15 06:26:56.417  5081  6138 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):21)
+10-15 06:26:56.423  5081  6091 W PhenotypeConfigurationU: Update for unknown DeviceConfig package com.google.android.westworld [CONTEXT service_id=204 ]
+10-15 06:26:56.423  5081  6091 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+10-15 06:26:56.423  5081  6091 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+10-15 06:26:56.423  5081  6091 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):21)
+10-15 06:26:56.450  5081  6090 W PhenotypeConfigurationU: Update for unknown DeviceConfig package com.google.android.gms.dtdi_logging#com.google.android.gms [CONTEXT service_id=204 ]
+10-15 06:26:56.450  5081  6090 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+10-15 06:26:56.450  5081  6090 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+10-15 06:26:56.450  5081  6090 W PhenotypeConfigurationU: 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):21)
+10-15 06:27:00.284  2823  2823 I NewsRepo: refresh(foreground, delta=true): g
+10-15 06:27:05.869  5081  5477 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.icing.proxy.IcingInternalCorporaUpdateService started execution. cause:9 exec_start_elapsed_seconds: 172 [CONTEXT service_id=218 ]
+10-15 06:27:05.874  5081  6028 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.icing.proxy.IcingInternalCorporaUpdateService finished executing. cause:9 result: 1 elapsed_millis: 8 uptime_millis: 8 exec_start_elapsed_seconds: 172 [CONTEXT service_id=218 ]
+10-15 06:27:06.359  2823  2823 I NewsRepo: refresh(foreground, delta=true): g
+10-15 06:27:09.031  6301  6301 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-15 06:27:09.035  6301  6301 I AndroidRuntime: Using default boot image
+10-15 06:27:09.035  6301  6301 I AndroidRuntime: Leaving lock profiling enabled
+10-15 06:27:09.154  6301  6301 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-15 06:27:10.261  6301  6301 D AndroidRuntime: Shutting down VM
+10-15 06:27:13.236  6335  6335 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-15 06:27:13.239  6335  6335 I AndroidRuntime: Using default boot image
+10-15 06:27:13.239  6335  6335 I AndroidRuntime: Leaving lock profiling enabled
+10-15 06:27:13.313  6335  6335 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-15 06:27:14.519  6335  6335 D AndroidRuntime: Shutting down VM
+10-15 06:27:25.587  3162  4259 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.insertOrUpdateVoicemailStatus:196 enter
+10-15 06:27:25.598  3162  3230 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.lambda$insertOrUpdateVoicemailStatus$5:213 merged status: # kee@6600c263
+10-15 06:27:25.603  3162  4259 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.insertOrUpdateVoicemailStatus:196 enter
+10-15 06:27:25.613  3162  3230 I DialerVoicemailStatusDataServiceImpl: com.android.dialer.voicemailstatus.dataservice.impl.VoicemailStatusDataServiceImpl.lambda$insertOrUpdateVoicemailStatus$5:213 merged status: # kee@6600c263
+10-15 06:27:27.827  2823  2823 I NewsRepo: refresh(foreground, delta=true): g
+10-15 06:27:35.671   479   479 I wificond: UpdateBandInfo
+10-15 06:27:37.734  6453  6453 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-15 06:27:37.737  6453  6453 I AndroidRuntime: Using default boot image
+10-15 06:27:37.737  6453  6453 I AndroidRuntime: Leaving lock profiling enabled
+10-15 06:27:37.821  6453  6453 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-15 06:27:38.913  6453  6453 D AndroidRuntime: Shutting down VM
+10-15 06:27:39.810  2823  2823 I NewsRepo: refresh(button, delta=true): e
+10-15 06:27:46.278   479   479 I wificond: UpdateBandInfo
+10-15 06:27:46.316   523   794 D NetworkTimeUpdateService: New default network 102; checking time.
+10-15 06:27:46.440   523   768 I ConnectivityService: Update score for net 102 : +EVER_EVALUATED
+10-15 06:27:46.440   523   768 I ConnectivityService: Update capabilities for net 102 : +VALIDATED
+10-15 06:27:46.440   523   768 I ConnectivityService: Update score for net 102 : +EVER_VALIDATED+IS_VALIDATED

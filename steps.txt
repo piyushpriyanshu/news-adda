@@ -1,0 +1,14 @@
+tap 'Breaking' at 330,469
+tap 'Leader tracker' at 679,469
+tap 'Controversies' at 812,469
+tap 'Seats & Bahubalis' at 861,469
+tap 'Statements' at 866,469
+tap 'Districts' at 943,469
+tap 'Amethi' at 140,859
+tap 'Settings' at 1006,207
+tap 'Saved' at 880,207
+tap 'BREAKING' at 176,932
+tap 'Leader, party, district' at 501,656
+tap 'Settings' at 1006,207
+tap 'हिंदी' at 336,750
+tap 'अभी अपडेट करें' at 918,338
