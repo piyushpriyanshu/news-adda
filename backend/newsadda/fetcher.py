@@ -126,7 +126,9 @@ class Fetcher:
         if not src.enabled:
             self.store.update_source_state(src.id, status="disabled")
             return FetchResult(source=src, skipped=True)
-        if not force and not is_due(state, now):
+        # A source that had no feed but now has one (config changed) is polled at once.
+        newly_configured = state.get("last_error") == "no_public_feed" and bool(src.feed_urls)
+        if not force and not newly_configured and not is_due(state, now):
             return FetchResult(source=src, skipped=True)
         if src.kind == "x":
             from .xsource import fetch_x  # local import keeps X optional

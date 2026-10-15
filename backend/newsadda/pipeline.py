@@ -309,6 +309,7 @@ class Pipeline:
         todo.sort(key=priority)  # stable sort keeps the newest-first order inside groups
         batch = todo[: self.settings.gist_budget]
         if not batch:
+            self.gist_stats = {"candidates": 0}
             return {}
         own = self.client is None
         client = self.client or httpx.AsyncClient(
