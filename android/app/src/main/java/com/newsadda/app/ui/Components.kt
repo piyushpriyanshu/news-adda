@@ -457,7 +457,7 @@ fun SectionTag(text: String) {
             .background(c.breaking, SlantShape)
             .padding(horizontal = 16.dp, vertical = 5.dp),
     ) {
-        Text(text, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 0.3.sp),
+        Text(text.uppercase(), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold, letterSpacing = 0.8.sp),
             color = c.onBreaking, maxLines = 1)
     }
 }
