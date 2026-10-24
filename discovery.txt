@@ -1,0 +1,380 @@
+amarujala_up           OK  https://www.amarujala.com/rss/uttar-pradesh.xml
+amarujala_lucknow      OK  https://www.amarujala.com/rss/lucknow.xml
+news18_up              OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/uttar-pradesh.xml
+tv9_up                 OK  https://www.tv9hindi.com/state/uttar-pradesh/feed
+abp_up                 OK  https://www.abplive.com/news/states/up-uk/feed
+amarujala_varanasi     OK  https://www.amarujala.com/rss/varanasi.xml
+amarujala_gorakhpur    OK  https://www.amarujala.com/rss/gorakhpur.xml
+amarujala_prayagraj    OK  https://www.amarujala.com/rss/allahabad.xml
+amarujala_ayodhya      OK  https://www.amarujala.com/rss/ayodhya.xml
+amarujala_azamgarh     OK  https://www.amarujala.com/rss/azamgarh.xml
+amarujala_meerut       OK  https://www.amarujala.com/rss/meerut.xml
+amarujala_kanpur       OK  https://www.amarujala.com/rss/kanpur.xml
+amarujala_raebareli    OK  https://www.amarujala.com/rss/raebareli.xml
+amarujala_amethi       OK  https://www.amarujala.com/rss/amethi.xml
+amarujala_mainpuri     OK  https://www.amarujala.com/rss/mainpuri.xml
+amarujala_kannauj      OK  https://www.amarujala.com/rss/kannauj.xml
+amarujala_etawah       OK  https://www.amarujala.com/rss/etawah.xml
+amarujala_rampur       OK  https://www.amarujala.com/rss/rampur.xml
+amarujala_moradabad    OK  https://www.amarujala.com/rss/moradabad.xml
+amarujala_saharanpur   OK  https://www.amarujala.com/rss/saharanpur.xml
+amarujala_muzaffarnagar OK  https://www.amarujala.com/rss/muzaffarnagar.xml
+amarujala_sambhal      OK  https://www.amarujala.com/rss/sambhal.xml
+amarujala_jaunpur      OK  https://www.amarujala.com/rss/jaunpur.xml
+amarujala_ghazipur     OK  https://www.amarujala.com/rss/ghazipur.xml
+amarujala_mau          OK  https://www.amarujala.com/rss/mau.xml
+amarujala_ballia       OK  https://www.amarujala.com/rss/ballia.xml
+amarujala_pratapgarh   OK  https://www.amarujala.com/rss/pratapgarh.xml
+amarujala_sultanpur    OK  https://www.amarujala.com/rss/sultanpur.xml
+amarujala_bareilly     OK  https://www.amarujala.com/rss/bareilly.xml
+amarujala_baghpat      OK  https://www.amarujala.com/rss/baghpat.xml
+amarujala_agra         OK  https://www.amarujala.com/rss/agra.xml
+amarujala_aligarh      OK  https://www.amarujala.com/rss/aligarh.xml
+amarujala_jhansi       OK  https://www.amarujala.com/rss/jhansi.xml
+amarujala_gonda        OK  https://www.amarujala.com/rss/gonda.xml
+amarujala_bahraich     OK  https://www.amarujala.com/rss/bahraich.xml
+amarujala_firozabad    OK  https://www.amarujala.com/rss/firozabad.xml
+amarujala_mathura      OK  https://www.amarujala.com/rss/mathura.xml
+amarujala_shahjahanpur OK  https://www.amarujala.com/rss/shahjahanpur.xml
+amarujala_sitapur      OK  https://www.amarujala.com/rss/sitapur.xml
+amarujala_hardoi       OK  https://www.amarujala.com/rss/hardoi.xml
+amarujala_unnao        OK  https://www.amarujala.com/rss/unnao.xml
+amarujala_basti        OK  https://www.amarujala.com/rss/basti.xml
+amarujala_deoria       OK  https://www.amarujala.com/rss/deoria.xml
+amarujala_kushinagar   OK  https://www.amarujala.com/rss/kushinagar.xml
+amarujala_mirzapur     OK  https://www.amarujala.com/rss/mirzapur.xml
+amarujala_ghaziabad    OK  https://www.amarujala.com/rss/ghaziabad.xml
+amarujala_noida        OK  https://www.amarujala.com/rss/noida.xml
+amarujala_bulandshahr  OK  https://www.amarujala.com/rss/bulandshahr.xml
+amarujala_bijnor       OK  https://www.amarujala.com/rss/bijnor.xml
+amarujala_amroha       OK  https://www.amarujala.com/rss/amroha.xml
+amarujala_shamli       OK  https://www.amarujala.com/rss/shamli.xml
+amarujala_budaun       OK  https://www.amarujala.com/rss/budaun.xml
+amarujala_etah         OK  https://www.amarujala.com/rss/etah.xml
+amarujala_farrukhabad  OK  https://www.amarujala.com/rss/farrukhabad.xml
+amarujala_barabanki    OK  https://www.amarujala.com/rss/barabanki.xml
+amarujala_ambedkar_nagar OK  https://www.amarujala.com/rss/ambedkar-nagar.xml
+livehindustan_up       OK  https://api.livehindustan.com/feeds/rss/uttar-pradesh/lucknow/rssfeed.xml
+livehindustan_gorakhpur OK  https://api.livehindustan.com/feeds/rss/uttar-pradesh/gorakhpur/rssfeed.xml
+livehindustan_ayodhya  OK  https://api.livehindustan.com/feeds/rss/uttar-pradesh/ayodhya/rssfeed.xml
+livehindustan_agra     OK  https://api.livehindustan.com/feeds/rss/uttar-pradesh/agra/rssfeed.xml
+livehindustan_bareilly OK  https://api.livehindustan.com/feeds/rss/uttar-pradesh/bareily/rssfeed.xml
+livehindustan_basti    OK  https://api.livehindustan.com/feeds/rss/uttar-pradesh/basti/rssfeed.xml
+news18_lucknow         OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/lucknow.xml
+news18_varanasi        OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/varanasi.xml
+news18_kanpur          OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/kanpur.xml
+news18_meerut          OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/meerut.xml
+news18_agra            OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/agra.xml
+news18_ayodhya         OK  https://hindi.news18.com/rss/khabar/uttar-pradesh/ayodhya.xml
+indiatv_up             OK  https://www.indiatv.in/rssnews/topstory-uttar-pradesh.xml
+aajtak_national        OK  https://www.aajtak.in/rssfeeds/?id=home
+ndtv_india             OK  https://feeds.feedburner.com/ndtvkhabar-latest
+bharatsamachar         OK  https://www.bharatsamachartv.in/feed/
+jagran_up              NONE
+bhaskar_up             NONE
+aajtak_up              NONE
+nbt_up                 NONE
+zee_up                 NONE
+uptak                  NONE
+amarujala_sitemap      NONE
+livehindustan_sitemap  NONE
+news18_sitemap         NONE
+abp_sitemap            NONE
+tv9_sitemap            NONE
+indiatv_sitemap        NONE
+patrika_up             NONE
+republicbharat_up      NONE
+prabhatkhabar_up       NONE
+lallantop              NONE
+jansatta_up            NONE
+etv_up                 NONE
+gn_bhaskar             OK  https://news.google.com/rss/search?q=site%3Abhaskar.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_uptak               OK  https://news.google.com/rss/search?q=site%3Auptak.in+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_jagran              OK  https://news.google.com/rss/search?q=site%3Ajagran.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_nbt                 OK  https://news.google.com/rss/search?q=site%3Anavbharattimes.indiatimes.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_aajtak              OK  https://news.google.com/rss/search?q=site%3Aaajtak.in+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_zee                 OK  https://news.google.com/rss/search?q=site%3Azeenews.india.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_hindustan           OK  https://news.google.com/rss/search?q=site%3Alivehindustan.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_jansatta            OK  https://news.google.com/rss/search?q=site%3Ajansatta.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A2d&hl=hi&gl=IN&ceid=IN:hi
+gn_lallantop           OK  https://news.google.com/rss/search?q=site%3Athelallantop.com+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+OR+%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+when%3A2d&hl=hi&gl=IN&ceid=IN:hi
+gn_regional            OK  https://news.google.com/rss/search?q=%28site%3Apatrika.com+OR+site%3Aetvbharat.com%29+%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_up_politics         OK  https://news.google.com/rss/search?q=%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22%29+%28%E0%A4%AD%E0%A4%BE%E0%A4%9C%E0%A4%AA%E0%A4%BE+OR+%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%E0%A4%AC%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%E0%A4%95%E0%A4%BE%E0%A4%82%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%B8+OR+%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%AF%E0%A4%95+OR+%E0%A4%B8%E0%A4%BE%E0%A4%82%E0%A4%B8%E0%A4%A6%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_up_leaders          OK  https://news.google.com/rss/search?q=%22%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80+%E0%A4%86%E0%A4%A6%E0%A4%BF%E0%A4%A4%E0%A5%8D%E0%A4%AF%E0%A4%A8%E0%A4%BE%E0%A4%A5%22+OR+%22%E0%A4%85%E0%A4%96%E0%A4%BF%E0%A4%B2%E0%A5%87%E0%A4%B6+%E0%A4%AF%E0%A4%BE%E0%A4%A6%E0%A4%B5%22+OR+%E0%A4%AE%E0%A4%BE%E0%A4%AF%E0%A4%BE%E0%A4%B5%E0%A4%A4%E0%A5%80+OR+%22%E0%A4%95%E0%A5%87%E0%A4%B6%E0%A4%B5+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%B8%E0%A4%BE%E0%A4%A6+%E0%A4%AE%E0%A5%8C%E0%A4%B0%E0%A5%8D%E0%A4%AF%22+OR+%22%E0%A4%AC%E0%A5%8D%E0%A4%B0%E0%A4%9C%E0%A5%87%E0%A4%B6+%E0%A4%AA%E0%A4%BE%E0%A4%A0%E0%A4%95%22+OR+%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%AD%E0%A4%B0+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_up_leaders_2        OK  https://news.google.com/rss/search?q=%22%E0%A4%A1%E0%A4%BF%E0%A4%82%E0%A4%AA%E0%A4%B2+%E0%A4%AF%E0%A4%BE%E0%A4%A6%E0%A4%B5%22+OR+%E0%A4%B6%E0%A4%BF%E0%A4%B5%E0%A4%AA%E0%A4%BE%E0%A4%B2+OR+%22%E0%A4%9C%E0%A4%AF%E0%A4%82%E0%A4%A4+%E0%A4%9A%E0%A5%8C%E0%A4%A7%E0%A4%B0%E0%A5%80%22+OR+%22%E0%A4%B8%E0%A4%82%E0%A4%9C%E0%A4%AF+%E0%A4%A8%E0%A4%BF%E0%A4%B7%E0%A4%BE%E0%A4%A6%22+OR+%22%E0%A4%85%E0%A4%A8%E0%A5%81%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%BF%E0%A4%AF%E0%A4%BE+%E0%A4%AA%E0%A4%9F%E0%A5%87%E0%A4%B2%22+OR+%22%E0%A4%9A%E0%A4%82%E0%A4%A6%E0%A5%8D%E0%A4%B0%E0%A4%B6%E0%A5%87%E0%A4%96%E0%A4%B0+%E0%A4%86%E0%A4%9C%E0%A4%BE%E0%A4%A6%22+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_up_figures          OK  https://news.google.com/rss/search?q=%22%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%BE+%E0%A4%AD%E0%A5%88%E0%A4%AF%E0%A4%BE%22+OR+%22%E0%A4%A7%E0%A4%A8%E0%A4%82%E0%A4%9C%E0%A4%AF+%E0%A4%B8%E0%A4%BF%E0%A4%82%E0%A4%B9%22+OR+%22%E0%A4%AC%E0%A5%83%E0%A4%9C%E0%A5%87%E0%A4%B6+%E0%A4%B8%E0%A4%BF%E0%A4%82%E0%A4%B9%22+OR+%22%E0%A4%AC%E0%A5%83%E0%A4%9C%E0%A4%AD%E0%A5%82%E0%A4%B7%E0%A4%A3+%E0%A4%B6%E0%A4%B0%E0%A4%A3+%E0%A4%B8%E0%A4%BF%E0%A4%82%E0%A4%B9%22+OR+%22%E0%A4%85%E0%A4%AB%E0%A4%9C%E0%A4%BE%E0%A4%B2+%E0%A4%85%E0%A4%82%E0%A4%B8%E0%A4%BE%E0%A4%B0%E0%A5%80%22+OR+%22%E0%A4%85%E0%A4%AC%E0%A5%8D%E0%A4%AC%E0%A4%BE%E0%A4%B8+%E0%A4%85%E0%A4%82%E0%A4%B8%E0%A4%BE%E0%A4%B0%E0%A5%80%22+when%3A2d&hl=hi&gl=IN&ceid=IN:hi
+gn_up_election         OK  https://news.google.com/rss/search?q=%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22%29+%28%E0%A4%89%E0%A4%AA%E0%A4%9A%E0%A5%81%E0%A4%A8%E0%A4%BE%E0%A4%B5+OR+%E0%A4%9F%E0%A4%BF%E0%A4%95%E0%A4%9F+OR+%22%E0%A4%9A%E0%A5%81%E0%A4%A8%E0%A4%BE%E0%A4%B5+%E0%A4%86%E0%A4%AF%E0%A5%8B%E0%A4%97%22+OR+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A4%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B6%E0%A5%80%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_controversy       OK  https://news.google.com/rss/search?q=%28%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%E0%A4%AD%E0%A4%BE%E0%A4%9C%E0%A4%AA%E0%A4%BE+OR+%E0%A4%AC%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%E0%A4%95%E0%A4%BE%E0%A4%82%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%B8%29+%28%E0%A4%AA%E0%A4%B2%E0%A4%9F%E0%A4%B5%E0%A4%BE%E0%A4%B0+OR+%E0%A4%A8%E0%A4%BF%E0%A4%B6%E0%A4%BE%E0%A4%A8%E0%A4%BE+OR+%E0%A4%86%E0%A4%B0%E0%A5%8B%E0%A4%AA+OR+%E0%A4%A4%E0%A4%82%E0%A4%9C%29+%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22+OR+%E0%A4%B2%E0%A4%96%E0%A4%A8%E0%A4%8A%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_yogi              OK  https://news.google.com/rss/search?q=%22%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80+%E0%A4%86%E0%A4%A6%E0%A4%BF%E0%A4%A4%E0%A5%8D%E0%A4%AF%E0%A4%A8%E0%A4%BE%E0%A4%A5%22+OR+%22%E0%A4%B8%E0%A5%80%E0%A4%8F%E0%A4%AE+%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80%22+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_akhilesh          OK  https://news.google.com/rss/search?q=%22%E0%A4%85%E0%A4%96%E0%A4%BF%E0%A4%B2%E0%A5%87%E0%A4%B6+%E0%A4%AF%E0%A4%BE%E0%A4%A6%E0%A4%B5%22+OR+%E0%A4%B8%E0%A4%AA%E0%A4%BE+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_mayawati          OK  https://news.google.com/rss/search?q=%E0%A4%AE%E0%A4%BE%E0%A4%AF%E0%A4%BE%E0%A4%B5%E0%A4%A4%E0%A5%80+OR+%E0%A4%AC%E0%A4%B8%E0%A4%AA%E0%A4%BE+OR+%22%E0%A4%86%E0%A4%95%E0%A4%BE%E0%A4%B6+%E0%A4%86%E0%A4%A8%E0%A4%82%E0%A4%A6%22+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_cabinet           OK  https://news.google.com/rss/search?q=%28%22%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A5%80+%E0%A4%95%E0%A5%88%E0%A4%AC%E0%A4%BF%E0%A4%A8%E0%A5%87%E0%A4%9F%22+OR+%22%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+%E0%A4%95%E0%A5%88%E0%A4%AC%E0%A4%BF%E0%A4%A8%E0%A5%87%E0%A4%9F%22+OR+%22%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+%E0%A4%B8%E0%A4%B0%E0%A4%95%E0%A4%BE%E0%A4%B0%22+OR+%E0%A4%B6%E0%A4%BE%E0%A4%B8%E0%A4%A8%E0%A4%BE%E0%A4%A6%E0%A5%87%E0%A4%B6%29+when%3A1d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_bahubali          OK  https://news.google.com/rss/search?q=%28%E0%A4%AC%E0%A4%BE%E0%A4%B9%E0%A5%81%E0%A4%AC%E0%A4%B2%E0%A5%80+OR+%E0%A4%AE%E0%A4%BE%E0%A4%AB%E0%A4%BF%E0%A4%AF%E0%A4%BE+OR+%22%E0%A4%AA%E0%A5%82%E0%A4%B0%E0%A5%8D%E0%A4%B5+%E0%A4%B8%E0%A4%BE%E0%A4%82%E0%A4%B8%E0%A4%A6%22+OR+%22%E0%A4%AA%E0%A5%82%E0%A4%B0%E0%A5%8D%E0%A4%B5+%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%AF%E0%A4%95%22%29+%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22%29+when%3A2d&hl=hi&gl=IN&ceid=IN:hi
+gn_q_panchayat         OK  https://news.google.com/rss/search?q=%28%22%E0%A4%AA%E0%A4%82%E0%A4%9A%E0%A4%BE%E0%A4%AF%E0%A4%A4+%E0%A4%9A%E0%A5%81%E0%A4%A8%E0%A4%BE%E0%A4%B5%22+OR+%22%E0%A4%B5%E0%A4%BF%E0%A4%A7%E0%A4%BE%E0%A4%A8+%E0%A4%AA%E0%A4%B0%E0%A4%BF%E0%A4%B7%E0%A4%A6%22+OR+%E0%A4%8F%E0%A4%AE%E0%A4%8F%E0%A4%B2%E0%A4%B8%E0%A5%80+OR+%E0%A4%89%E0%A4%AA%E0%A4%9A%E0%A5%81%E0%A4%A8%E0%A4%BE%E0%A4%B5%29+%28%E0%A4%AF%E0%A5%82%E0%A4%AA%E0%A5%80+OR+%22%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0+%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%87%E0%A4%B6%22%29+when%3A2d&hl=hi&gl=IN&ceid=IN:hi
+gn_geo_lucknow         OK  https://news.google.com/rss/headlines/section/geo/Lucknow?hl=hi&gl=IN&ceid=IN:hi
+
+# probes
+au_raebareli             OK  items=40 newest=2026-10-24T05:06:54Z 
+au_rae_bareli            NO  items=None newest=None HTTP 404
+au_amethi                OK  items=40 newest=2026-10-24T07:29:38Z 
+au_mainpuri              OK  items=40 newest=2026-10-23T06:29:46Z 
+au_kannauj               OK  items=40 newest=2026-10-24T06:42:10Z 
+au_etawah                OK  items=40 newest=2026-10-24T05:34:42Z 
+au_rampur                OK  items=40 newest=2026-10-24T07:29:46Z 
+au_moradabad             OK  items=40 newest=2026-10-24T06:44:09Z 
+au_saharanpur            OK  items=40 newest=2026-10-24T07:28:33Z 
+au_muzaffarnagar         OK  items=40 newest=2026-10-24T07:12:08Z 
+au_sambhal               OK  items=40 newest=2026-10-23T20:55:20Z 
+au_jaunpur               OK  items=40 newest=2026-10-24T07:28:49Z 
+au_ghazipur              OK  items=40 newest=2026-10-24T07:17:02Z 
+au_mau                   OK  items=40 newest=2026-10-23T20:47:57Z 
+au_ballia                OK  items=40 newest=2026-10-23T23:57:03Z 
+au_pratapgarh            OK  items=40 newest=2026-10-23T06:58:17Z 
+au_baghpat               OK  items=40 newest=2026-10-24T05:30:33Z 
+au_bareilly              OK  items=40 newest=2026-10-24T05:12:48Z 
+au_agra                  OK  items=40 newest=2026-10-24T07:16:14Z 
+au_aligarh               OK  items=40 newest=2026-10-24T05:18:00Z 
+au_jhansi                OK  items=40 newest=2026-10-23T21:56:17Z 
+au_sultanpur             OK  items=40 newest=2026-10-24T07:25:21Z 
+au_gonda                 OK  items=40 newest=2026-10-23T05:56:37Z 
+au_bahraich              OK  items=40 newest=2026-10-24T07:29:54Z 
+au_firozabad             OK  items=40 newest=2026-10-24T06:31:58Z 
+au_mathura               OK  items=40 newest=2026-10-24T07:27:56Z 
+au_shahjahanpur          OK  items=40 newest=2026-10-24T07:28:12Z 
+au_sitapur               OK  items=40 newest=2026-10-24T06:44:09Z 
+au_hardoi                OK  items=40 newest=2026-10-23T06:13:35Z 
+au_unnao                 OK  items=40 newest=2026-10-23T19:53:37Z 
+au_basti                 OK  items=40 newest=2026-10-24T03:43:30Z 
+au_deoria                OK  items=40 newest=2026-10-24T07:07:25Z 
+au_kushinagar            OK  items=40 newest=2026-10-24T07:29:20Z 
+au_mirzapur              OK  items=40 newest=2026-10-23T20:49:51Z 
+au_ghaziabad             OK  items=40 newest=2026-10-24T04:04:00Z 
+au_noida                 OK  items=40 newest=2026-10-24T06:34:01Z 
+au_bulandshahr           OK  items=40 newest=2026-10-23T06:45:27Z 
+au_bijnor                OK  items=40 newest=2026-10-24T06:46:43Z 
+au_amroha                OK  items=40 newest=2026-10-23T21:03:04Z 
+au_shamli                OK  items=40 newest=2026-10-24T07:23:41Z 
+au_budaun                OK  items=40 newest=2026-10-23T20:00:28Z 
+au_etah                  OK  items=40 newest=2026-10-24T06:43:04Z 
+au_farrukhabad           OK  items=40 newest=2026-10-24T07:06:04Z 
+au_barabanki             OK  items=40 newest=2026-10-23T06:22:30Z 
+au_ambedkar_nagar        OK  items=40 newest=2026-10-23T06:23:40Z 
+au_breaking              OK  items=11 newest=2026-10-24T05:33:32Z 
+lh_lucknow               OK  items=50 newest=2026-10-24T05:34:34Z 
+lh_varanasi              OK  items=50 newest=2026-10-23T09:15:01Z 
+lh_gorakhpur             OK  items=50 newest=2026-10-24T01:57:23Z 
+lh_prayagraj             OK  items=50 newest=2026-10-23T17:42:51Z 
+lh_ayodhya               OK  items=50 newest=2026-10-22T07:21:42Z 
+lh_kanpur                OK  items=50 newest=2026-10-24T04:39:51Z 
+lh_meerut                OK  items=50 newest=2026-10-23T02:09:14Z 
+lh_agra                  OK  items=50 newest=2026-10-23T16:54:22Z 
+lh_bareily               OK  items=50 newest=2026-10-23T01:30:00Z 
+lh_moradabad             OK  items=50 newest=2026-10-23T15:16:59Z 
+lh_azamgarh              OK  items=50 newest=2026-10-21T13:21:45Z 
+lh_ghazipur              OK  items=50 newest=2026-10-24T03:52:24Z 
+lh_aligarh               OK  items=50 newest=2026-10-23T15:03:45Z 
+lh_basti                 OK  items=50 newest=2026-10-22T03:33:56Z 
+lh_balia                 OK  items=50 newest=2026-10-24T04:39:51Z 
+lh_mirzapur              OK  items=50 newest=2026-10-22T03:19:55Z 
+lh_deoria                OK  items=50 newest=2026-10-22T11:32:46Z 
+lh_kushinagar            OK  items=50 newest=2026-10-10T14:25:48Z 
+lh_barabanki             OK  items=50 newest=2026-10-21T00:32:46Z 
+n18_lucknow              OK  items=200 newest=2026-10-24T05:13:09Z 
+n18_varanasi             OK  items=200 newest=2026-10-24T02:27:57Z 
+n18_gorakhpur            OK  items=200 newest=2026-10-22T17:51:59Z 
+n18_prayagraj            NO  items=None newest=None invalid feed: not a feed: <unknown>:2:0: not well-formed (invalid token)
+n18_kanpur               OK  items=200 newest=2026-10-24T02:55:46Z 
+n18_meerut               OK  items=200 newest=2026-10-24T05:20:40Z 
+n18_agra                 OK  items=200 newest=2026-10-24T05:07:50Z 
+n18_ayodhya              OK  items=200 newest=2026-10-23T11:01:43Z 
+tv9_lucknow              NO  items=None newest=None invalid feed: received an HTML page, not a feed
+zee_upuk_feed            NO  items=None newest=None HTTP 404
+zee_up_rss               NO  items=None newest=None HTTP 404
+zee_upnews               NO  items=None newest=None HTTP 404
+ndtv_khabar_up           NO  items=None newest=None HTTP 403
+ndtv_khabar_latest       OK  items=100 newest=2026-10-24T05:10:42Z 
+indiatv_up               OK  items=57 newest=2026-10-24T04:22:25Z 
+indiatv_top              OK  items=20 newest=2026-10-24T05:09:00Z 
+patrika_lucknow          NO  items=None newest=None HTTP 404
+patrika_up               NO  items=None newest=None HTTP 404
+lallantop_rss            NO  items=None newest=None invalid feed: received an HTML page, not a feed
+uptak_rss                NO  items=None newest=None HTTP 404
+uptak_rssfeeds           NO  items=None newest=None HTTP 404
+aajtak_home              OK  items=147 newest=2026-10-24T05:53:30Z 
+ddnews_hi                NO  items=None newest=None ConnectError: 
+pib_hi                   NO  items=None newest=None HTTP 403
+abp_ganga                OK  items=10 newest=2026-10-23T15:24:29Z 
+bharat_samachar          OK  items=5 newest=2026-10-24T05:48:28Z 
+jansatta_up              NO  items=None newest=None HTTP 403
+gn_geo_up                NO  items=0 newest=None feed has no items
+gn_geo_lucknow           OK  items=70 newest=2026-10-24T05:00:00Z 
+gn_q_controversy         OK  items=54 newest=2026-10-24T03:42:10Z 
+gn_q_mayawati            OK  items=39 newest=2026-10-24T02:19:16Z 
+gn_q_akhilesh            OK  items=99 newest=2026-10-24T05:13:09Z 
+gn_q_yogi                OK  items=99 newest=2026-10-24T04:34:33Z 
+gn_q_bahubali            OK  items=49 newest=2026-10-24T02:11:31Z 
+gn_q_panchayat           OK  items=100 newest=2026-10-24T05:32:17Z 
+gn_q_cabinet             OK  items=12 newest=2026-10-23T20:32:17Z 
+gn_q_en_up_politics      OK  items=91 newest=2026-10-24T05:27:53Z 
+bing_up_politics         OK  items=12 newest=2026-10-23T21:00:00Z 
+bing_akhilesh            OK  items=12 newest=2026-10-23T14:25:00Z 
+bing_yogi                OK  items=12 newest=2026-10-23T22:02:00Z 
+
+# sitemaps
+www.jagran.com                   working=['https://www.jagran.com/all-news-sitemap.xml', 'https://www.jagran.com/news-sitemap.xml']
+   https://www.jagran.com/all-news-sitemap.xml items=2500 up=675 newest=2026-10-24T05:48:10Z err=None followed=None
+      https://www.jagran.com/uttar-pradesh/shamli-city-delhishamli-rail-doubling-dpr-nears-completion-easing-travel- | दिल्ली-शामली रेल रूट के दोहरीकरण की कवायद तेज, वैष्णो देवी और खाटूश्या
+      https://www.jagran.com/uttar-pradesh/varanasi-city-varanasi-air-show-2026-live-pm-narendra-modi-yogi-rajnath-s | Varanasi Air Show 2026 LIVE : काशी में गंगा की लहरों पर शुरू होने जा र
+      https://www.jagran.com/uttar-pradesh/agra-city-chance-to-become-a-voter-can-also-get-corrections-made-to-your- | SIR में कटा नाम जुड़वाने का मौका: बूथ पर या ऑनलाइन आवेदन की सुविधा, चा
+   https://www.jagran.com/news-sitemap.xml items=1000 up=343 newest=2026-10-24T05:47:23Z err=None followed=None
+      https://www.jagran.com/uttar-pradesh/shamli-city-delhishamli-rail-doubling-dpr-nears-completion-easing-travel- | दिल्ली-शामली रेल रूट के दोहरीकरण की कवायद तेज, वैष्णो देवी और खाटूश्या
+      https://www.jagran.com/uttar-pradesh/varanasi-city-varanasi-air-show-2026-live-pm-narendra-modi-yogi-rajnath-s | Varanasi Air Show 2026 LIVE : काशी में गंगा की लहरों पर शुरू होने जा र
+      https://www.jagran.com/uttar-pradesh/agra-city-chance-to-become-a-voter-can-also-get-corrections-made-to-your- | SIR में कटा नाम जुड़वाने का मौका: बूथ पर या ऑनलाइन आवेदन की सुविधा, चा
+www.bhaskar.com                  working=['https://www.bhaskar.com/sitemaps-v1--sitemap-google-news-index.xml']
+   https://www.bhaskar.com/sitemaps-v1--sitemap-google-news-index.xml items=700 up=485 newest=2026-10-24T11:24:14Z err=None followed=https://www.bhaskar.com/sitemaps-v1--sitemap-google-news-1.xml
+      https://www.bhaskar.com/local/uttar-pradesh/gorakhpur/gajpur/news/mau-khurd-gorakhpur-ramlila-utsav-2026-tradi | मऊ खुर्द में 24 से 28 अक्टूबर तक रामलीला: ग्रामीणों में उत्साह, 1984 स
+      https://www.bhaskar.com/local/uttar-pradesh/etawah/tijora/news/jaswantnagar-balrai-railway-underpass-waterlogg | पुल नंबर 38 के अंडरपास में फिर भरा पानी: जसवंतनगर में वाहन चालकों और र
+      https://www.bhaskar.com/local/uttar-pradesh/basti/kaptanganj/news/basti-sadwaliya-road-construction-delay-vill | बस्ती में पुल बनने के बाद भी 1किमी सड़क जर्जर: 100 गांवों के लोगों को 
+www.aajtak.in                    working=['https://www.aajtak.in/rssfeeds/news-sitemap.xml']
+   https://www.aajtak.in/rssfeeds/news-sitemap.xml items=889 up=65 newest=2026-10-24T05:54:58Z err=None followed=None
+      https://www.aajtak.in/uttar-pradesh/story/up-government-land-acquisition-greenfield-expressways-ntc-amkr-utrat | यूपी में बनेंगे 3 ग्रीनफील्ड एक्सप्रेसवे, 650 गांवों से गुजरेगा नेटवर्
+      https://www.aajtak.in/uttar-pradesh/story/sp-candidate-akash-agrawal-allegation-after-agra-mlc-election-says-a | 'जैसे पाकिस्तान से आया हूं...', आगरा MLC चुनाव के बाद सपा प्रत्याशी आक
+      https://www.aajtak.in/uttar-pradesh/story/girl-climbs-mobile-tower-comes-down-online-marriage-mumbai-groom-lcl | दूल्हा मुंबई में, दुल्हन मोबाइल टावर पर! ऑनलाइन शादी हुई, तब 100 फीट क
+navbharattimes.indiatimes.com    working=['https://navbharattimes.indiatimes.com/news-sitemap.xml']
+   https://navbharattimes.indiatimes.com/news-sitemap.xml items=1000 up=139 newest=2026-10-24T05:52:49Z err=None followed=https://navbharattimes.indiatimes.com/staticsitemap/nbt/news/sitemap-48hours-1.xml
+      https://navbharattimes.indiatimes.com/state/uttar-pradesh/ayodhya/ayodhya-100-year-old-gurukul-mafia-seizes-la | अयोध्या में 100 साल पुरानी गुरुकुल की जमीन पर भू-माफियाओं का कब्जा, प्
+      https://navbharattimes.indiatimes.com/education/jobs-junction/upessc-recruitment-2026-notification-for-uttar-p | UPESSC Vacancy 2026: यूपी में निकली 20000+ भर्तियां, TGT-हेड मास्टर, प
+      https://navbharattimes.indiatimes.com/state/uttar-pradesh/agra/agra-teachers-mlc-election-re-polling-to-be-hel | आगरा शिक्षक MLC चुनाव में 3 बूथों पर दोबारा होगी वोटिंग, सपा कैंडिडेट 
+   https://navbharattimes.indiatimes.com/staticsitemap/nbt/news/sitemap-index.xml items=0 up=0 newest=None err=None followed=https://navbharattimes.indiatimes.com/staticsitemap/nbt/news/2026-October-1.xml
+zeenews.india.com                working=['https://zeenews.india.com/sitemap.xml', 'https://zeenews.india.com/sitemaps/news-sitemap.xml', 'https://zeenews.india.com/hindi/sitemaps/news-sitemap.xml']
+   https://zeenews.india.com/sitemap.xml items=43 up=0 newest=2026-10-24T05:45:00Z err=None followed=None
+      https://zeenews.india.com/india/jamia-hunger-strike-day-13-students-union-elections-3076962.html | Jamia hunger strike enters day 13 amid 'Free Kashmir' graffiti row
+      https://zeenews.india.com/world/trump-iran-strikes-undersea-internet-cables-hormuz-threat-3076961.html | Trump hints at fresh military strike; Iran threatens to cut undersea c
+   https://zeenews.india.com/sitemaps/news-sitemap.xml items=36 up=0 newest=2026-10-24T05:51:02Z err=None followed=None
+      https://zeenews.india.com/world/trump-iran-strikes-undersea-internet-cables-hormuz-threat-3076961.html | Trump hints at fresh military strike; Iran threatens to cut undersea c
+      https://zeenews.india.com/india/jamia-hunger-strike-day-13-students-union-elections-3076962.html | Jamia hunger strike enters day 13 amid 'Free Kashmir' graffiti row
+   https://zeenews.india.com/sitemaps/sitemaps-index.xml items=0 up=0 newest=None err=None followed=https://zeenews.india.com/sitemaps/sitemap-2026-oct.xml
+   https://zeenews.india.com/hindi/sitemaps/news-sitemap.xml items=158 up=3 newest=2026-10-24T04:25:21Z err=None followed=None
+      https://zeenews.india.com/hindi/india/up-uttarakhand/uttar-pradesh/yogi-adityanath-mission-karmayogi-sadhana-s | सीएम योगी बोले- जनता के जीवन में बदलाव से साबित होती है प्रशासन की सार
+      https://zeenews.india.com/hindi/india/up-uttarakhand/uttar-pradesh/yogi-adityanath-up-police-police-memorial-d | पुलिस स्मृति दिवस पर सीएम योगी का संदेश, बोले- नए यूपी में कानून से ऊप
+      https://zeenews.india.com/hindi/india/up-uttarakhand/uttar-pradesh/yogi-adityanath-uttar-pradesh-economy-women | साढ़े 9 वर्षों में UP की GSDP, पर-कैपिटा इनकम, बजट-महिला श्रम बल भागीद
+   https://zeenews.india.com/hindi/sitemaps/web-sitemap.xml items=0 up=0 newest=None err=None followed=None
+   https://zeenews.india.com/hindi/sitemaps/video-sitemaps-index.xml items=0 up=0 newest=None err=None followed=https://zeenews.india.com/hindi/sitemaps/2026-sep-mpcg-video-sitemap.xml
+   https://zeenews.india.com/hindi/sitemaps/sitemaps-index.xml items=0 up=0 newest=None err=None followed=https://zeenews.india.com/hindi/sitemaps/bihar-jharkhand-sitemaps-index.xml
+   https://zeenews.india.com/hindi/sitemaps/zee-hindi-webstory-sitemap.xml items=0 up=0 newest=None err=None followed=None
+www.amarujala.com                working=['https://www.amarujala.com/sitemap-news-v1.xml', 'https://www.amarujala.com/sitemap-news.xml']
+   https://www.amarujala.com/sitemap-news-v1.xml items=700 up=374 newest=2026-10-24T05:54:31Z err=None followed=None
+      https://www.amarujala.com/photo-gallery/uttar-pradesh/moradabad/mlc-elections-dilari-records-highest-turnout-a | एमएलसी चुनने का उत्साह डिलारी में सबसे अधिक 87.79% मतदान, मुरादाबाद ब्
+      https://www.amarujala.com/lucknow/have-you-heard-the-story-of-seeking-a-gallantry-award-only-to-have-one-s-tru | सुना है क्या 'मांगा गैलेंट्री, खुली पोल' की कहानी, साथ ही 'भेदी निपटे,
+      https://www.amarujala.com/uttar-pradesh/hathras/hathras-wrong-side-truck-parking-2026-10-24 | हाथरस गलत साइड खड़े ट्रक बिगाड़ रहे हालात, जाम में फंसी एंबुलेंस, ट्रक
+   https://www.amarujala.com/sitemap-news.xml items=700 up=374 newest=2026-10-24T05:54:31Z err=None followed=None
+      https://www.amarujala.com/photo-gallery/uttar-pradesh/moradabad/mlc-elections-dilari-records-highest-turnout-a | एमएलसी चुनने का उत्साह डिलारी में सबसे अधिक 87.79% मतदान, मुरादाबाद ब्
+      https://www.amarujala.com/lucknow/have-you-heard-the-story-of-seeking-a-gallantry-award-only-to-have-one-s-tru | सुना है क्या 'मांगा गैलेंट्री, खुली पोल' की कहानी, साथ ही 'भेदी निपटे,
+      https://www.amarujala.com/uttar-pradesh/hathras/hathras-wrong-side-truck-parking-2026-10-24 | हाथरस गलत साइड खड़े ट्रक बिगाड़ रहे हालात, जाम में फंसी एंबुलेंस, ट्रक
+www.livehindustan.com            working=['https://www.livehindustan.com/news-sitemap.xml']
+   https://www.livehindustan.com/news-sitemap.xml items=1000 up=97 newest=2026-10-24T05:44:29Z err=None followed=None
+      https://www.livehindustan.com/uttar-pradesh/up-12-districts-to-get-improved-roads-with-changed-engineering-dea | यूपी के 12 जिलों में बदलेगी सड़कों की इंजीनियरिंग, हादसों में मृत्यु द
+      https://www.livehindustan.com/uttar-pradesh/railways-to-run-exam-special-trains-for-pet-know-timings-201792816 | PET के लिए रेलवे का बड़ा इंतजाम, इन शहरों के लिए चलेंगी परीक्षा स्पेशल
+      https://www.livehindustan.com/uttar-pradesh/up-lucknow-businessman-shiva-murder-case-crime-scene-reconstructin | क्राइम सीन दोहराकर शिवा की हत्या के सबूत जुटाएगी पुलिस, हत्या या आत्मह
+www.patrika.com                  working=['https://www.patrika.com/google-news-sitemap-v1.xml']
+   https://www.patrika.com/google-news-sitemap-v1.xml items=589 up=26 newest=2026-10-24T05:48:28Z err=None followed=None
+      https://www.patrika.com/lucknow-news/samajwadi-party-ashutosh-verma-jamia-student-union-election-support-21004 | ‘छात्रों की आवाज दबनी नहीं चाहिए’, जामिया प्रदर्शन पर बोले सपा प्रवक्त
+      https://www.patrika.com/lucknow-news/shraddha-first-night-in-jail-escape-mystery-21004780 | Shraddha jail case: जेल में श्रद्धा की पहली रात का सच! दो मोबाइल, लाखो
+      https://www.patrika.com/lucknow-news/akhilesh-yadav-akash-agrawal-agra-mlc-election-irregularities-21004601 | ‘भाजपा किसी की सगी नहीं’, आकाश अग्रवाल के समर्थन में उतरे अखिलेश यादव,
+www.uptak.in                     working=['https://www.uptak.in/rssfeeds/news-sitemap.xml', 'https://www.uptak.in/news-sitemap.xml']
+   https://www.uptak.in/rssfeeds/news-sitemap.xml items=35 up=1 newest=2026-10-24T05:43:02Z err=None followed=None
+      https://www.uptak.in/neighbouring-news/lucknow/story/shraddha-rashmi-first-night-jail-45-women-prisoners-luckn | श्रद्धा दुबे की लग्जरी लाइफ खत्म! 45 महिला कैदियों के बीच जेल में कैसी
+   https://www.uptak.in/news-sitemap.xml items=35 up=1 newest=2026-10-24T05:43:02Z err=None followed=None
+      https://www.uptak.in/neighbouring-news/lucknow/story/shraddha-rashmi-first-night-jail-45-women-prisoners-luckn | श्रद्धा दुबे की लग्जरी लाइफ खत्म! 45 महिला कैदियों के बीच जेल में कैसी
+www.abplive.com                  working=['https://www.abplive.com/google-news-sitemap.xml']
+   https://www.abplive.com/news-sitemap.xml items=0 up=0 newest=None err=None followed=https://www.abplive.com/news-24-10-2026.xml
+   https://www.abplive.com/google-news-sitemap.xml items=500 up=74 newest=2026-10-24T05:46:40Z err=None followed=None
+      https://www.abplive.com/states/up-uk/jamia-student-union-restoration-sp-mp-mohibbullah-nadvi-raises-questions- | 370 को बहाल किया जाए तो इसमें बुराई क्या? जामिया विवाद पर बोले अखिलेश 
+      https://www.abplive.com/states/up-uk/abbas-ansari-warns-om-prakash-rajbhar-bjp-sbsp-reservation-issue-3206076 | अब्बास अंसारी की ओम प्रकाश राजभर को नसीहत, बोले- 'BJP आपकी पार्टी को ख
+      https://www.abplive.com/states/up-uk/deepotsav-2026-celebration-in-ayodhya-with-millions-of-lamps-in-10th-diwa | 10वें दीपोत्सव में लाखों दीपों से जगमगाएगी अयोध्या, स्वदेशी ड्रोन से ह
+hindi.news18.com                 working=['https://hindi.news18.com/allstory-sitemap-data.xml', 'https://hindi.news18.com/commonfeeds/v1/hin/sitemap/google-news/yesterday.xml', 'https://hindi.news18.com/commonfeeds/v1/hin/sitemap/google-news/today.xml']
+   https://hindi.news18.com/allstory-sitemap-data.xml items=1001 up=109 newest=2026-10-24T05:53:15Z err=None followed=None
+      https://hindi.news18.com/news/uttar-pradesh/meerut-along-with-wooden-bats-the-demand-for-this-bat-is-increasin | मेरठ लकड़ी के बल्ले ही नहीं प्लास्टिक बैट में भी बनाई पहचान, 60 से 700
+      https://hindi.news18.com/elections/uttar-pradesh/up-election-seat-sharing-congress-demanding-180-seats-sp-unwi | यूपी चुनाव: सपा-कांग्रेस के बीच 180 और 80 का झगड़ा, प्रियंका की एंट्री
+      https://hindi.news18.com/news/uttar-pradesh/agra-meet-richa-start-papd-budsiness-2000-cost-now-eployment-women | आगरा की रिचा ने दो हजार में शुरू किया पापड़ का बिजनेस, अब महिलाओं को द
+   https://hindi.news18.com/commonfeeds/v1/hin/sitemap/google-news/yesterday.xml items=667 up=70 newest=2026-10-23T00:25:00Z err=None followed=None
+      https://hindi.news18.com/news/uttar-pradesh/allahabad-school-holiday-tomorrow-schools-closed-news-live-lucknow | UP School Holiday: यूपी के इन जिलों में आज बंद रहेंगे स्कूल, नर्सरी से
+      https://hindi.news18.com/news/uttar-pradesh/saharanpur-mosque-demolition-allahabad-high-court-extends-stay-on- | सहारनपुर: मस्जिद पर ₹64100000 की लगा फाइन, तो इलाहाबाद हाईकोर्ट ने दी 
+      https://hindi.news18.com/news/uttar-pradesh/allahabad-metro-project-in-prayagraj-rites-summit-it-report-to-gov | तैयार हैं रूट, बजट भी फाइनल, अब लखनऊ, कानपुर, नोएडा और आगरा के बाद प्र
+   https://hindi.news18.com/commonfeeds/v1/hin/sitemap/google-news/today.xml items=782 up=89 newest=2026-10-24T05:53:15Z err=None followed=None
+      https://hindi.news18.com/news/uttar-pradesh/meerut-along-with-wooden-bats-the-demand-for-this-bat-is-increasin | मेरठ लकड़ी के बल्ले ही नहीं प्लास्टिक बैट में भी बनाई पहचान, 60 से 700
+      https://hindi.news18.com/elections/uttar-pradesh/up-election-seat-sharing-congress-demanding-180-seats-sp-unwi | यूपी चुनाव: सपा-कांग्रेस के बीच 180 और 80 का झगड़ा, प्रियंका की एंट्री
+      https://hindi.news18.com/news/uttar-pradesh/agra-meet-richa-start-papd-budsiness-2000-cost-now-eployment-women | आगरा की रिचा ने दो हजार में शुरू किया पापड़ का बिजनेस, अब महिलाओं को द
+www.tv9hindi.com                 working=['https://www.tv9hindi.com/news-sitemap.xml', 'https://www.tv9hindi.com/yesterday-news-sitemap.xml']
+   https://www.tv9hindi.com/news-sitemap.xml items=85 up=6 newest=2026-10-24T05:53:30Z err=None followed=None
+      https://www.tv9hindi.com/state/uttar-pradesh/moradabad-katghar-2007-gangrape-case-life-imprisonment-two-convic | आखिर मिल ही गया इंसाफ… 19 साल पहले मुरादाबाद में नाबालिग छात्रा से किय
+      https://www.tv9hindi.com/state/uttar-pradesh/moradabad-accident-uncle-and-nephew-die-after-bike-falls-from-rai | मुरादाबाद में भीषण हादसा, ओवरब्रिज से नीचे गिरी बाइक, मामा-भांजे की मौ
+      https://www.tv9hindi.com/state/uttar-pradesh/bareilly-fake-degree-marksheet-racket-pradeep-kumar-arrested-3943 | 50 हजार रुपये में BA की फेक मार्कशीट, पंजाब से नगालैंड तक जुड़े तार; ब
+   https://www.tv9hindi.com/yesterday-news-sitemap.xml items=248 up=21 newest=2026-10-23T18:28:50Z err=None followed=None
+      https://www.tv9hindi.com/state/uttar-pradesh/shraddha-dubey-and-rashmi-first-night-in-lucknow-jail-both-sister | श्रद्धा दुबे की जेल में पहली रात कैसी गुजरी? मच्छरों ने किया परेशान, ब
+      https://www.tv9hindi.com/india/cbi-arrested-2-ed-officers-taking-bribe-lucknow-3943678.html | यूपी में ED के दो अधिकारी गिरफ्तार... CBI का बड़ा एक्शन, 5 लाख की रिश्व
+      https://www.tv9hindi.com/state/uttar-pradesh/moradabad-farmer-kuldeep-singh-murder-body-kept-home-for-three-da | भाई सेना में, बहन दारोगा... हत्या के बाद 3 दिन घर में रखा रहा किसान का
+www.jansatta.com                 working=[]
+www.thelallantop.com             working=['https://www.thelallantop.com/sitemaps/news-sitemap.xml']
+   https://www.thelallantop.com/sitemaps/news-sitemap.xml items=82 up=1 newest=2026-10-24T05:42:05Z err=None followed=None
+      https://www.thelallantop.com/india/post/baghpat-college-violence-baghpat-student-clash-uttar-pradesh-news-stud | रामलीला में हुआ झगड़ा कॉलेज तक पहुंचा, चले लाठी-फावड़े, 14 पुलिसवालों 
+   https://www.thelallantop.com/news-sitemap.xml items=None up=None newest=None err=not a sitemap: mismatched tag: line 13, column 2 followed=None
+   https://www.thelallantop.com/sitemap-news.xml items=None up=None newest=None err=not a sitemap: mismatched tag: line 13, column 2 followed=None
+   https://www.thelallantop.com/sitemap/news.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.thelallantop.com/google-news-sitemap.xml items=None up=None newest=None err=not a sitemap: mismatched tag: line 13, column 2 followed=None
+   https://www.thelallantop.com/hindi/news-sitemap.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+www.etvbharat.com                working=['https://www.etvbharat.com/googlenewssitemap.xml']
+   https://www.etvbharat.com/googlenewssitemap.xml items=500 up=2 newest=2026-10-24T05:29:17Z err=None followed=https://www.etvbharat.com/pa/punjab/googlenewssitemap.xml
+      https://www.etvbharat.com/pa/bharat/a-woman-climbed-a-tower-to-get-her-lover-released-from-jail-in-maharajganj | ਪ੍ਰੇਮੀ ਨੂੰ ਜੇਲ੍ਹ ਤੋਂ ਛੁਡਾਉਣ ਲਈ ਕੁੜੀ ਦਾ ਹਾਈ ਵੋਲਟੇਜ ਡਰਾਮਾ, ਟਾਵਰ 'ਤੇ ਚੜ੍ਹ
+      https://www.etvbharat.com/pa/bharat/speeding-vehicle-crushed-people-in-balrampur-uttar-pradesh-pbs26101801305 | ਤੇਜ਼ ਰਫ਼ਤਾਰ ਵਾਹਨ ਨੇ 7 ਨੂੰ ਦਰੜਿਆ, 3 ਦੀ ਮੌਤ, 4 ਜ਼ਖਮੀ
+   https://www.etvbharat.com/news-sitemap.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.etvbharat.com/sitemap-news.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.etvbharat.com/sitemap/news.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.etvbharat.com/google-news-sitemap.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.etvbharat.com/sitemaps/news.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.etvbharat.com/hindi/news-sitemap.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+www.indiatv.in                   working=['https://www.indiatv.in/news-sitemap.xml', 'https://www.indiatv.in/news-sitemap-paisa.xml']
+   https://www.indiatv.in/news-sitemap.xml items=252 up=27 newest=2026-10-24T05:51:43Z err=None followed=None
+      https://www.indiatv.in/uttar-pradesh/election-commission-set-up-special-camps-for-voter-who-want-name-added-or | यूपी में चुनाव आयोग ने लगाया स्पेशल कैंप, आज अपने बूथ पर जाकर जुड़वा स
+      https://www.indiatv.in/uttar-pradesh/bjp-and-sp-supporters-clash-under-the-watch-of-police-in-hardoi-attempt-m | हरदोई में पुलिस के साए में भिड़े बीजेपी और सपा समर्थक, वकील पर हमले की
+      https://www.indiatv.in/uttar-pradesh/ghazipur-samajwadi-party-mp-afzal-ansari-admitted-to-medanta-hospital-in- | गाजीपुर के सपा सांसद अफजाल अंसारी की आधी रात बिगड़ी तबीयत, मुख्तार के 
+   https://www.indiatv.in/news-sitemap-paisa.xml items=17 up=0 newest=2026-10-24T05:11:31Z err=None followed=None
+      https://www.indiatv.in/paisa/business/idbi-bank-employees-will-not-be-adversely-affected-by-the-stake-sale-her | IDBI Bank के कर्मचारियों पर नहीं पड़ेगा हिस्सेदारी बिक्री का कोई भी बु
+      https://www.indiatv.in/paisa/business/traders-association-writes-to-rahul-gandhi-demands-postponement-of-the-r | व्यापारी संघ ने राहुल गांधी को लिखी चिट्ठी, 1 नवंबर को रामलीला मैदान म
+ndtv.in                          working=[]
+www.bharatsamachartv.in          working=[]
+www.prabhatkhabar.com            working=['https://www.prabhatkhabar.com/news-sitemap.xml']
+   https://www.prabhatkhabar.com/news-sitemap.xml items=700 up=47 newest=2026-10-24T05:50:04Z err=None followed=None
+      https://www.prabhatkhabar.com/state/uttar-pradesh/lucknow-cm-grid-yojana-7-roads-90-percent-completion-pedestr | लंदन-पेरिस की तरह अब लखनऊ में भी बदलेगी सड़कों और चौराहों की तस्वीर, र
+      https://www.prabhatkhabar.com/state/uttar-pradesh/allahabad-hc-court-employee-dismissal-off-duty-incident-wido | ड्यूटी के बाहर हुई एक घटना पर नौकरी से निकालना गलत... हाई कोर्ट ने 24 
+      https://www.prabhatkhabar.com/state/uttar-pradesh/uppcl-smart-meter-installation-old-meter-removal-reading-sea | UPPCL: घर में लग रहा नया स्मार्ट मीटर? पुराना मीटर हटाने से पहले कर ले
+www.newstrack.com                working=[]
+www.punjabkesari.in              working=['https://www.punjabkesari.in/newssitemap.xml']
+   https://www.punjabkesari.in/newssitemap.xml items=400 up=0 newest=2026-10-24T05:39:19Z err=None followed=None
+      https://www.punjabkesari.in/dharm/news/bharat-swastik-yatra-2392865 | Bharat Swastik Yatra: भारत स्वस्तिक यात्रा का प्रथम चरण संपन्न, केदारन
+      https://www.punjabkesari.in/national/news/telangana-women-dies-new-york-cardiac-arrest-new-york-2392849 | न्यूयॉर्क में तेलंगाना की 25 वर्षीय महिला की संदिग्ध कार्डियक अरेस्ट स
+www.republicbharat.com           working=['https://www.republicbharat.com/sitemap/sitemap-news.xml']
+   https://www.republicbharat.com/sitemap/sitemap-news.xml items=1000 up=124 newest=2026-10-24T04:59:39Z err=None followed=None
+      https://www.republicbharat.com/india/uttar-pradesh/shiva-sharma-murder-from-luxury-cars-shopping-5-star-hotels | लग्जरी कार, 5 स्टार होटलों वाली जिंदगी से लॉकअप तक... शिवा शर्मा मर्डर
+      https://www.republicbharat.com/india/uttar-pradesh/like-daily-soap-office-office-common-man-should-not-be-made | ‘ऑफिस-ऑफिस’ सीरियल की तरह न भटके आम आदमी, नागरिक संतुष्टि ही लोकसेवक क
+      https://www.republicbharat.com/india/uttar-pradesh/wife-kills-husband-12-years-younger-stuffs-body-in-trunk-du | बेवफा पत्नी का खूनी खेल! प्रेमी संग मिल कूचा पति का सिर, फिर बक्से में
+www.news24online.com             working=['https://www.news24online.com/sitemap-news.xml']
+   https://www.news24online.com/sitemap-news.xml items=155 up=4 newest=2026-10-24T05:51:36Z err=None followed=None
+      https://news24online.com/trending/school-holiday-tomorrow-october-24-schools-to-be-closed-in-delhi-noida-gurug | School Holiday Tomorrow, October 24: Schools to be closed in Delhi, No
+      https://news24online.com/trending/weather-update-tomorrow-october-23-imd-warns-of-heavy-rain-in-delhi-noida-gu | Weather Update Tomorrow, October 23: IMD warns of heavy rain in Delhi,
+      https://news24online.com/trending/school-holiday-tomorrow-october-23-schools-to-be-closed-in-delhi-noida-gurug | School Holiday Tomorrow, October 23: Schools to be closed in Delhi, No
+   https://www.news24online.com/sitemap/news.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.news24online.com/sitemaps/news.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+   https://www.news24online.com/hindi/news-sitemap.xml items=None up=None newest=None err=received an HTML page, not a sitemap followed=None
+www.oneindia.com                 working=['https://www.oneindia.com/sitemap_news.xml']
+   https://www.oneindia.com/sitemap_news.xml items=107 up=0 newest=2026-10-24T05:40:40Z err=None followed=None
+      https://www.oneindia.com/mumbai/mumbai-ats-arrests-suspected-jaish-e-mohammed-operative-who-worked-as-rapido-r | Mumbai ATS Arrests Suspected Jaish-e-Mohammed Operative Who Worked As 
+      https://www.oneindia.com/sports/cricket/india-vs-new-zealand-2nd-t20i-live-tv-channel-venue-teams-pitch-report | India vs New Zealand 2nd T20I LIVE TV Channel, Venue, Teams, Pitch Rep
+
+# gist check
+{"title": "यूपी 2027ः सपा कांग्रेस को ज्यादा सीटें क्यों नहीं देना चाहती, ओवैसी और बीजेपी की रणनीति क्या है", "publisher": "Satya Hindi", "resolved": "https://www.satyahindi.com/uttar-pradesh/up-election-2027-congress-sp-180-seats-owaisi-bjp-strategy-157428.html/amp", "gist": null}
+{"title": "यूपी विधानसभा चुनाव: कांग्रेस ने सपा को सौंपी 200 सीटों की लिस्ट, 50-55 से ज्यादा सीट देने के मूड में नहीं अखिलेश", "publisher": "Jagran", "resolved": "https://www.jagran.com/uttar-pradesh/lucknow-city-up-assembly-elections-congress-demands-200-seats-from-sp-40414627.html", "gist": "यूपी 
+{"title": "यूपी: सपा सांसद अफजाल अंसारी की तबीयत बिगड़ी, मेदांता में भर्ती, मुख्तार के बेटे ने दी जानकारी; जानें क्या हुआ", "publisher": "Amar Ujala", "resolved": "https://www.amarujala.com/uttar-pradesh/ghazipur/sp-mp-afzal-ansari-health-deteriorates-admitted-to-lucknow-medanta-hospital-mukhtar-son
+{"title": "UP Election 2027: यूपी में सीटों के बंटवारे पर कांग्रेस-सपा में खींचतान, 180 सीटों की लिस्ट से बढ़ी तकरार", "publisher": "Prabhat Khabar", "resolved": "https://www.prabhatkhabar.com/state/uttar-pradesh/up-election-2027-congress-sp-seat-sharing-180-seats", "gist": "यूपी चुनाव से पहले कांग्
+{"title": "बिहार, यूपी, महाराष्ट्र-कर्नाटक की 28 विधान परिषद सीटों पर वोटिंग: यूपी में मतदान के दौरान सपा और भाजपा कार...", "publisher": "Dainik Bhaskar", "resolved": "https://www.bhaskar.com/g/national/news/up-bihar-maharashtra-karnataka-mlc-election-voting-clash-result-139463064.html", "gist": "बि
+{"title": "सपा सांसद अफजाल अंसारी की तबीयत बिगड़ी, लखनऊ के मेदांता अस्पताल में भर्ती", "publisher": "ABP News", "resolved": "https://www.abplive.com/states/up-uk/samajwadi-party-mp-afzal-ansari-fadmitted-to-medanta-hospital-in-lucknow-ann-3206022", "gist": "यूपी की गाज़ीपुर सीट से समाजवादी पार्टी के
+{"stats": {"resolved": 0, "gists": 0, "robots_blocked": 0, "errors": 0, "google_blocked": false}, "google_blocked": false}
